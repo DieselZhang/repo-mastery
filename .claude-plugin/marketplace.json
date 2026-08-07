@@ -1,0 +1,14 @@
+{
+  "name": "repo-mastery",
+  "description": "Learn any open-source repository like a course — usage, architecture, and key implementations, with deterministic mastery gates and spaced review.",
+  "owner": {
+    "name": "Diesel Zhang"
+  },
+  "plugins": [
+    {
+      "name": "repo-mastery",
+      "source": "./",
+      "description": "Turn any open-source repository into a developer-focused mastery course — usage, architecture, and key implementations, with deterministic mastery gates and spaced review."
+    }
+  ]
+}

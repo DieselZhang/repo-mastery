@@ -1,0 +1,46 @@
+{
+  "name": "@dieselzhang/repo-mastery",
+  "version": "2.2.0",
+  "description": "Turn any open-source repository into a developer-focused mastery course — usage, architecture, key implementations, with deterministic mastery gates and spaced review. Installable as a skill for Claude Code, OpenAI Codex, and Gemini CLI.",
+  "bin": {
+    "repo-mastery": "bin/repo-mastery.js"
+  },
+  "files": [
+    "bin/",
+    "SKILL.md",
+    "AGENTS.md",
+    "GEMINI.md",
+    "ADOPTION.md",
+    "LICENSE",
+    "README.md",
+    "references/",
+    "scripts/",
+    "agents/",
+    ".claude-plugin/"
+  ],
+  "scripts": {
+    "install:all": "node bin/repo-mastery.js install"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DieselZhang/repo-mastery.git"
+  },
+  "keywords": [
+    "claude-code",
+    "codex",
+    "gemini-cli",
+    "skill",
+    "learning",
+    "mastery",
+    "spaced-repetition",
+    "open-source",
+    "education"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

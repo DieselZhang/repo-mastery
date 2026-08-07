@@ -19,7 +19,17 @@
 
 set -euo pipefail
 
-SRC="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+# Resolve the skill source. When run via `curl ... | bash` there is no local
+# checkout, so fetch the latest tarball from GitHub.
+SRC="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")/.." 2>/dev/null && pwd)"
+if [ ! -f "$SRC/SKILL.md" ]; then
+  echo "No local checkout — fetching repo-mastery from GitHub…"
+  TMP="$(mktemp -d)"
+  trap 'rm -rf "$TMP"' EXIT
+  curl -fsSL https://github.com/DieselZhang/repo-mastery/archive/refs/heads/main.tar.gz \
+    | tar -xz -C "$TMP"
+  SRC="$TMP/repo-mastery-main"
+fi
 
 CLAUDE_DIR="${CLAUDE_SKILLS_DIR:-$HOME/.claude/skills}"
 CODEX_DIR="${CODEX_SKILLS_DIR:-$HOME/.codex/skills}"

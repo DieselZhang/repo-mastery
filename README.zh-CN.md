@@ -8,7 +8,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-skill-0A84FF.svg)](#)
-![Version](https://img.shields.io/badge/version-2.1.0-blue.svg)
+![Version](https://img.shields.io/badge/version-2.2.0-blue.svg)
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)
 
 [English](./README.md) · [文档](./docs/zh-CN/ARCHITECTURE.md) · [贡献指南](./CONTRIBUTING.md)
@@ -86,33 +86,61 @@ Phase 4  合成 COVERAGE.md + 可选可分享 HTML 课程
 
 ## 安装
 
-本仓库**本身就是**这个 skill，遵循开放的 **Agent Skills 标准**（agentskills.io）——同一份 `SKILL.md` 原生运行于 Claude Code、OpenAI Codex、Gemini CLI。clone 一次，处处安装：
+本仓库**本身就是**这个 skill，遵循开放的 **Agent Skills 标准**（agentskills.io）——同一份 `SKILL.md` 原生运行于 Claude Code、OpenAI Codex、Gemini CLI。**五种安装方式，任选其一：**
+
+### 1. npm —— 一条命令（发布后可用）
 
 ```bash
-git clone https://github.com/DieselZhang/repo-mastery.git
-cd repo-mastery
-
-# 一键安装到 Claude Code + Codex + Gemini：
-./scripts/install.sh
-
-# …或按工具安装：
-./scripts/install.sh --only claude        # 仅 Claude Code
-./scripts/install.sh --only codex         # 仅 Codex
-./scripts/install.sh --only gemini        # 仅 Gemini CLI
+npx @dieselzhang/repo-mastery install            # 任意工具、任意位置
+# 或全局安装 CLI：
+npm i -g @dieselzhang/repo-mastery && repo-mastery install
+# 选项：repo-mastery install --only codex / --skip gemini / --dry-run
 ```
 
-**各 CLI 安装命令：**
+### 2. curl —— 一行，无需 npm
 
-| 工具 | 安装命令 | 入口 |
+```bash
+curl -fsSL https://raw.githubusercontent.com/DieselZhang/repo-mastery/main/scripts/install.sh | bash
+```
+
+安装到 Claude Code + Codex + Gemini。管道后加 `--only codex`（等）可选。
+
+### 3. Claude Code —— 原生插件安装
+
+```bash
+claude plugin marketplace add DieselZhang/repo-mastery
+claude plugin install repo-mastery@repo-mastery
+```
+
+（会话内等价：`/plugin marketplace add …` 然后 `/plugin install …`。）
+
+### 4. 对话安装 —— 让 CLI 自己装
+
+| 工具 | 对它说 |
+|---|---|
+| **Claude Code** | "把 github:DieselZhang/repo-mastery 的 repo-mastery skill 安装到 ~/.claude/skills"（Claude 会 clone + 放置），或走上面的 `/plugin` 路线 |
+| **OpenAI Codex** | 在 Codex 里用内置安装器：`$skill-installer install https://github.com/DieselZhang/repo-mastery` |
+| **Gemini CLI** | "把 github:DieselZhang/repo-mastery 的 repo-mastery skill clone 到你的 skills 目录" |
+
+### 5. 手动 —— clone
+
+```bash
+git clone https://github.com/DieselZhang/repo-mastery ~/.claude/skills/repo-mastery
+cd repo-mastery && ./scripts/install.sh    # 从 checkout 安装到其他工具
+```
+
+### 各工具查找位置
+
+| 工具 | skill 目录 | 入口 |
 |---|---|---|
-| **Claude Code** | `cp -r repo-mastery ~/.claude/skills/repo-mastery` | `SKILL.md` —— 用 `/repo-mastery start <仓库>` |
-| **OpenAI Codex** | `cp -r repo-mastery ~/.codex/skills/repo-mastery` | `SKILL.md` + `agents/openai.yaml` —— 提到 *repo-mastery* 或要求掌握某个仓库 |
-| **Gemini CLI** | `cp -r repo-mastery ~/.gemini/skills/repo-mastery` | 经 `activate_skill` 激活；或把 `GEMINI.md` 复制进项目 |
-| **opencode / Cursor**（AGENTS.md 工具） | `cp AGENTS.md <项目>/AGENTS.md` | `AGENTS.md` 协议 |
+| **Claude Code** | `~/.claude/skills/` | `SKILL.md` —— `/repo-mastery start <仓库>` |
+| **OpenAI Codex** | `~/.codex/skills/`（或 `~/.agents/skills/`） | `SKILL.md` + `agents/openai.yaml` |
+| **Gemini CLI** | 其 skills 目录（`GEMINI_SKILLS_DIR` 可覆盖） | `activate_skill` / `GEMINI.md` |
+| **opencode / Cursor**（AGENTS.md 工具） | 项目目录 | `cp AGENTS.md <项目>/AGENTS.md` |
 
-> **Codex 注意**：Codex 只读自己的目录，不读 `~/.claude/`。请安装到 `~/.codex/skills/`（或 `~/.agents/skills/`）才会被发现。安装后重启 CLI。
+> **Codex 注意**：Codex 只读自己的目录，不读 `~/.claude/`。请安装到 `~/.codex/skills/` 才会被发现。安装后重启 CLI。
 >
-> **Gemini 注意**：若你的 Gemini skills 目录不同，用 `GEMINI_SKILLS_DIR` 指定（如 `GEMINI_SKILLS_DIR=$HOME/.config/gemini/skills ./scripts/install.sh`）。
+> **插件注意**：以插件方式安装会把 skill 缓存到 `~/.claude/plugins/cache/`，调用为带命名空间的形式（`/repo-mastery:repo-mastery`）。
 
 **环境要求**
 
@@ -173,12 +201,18 @@ repo-mastery/
 ├── AGENTS.md                       遵循 AGENTS.md 工具（Codex/opencode/Cursor）的协议
 ├── GEMINI.md                       Gemini CLI 的协议
 ├── LICENSE                         MIT
+├── package.json                    npm 打包（`repo-mastery install` 一条命令安装）
+├── .claude-plugin/                 Claude Code 插件 marketplace + plugin 清单
+│   ├── marketplace.json
+│   └── plugin.json
 ├── agents/
 │   └── openai.yaml                 Codex / Agent-Skills UI 元数据
+├── bin/
+│   └── repo-mastery.js             npm 一条命令安装器
 ├── scripts/
 │   ├── learning_engine.py          确定性闸门（掌握度/排期/记录/下一步/校验/初始化）
 │   ├── index_repo.py               大型仓库代码索引（纯标准库）
-│   └── install.sh                  一键安装到 Claude Code + Codex + Gemini
+│   └── install.sh                  一键安装到 Claude Code + Codex + Gemini（也支持 curl 管道）
 ├── references/                     skill 内部文件（按阶段读取）
 │   ├── curriculum-design.md        从源码设计课程地图
 │   ├── mastery-policy.md           掌握度 / 闸门 / 间隔复习 / 错误诊断

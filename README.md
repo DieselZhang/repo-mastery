@@ -8,7 +8,7 @@ Learn a project's **usage → architecture → key implementations** the way you
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-skill-0A84FF.svg)](#)
-![Version](https://img.shields.io/badge/version-2.1.0-blue.svg)
+![Version](https://img.shields.io/badge/version-2.2.0-blue.svg)
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)
 
 [简体中文](./README.zh-CN.md) · [Documentation](./docs/ARCHITECTURE.md) · [Contributing](./CONTRIBUTING.md)
@@ -88,36 +88,64 @@ Core design axiom: **intelligence at the exit, advancement at the gate** — the
 
 The repo itself **is** the skill, following the open **Agent Skills** standard
 (agentskills.io) — the same `SKILL.md` runs natively on Claude Code, OpenAI
-Codex, and Gemini CLI. Clone once, install everywhere:
+Codex, and Gemini CLI. **Five ways to install, pick one:**
+
+### 1. npm — one command (once published)
 
 ```bash
-git clone https://github.com/DieselZhang/repo-mastery.git
-cd repo-mastery
-
-# Install to Claude Code + Codex + Gemini in one step:
-./scripts/install.sh
-
-# …or per tool:
-./scripts/install.sh --only claude        # Claude Code only
-./scripts/install.sh --only codex         # Codex only
-./scripts/install.sh --only gemini        # Gemini CLI only
+npx @dieselzhang/repo-mastery install            # any tool, from anywhere
+# or install the CLI globally:
+npm i -g @dieselzhang/repo-mastery && repo-mastery install
+# options: repo-mastery install --only codex / --skip gemini / --dry-run
 ```
 
-**Per-CLI installation commands:**
+### 2. curl — one line, no npm needed
 
-| Tool | Install command | Entry point |
+```bash
+curl -fsSL https://raw.githubusercontent.com/DieselZhang/repo-mastery/main/scripts/install.sh | bash
+```
+
+Installs to Claude Code + Codex + Gemini. Add `--only codex` (etc.) after the pipe.
+
+### 3. Claude Code — native plugin install
+
+```bash
+claude plugin marketplace add DieselZhang/repo-mastery
+claude plugin install repo-mastery@repo-mastery
+```
+
+(In-session equivalents: `/plugin marketplace add …` then `/plugin install …`.)
+
+### 4. Conversation-driven — tell the CLI to install it
+
+| Tool | Say this |
+|---|---|
+| **Claude Code** | "Install the repo-mastery skill from github:DieselZhang/repo-mastery into ~/.claude/skills" (Claude clones + places it), or use the `/plugin` route above |
+| **OpenAI Codex** | In Codex, use its built-in installer: `$skill-installer install https://github.com/DieselZhang/repo-mastery` |
+| **Gemini CLI** | "Clone the repo-mastery skill from github:DieselZhang/repo-mastery into your skills directory" |
+
+### 5. Manual — clone
+
+```bash
+git clone https://github.com/DieselZhang/repo-mastery ~/.claude/skills/repo-mastery
+cd repo-mastery && ./scripts/install.sh    # from the checkout, install to other tools too
+```
+
+### Where each tool looks
+
+| Tool | Skill directory | Entry point |
 |---|---|---|
-| **Claude Code** | `cp -r repo-mastery ~/.claude/skills/repo-mastery` | `SKILL.md` — use `/repo-mastery start <repo>` |
-| **OpenAI Codex** | `cp -r repo-mastery ~/.codex/skills/repo-mastery` | `SKILL.md` + `agents/openai.yaml` — mention *repo-mastery* or ask to master a repo |
-| **Gemini CLI** | `cp -r repo-mastery ~/.gemini/skills/repo-mastery` | skills via `activate_skill`; or copy `GEMINI.md` into a project |
-| **opencode / Cursor** (AGENTS.md tools) | `cp AGENTS.md <project>/AGENTS.md` | `AGENTS.md` protocol |
+| **Claude Code** | `~/.claude/skills/` | `SKILL.md` — `/repo-mastery start <repo>` |
+| **OpenAI Codex** | `~/.codex/skills/` (or `~/.agents/skills/`) | `SKILL.md` + `agents/openai.yaml` |
+| **Gemini CLI** | its skills dir (`GEMINI_SKILLS_DIR` overridable) | `activate_skill` / `GEMINI.md` |
+| **opencode / Cursor** (AGENTS.md tools) | project dir | `cp AGENTS.md <project>/AGENTS.md` |
 
 > **Codex note**: Codex reads only its own directories — it does not read
-> `~/.claude/`. Install to `~/.codex/skills/` (or `~/.agents/skills/`) so it is
-> discovered. Restart the CLI after installing.
+> `~/.claude/`. Install to `~/.codex/skills/` so it is discovered. Restart the
+> CLI after installing.
 >
-> **Gemini note**: set `GEMINI_SKILLS_DIR` if your Gemini skills directory
-> differs (e.g. `GEMINI_SKILLS_DIR=$HOME/.config/gemini/skills ./scripts/install.sh`).
+> **Plugin note**: installing as a plugin caches the skill in
+> `~/.claude/plugins/cache/` and invokes it namespaced (`/repo-mastery:repo-mastery`).
 
 **Requirements**
 
@@ -178,12 +206,18 @@ repo-mastery/
 ├── AGENTS.md                       protocol for AGENTS.md tools (Codex, opencode, Cursor)
 ├── GEMINI.md                       protocol for Gemini CLI
 ├── LICENSE                         MIT
+├── package.json                    npm packaging (`repo-mastery install` one-command CLI)
+├── .claude-plugin/                 Claude Code plugin marketplace + plugin manifests
+│   ├── marketplace.json
+│   └── plugin.json
 ├── agents/
 │   └── openai.yaml                 Codex / Agent-Skills UI metadata
+├── bin/
+│   └── repo-mastery.js             npm one-command installer
 ├── scripts/
 │   ├── learning_engine.py          the deterministic gate (mastery/schedule/record/next/validate/init)
 │   ├── index_repo.py               large-repo code index (pure stdlib)
-│   └── install.sh                  install to Claude Code + Codex + Gemini at once
+│   └── install.sh                  install to Claude Code + Codex + Gemini (also curl-pipeable)
 ├── references/                     skill internals (read by the skill per phase)
 │   ├── curriculum-design.md        course map design from source
 │   ├── mastery-policy.md           mastery / gates / spaced review / error diagnosis
