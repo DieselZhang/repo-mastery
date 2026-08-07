@@ -51,8 +51,12 @@ diagnostic (probe; includes test-out)
 ### Quiz (memory / procedure)
 - Follow `quiz-design.md` (**test application, not memory**).
 - **The expected answer goes only into `progress.json.pending_question` — never shown back in the question**.
-- User answers → grade → update `quiz_attempts` → recompute `compute_mastery` → write `mastery_levels`.
-- Advance only at mastery ≥ 0.9; otherwise return to explain + practice more.
+- User answers → grade via the **engine script** (deterministic, tool-agnostic):
+  ```bash
+  python3 scripts/learning_engine.py record-attempt <path>/.learning/progress.json \
+      --kp <kp_id> --type procedure --correct --question <qid> --write
+  ```
+- Advance only when the script reports `passed_gate: true` (≥ 0.9); otherwise return to explain + practice more.
 
 ### Hands-on on demand (procedure especially)
 - Guide the user to actually verify: "verify it now — run `pytest tests/test_x.py`" or "write a 20-line demo calling this API."

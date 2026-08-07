@@ -4,13 +4,22 @@
 
 ## 安装 skill
 
-本仓库本身就是这个 skill。安装到你的 Claude Code skills 目录：
+本仓库本身就是这个 skill（Agent Skills 标准）。clone 一次，可安装到任意工具——或全部：
 
 ```bash
-git clone https://github.com/DieselZhang/repo-mastery.git ~/.claude/skills/repo-mastery
+git clone https://github.com/DieselZhang/repo-mastery.git
+cd repo-mastery
+./scripts/install.sh          # Claude Code + Codex + Gemini 一次装好
 ```
 
-重启 Claude Code（或开新会话）让 skill 被发现。用 `/skills` 或技能列表确认出现 `repo-mastery` 条目。
+按工具：
+
+- **Claude Code**：`cp -r repo-mastery ~/.claude/skills/repo-mastery` → 用 `/repo-mastery start <仓库>`
+- **OpenAI Codex**：`cp -r repo-mastery ~/.codex/skills/repo-mastery` → 提到 *repo-mastery* 或要求掌握某仓库
+- **Gemini CLI**：`cp -r repo-mastery ~/.gemini/skills/repo-mastery` → 经 `activate_skill` 激活
+- **AGENTS.md 工具**（opencode、Cursor）：`cp AGENTS.md <项目>/AGENTS.md`
+
+重启 CLI 让 skill 被发现。在 Claude Code 中，用技能列表确认出现 `repo-mastery` 条目。
 
 ## 快速开始
 

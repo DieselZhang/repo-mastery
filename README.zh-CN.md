@@ -8,7 +8,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-skill-0A84FF.svg)](#)
-![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)
+![Version](https://img.shields.io/badge/version-2.1.0-blue.svg)
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)
 
 [English](./README.md) · [文档](./docs/zh-CN/ARCHITECTURE.md) · [贡献指南](./CONTRIBUTING.md)
@@ -70,6 +70,7 @@ Repo-Mastery 是一个 **Claude Code skill**，把任意开源仓库转成结构
 - 🌍 **自适应提取** —— 中小仓库直接读；大型仓库用轻量 Python 索引（`code-map.json`）。
 - 📦 **双形态产出** —— 全量 Markdown 课程（`COVERAGE.md`）+ 可分享的交互式 HTML 课程。
 - 🌐 **双语** —— 讲解语言跟随你的输入；代码与标识符保持原文。
+- 🧰 **多 CLI 支持** —— 同一 skill 原生运行于 **Claude Code、OpenAI Codex、Gemini CLI** 及遵循 AGENTS.md 的工具。确定性闸门是真代码（`scripts/learning_engine.py`），所有工具共用，掌握度数学永不错位。
 
 ## 工作原理
 
@@ -85,21 +86,38 @@ Phase 4  合成 COVERAGE.md + 可选可分享 HTML 课程
 
 ## 安装
 
-本仓库**本身就是**这个 skill。安装到你的 Claude Code skills 目录：
+本仓库**本身就是**这个 skill，遵循开放的 **Agent Skills 标准**（agentskills.io）——同一份 `SKILL.md` 原生运行于 Claude Code、OpenAI Codex、Gemini CLI。clone 一次，处处安装：
 
 ```bash
-# clone 到 skills 目录（推荐，可用 git 保持更新）
-git clone https://github.com/DieselZhang/repo-mastery.git ~/.claude/skills/repo-mastery
+git clone https://github.com/DieselZhang/repo-mastery.git
+cd repo-mastery
 
-# 或复制/软链一份
-cp -r repo-mastery ~/.claude/skills/repo-mastery
+# 一键安装到 Claude Code + Codex + Gemini：
+./scripts/install.sh
+
+# …或按工具安装：
+./scripts/install.sh --only claude        # 仅 Claude Code
+./scripts/install.sh --only codex         # 仅 Codex
+./scripts/install.sh --only gemini        # 仅 Gemini CLI
 ```
+
+**各 CLI 安装命令：**
+
+| 工具 | 安装命令 | 入口 |
+|---|---|---|
+| **Claude Code** | `cp -r repo-mastery ~/.claude/skills/repo-mastery` | `SKILL.md` —— 用 `/repo-mastery start <仓库>` |
+| **OpenAI Codex** | `cp -r repo-mastery ~/.codex/skills/repo-mastery` | `SKILL.md` + `agents/openai.yaml` —— 提到 *repo-mastery* 或要求掌握某个仓库 |
+| **Gemini CLI** | `cp -r repo-mastery ~/.gemini/skills/repo-mastery` | 经 `activate_skill` 激活；或把 `GEMINI.md` 复制进项目 |
+| **opencode / Cursor**（AGENTS.md 工具） | `cp AGENTS.md <项目>/AGENTS.md` | `AGENTS.md` 协议 |
+
+> **Codex 注意**：Codex 只读自己的目录，不读 `~/.claude/`。请安装到 `~/.codex/skills/`（或 `~/.agents/skills/`）才会被发现。安装后重启 CLI。
+>
+> **Gemini 注意**：若你的 Gemini skills 目录不同，用 `GEMINI_SKILLS_DIR` 指定（如 `GEMINI_SKILLS_DIR=$HOME/.config/gemini/skills ./scripts/install.sh`）。
 
 **环境要求**
 
-- [Claude Code](https://claude.com/claude-code)（skill 运行时）。
 - 目标仓库：本地路径，或可访问的 `github:owner/repo`（skill 自动 `git clone --depth 1`）。
-- Python 3.8+ —— 仅大型仓库索引脚本需要（`scripts/index_repo.py`，纯标准库）。
+- Python 3.8+ —— 确定性引擎（`scripts/learning_engine.py`）与大型仓库索引（`scripts/index_repo.py`）需要，均纯标准库。
 
 ## 使用
 
@@ -147,14 +165,20 @@ skill 会带你走完四个阶段。讲解语言默认跟随你的输入；传 `
 
 ```text
 repo-mastery/
-├── SKILL.md                        skill 定义（英文；Claude Code 加载）
+├── SKILL.md                        skill 定义（英文；Agent Skills 标准）
 ├── README.md                       本文件（英文）
 ├── README.zh-CN.md                 中文镜像
 ├── ADOPTION.md                     归属声明：DeepTutor / docs-to-course / teach
 ├── CONTRIBUTING.md                 贡献指南
+├── AGENTS.md                       遵循 AGENTS.md 工具（Codex/opencode/Cursor）的协议
+├── GEMINI.md                       Gemini CLI 的协议
 ├── LICENSE                         MIT
+├── agents/
+│   └── openai.yaml                 Codex / Agent-Skills UI 元数据
 ├── scripts/
-│   └── index_repo.py               大型仓库代码索引（纯标准库）
+│   ├── learning_engine.py          确定性闸门（掌握度/排期/记录/下一步/校验/初始化）
+│   ├── index_repo.py               大型仓库代码索引（纯标准库）
+│   └── install.sh                  一键安装到 Claude Code + Codex + Gemini
 ├── references/                     skill 内部文件（按阶段读取）
 │   ├── curriculum-design.md        从源码设计课程地图
 │   ├── mastery-policy.md           掌握度 / 闸门 / 间隔复习 / 错误诊断

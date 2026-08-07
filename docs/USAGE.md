@@ -4,13 +4,24 @@ A detailed walkthrough of how to use the skill day to day.
 
 ## Installing the skill
 
-The repo itself is the skill. Install it into your Claude Code skills directory:
+The repo itself is the skill (Agent Skills standard). Clone once, install to any
+tool — or all of them:
 
 ```bash
-git clone https://github.com/DieselZhang/repo-mastery.git ~/.claude/skills/repo-mastery
+git clone https://github.com/DieselZhang/repo-mastery.git
+cd repo-mastery
+./scripts/install.sh          # Claude Code + Codex + Gemini at once
 ```
 
-Restart Claude Code (or start a new session) so the skill is discovered. Verify it's available by listing skills — the entry should appear as `repo-mastery`.
+Per tool:
+
+- **Claude Code**: `cp -r repo-mastery ~/.claude/skills/repo-mastery` → use `/repo-mastery start <repo>`
+- **OpenAI Codex**: `cp -r repo-mastery ~/.codex/skills/repo-mastery` → mention *repo-mastery* or ask to master a repo
+- **Gemini CLI**: `cp -r repo-mastery ~/.gemini/skills/repo-mastery` → activate via `activate_skill`
+- **AGENTS.md tools** (opencode, Cursor): `cp AGENTS.md <project>/AGENTS.md`
+
+Restart the CLI so the skill is discovered. In Claude Code, verify it appears as
+`repo-mastery` in the skills list.
 
 ## Quick start
 

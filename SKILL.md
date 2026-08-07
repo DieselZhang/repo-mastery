@@ -2,7 +2,7 @@
 name: repo-mastery
 description: "Turn any open-source repository into a developer-focused mastery course. Given a local repo path or GitHub URL, it builds a confirmed course map and drives interactive mastery learning (diagnostic, explanation, Feynman check, practice, spaced review) with hands-on tasks, note-taking, and dual-format (Markdown + HTML) course output — so you fully master a project's usage, architecture, and key implementations like a real course. Triggers: 'learn this repo', 'master this codebase', 'turn X into a course', 'deep-dive into X project'."
 origin: personal
-version: 2.0.0
+version: 2.1.0
 tags: [learning, education, codebase, mastery, spaced-repetition]
 ---
 
@@ -39,6 +39,26 @@ Teaching language **follows the user's input language by default** (Chinese inpu
 ```
 
 Code, file paths, and identifiers always stay in their original form regardless of language.
+
+## Multi-Tool Support
+
+Repo-Mastery is not Claude Code-only. The skill follows the open **Agent
+Skills** standard (agentskills.io), so the same `SKILL.md` runs natively on
+**Claude Code**, **OpenAI Codex**, **Gemini CLI**, and any tool that loads
+`SKILL.md` skills.
+
+| Tool | Entry point | Install |
+|---|---|---|
+| Claude Code | `SKILL.md` (this file) | `~/.claude/skills/repo-mastery/` |
+| OpenAI Codex | `SKILL.md` + `agents/openai.yaml` | `~/.codex/skills/repo-mastery/` |
+| Gemini CLI | `GEMINI.md` + skills via `activate_skill` | its skills dir; or copy `GEMINI.md` into a project |
+| AGENTS.md tools (opencode, Cursor, …) | `AGENTS.md` | clone repo or copy `AGENTS.md` into the project |
+
+**The deterministic engine is real code, not prose** — `scripts/learning_engine.py`
+implements `compute-mastery`, the spaced-repetition scheduler, `record-attempt`,
+and `next-objective`. **Every gate decision MUST go through this script**, so
+mastery math is identical in every tool. See `AGENTS.md` / `GEMINI.md` for the
+per-tool protocol; `scripts/install.sh` installs to all tools at once.
 
 ## Difference from docs-to-course
 
@@ -138,9 +158,13 @@ Drive per `references/session-flow.md`. Core loop (per knowledge point):
 
 > **diagnostic (probe how much is known; test-out skip) → explain → Feynman check → practice (quiz / hands-on) → error diagnosis → spaced-review scheduling**
 
-- The next station is always decided by `next_objective` (priority: pending question → due review → first unmastered point → complete).
-- Quantitative gate (memory/procedure): pose a question, compute via `compute_mastery` per `mastery-policy.md`; advance only at ≥ 0.9.
-- Qualitative gate (concept/design): have the user do a Feynman recital; you judge `passed`; retry if not.
+- The next station is always decided by the **engine script** — run
+  `python3 scripts/learning_engine.py next-objective <path>/.learning/progress.json`
+  (priority: pending question → due review → first unmastered point → complete).
+- Quantitative gate (memory/procedure): pose a question, then record the attempt and
+  recompute mastery via `python3 scripts/learning_engine.py record-attempt ... --write`;
+  advance only when the script reports `passed_gate: true` (≥ 0.9).
+- Qualitative gate (concept/design): have the user do a Feynman recital; you judge `passed`; retry if not. (Qualitative results are stored in `progress.json.qualitative_mastery` and read by the engine's `next-objective`.)
 - **Hands-on on demand**: for procedure points, guide the user to actually run things (build/test/write a small demo). Read-only commands (`build`, `test`, `--help`) may run directly; **mutating operations (writing files, installing deps) require explicit user approval first**. The hands-on result is recorded as mastery evidence.
 - **Auto notes**: after each explanation/judgment, automatically append to `<repo>/.learning/notes/<module>.md` (format: `note-template.md`); the user can `/repo-mastery note "..."` at any time.
 - **Command convention**: only run read-only/no-side-effect commands by default; show any command that modifies the user's filesystem or installs dependencies and request approval.
@@ -189,6 +213,21 @@ Progress is stored in JSON, one record per knowledge point; the **expected answe
 - `references/gotchas.md` — **All phases**: failure-point checklist
 - `references/index-script-spec.md` — **Phase 0, large repos**: Python indexing script docs
 - `references/html-shell/` — **Phase 4**: HTML course shell (copy verbatim)
+
+## Scripts
+
+- `scripts/learning_engine.py` — **the deterministic gate**. Call for mastery /
+  schedule / record-attempt / next-objective / validate-map / init. Mandatory in
+  every tool; never re-derive the math from prose.
+- `scripts/index_repo.py` — large-repo code index (`code-map.json`), pure stdlib.
+- `scripts/install.sh` — install the skill to Claude Code, Codex, and Gemini CLI
+  at once (`--only <tool>` / `--skip <tool>` / `--dry-run`).
+
+## Multi-tool entry points
+
+- `AGENTS.md` — portable protocol for AGENTS.md-compatible tools (Codex, opencode, Cursor).
+- `GEMINI.md` — protocol for Gemini CLI.
+- `agents/openai.yaml` — Codex/Agent-Skills UI metadata.
 
 ## Anti-Patterns
 

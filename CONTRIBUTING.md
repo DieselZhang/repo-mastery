@@ -35,6 +35,8 @@ cd ~/.claude/skills/repo-mastery
 - **Language** — `SKILL.md` frontmatter `description` and all `references/` must be **English** (the skill is used worldwide). `README.zh-CN.md` and `docs/zh-CN/` are the Chinese mirrors — keep them in sync when you change the English versions.
 - **Dual-format docs** — when you edit `README.md` / `docs/`, mirror the change into `README.zh-CN.md` / `docs/zh-CN/`.
 - **HTML shell is frozen** — `references/html-shell/*` (styles.css, main.js, build.sh, _base.html, _footer.html, interactive-elements.md, design-system.md) are copied verbatim from docs-to-course and must **never** be regenerated or restyled here. Fixes to the shell belong in the upstream skill.
+- **The gate is code, not prose** — `scripts/learning_engine.py` is the single source of truth for `compute-mastery`, spaced review, `record-attempt`, and `next-objective`. When you change mastery math, change it **here first**, then update `references/mastery-policy.md` to match. Never let a reference formula drift from the script.
+- **Multi-tool entry files** — when you change the workflow, keep `AGENTS.md`, `GEMINI.md`, and `SKILL.md` consistent (they describe the same protocol for different tools). Verify the engine with `python3 scripts/learning_engine.py --help` and the subcommand tests.
 - **Attribution** — if you add a design absorbed from another project, note it in `ADOPTION.md`.
 - **No secrets** — never commit API keys, tokens, or absolute personal paths.
 

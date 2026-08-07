@@ -4,6 +4,12 @@
 
 This policy is ported from DeepTutor's `learning/` module (`mastery.py` / `policy.py` / `scheduler.py` / `models.py`), replacing "subject knowledge" with "code knowledge".
 
+> **Every formula in this document is implemented in `scripts/learning_engine.py`.**
+> The tutor (in any tool) MUST call the script for gate decisions
+> (`compute-mastery`, `schedule`, `record-attempt`, `next-objective`,
+> `validate-map`, `init`) rather than re-deriving the math by hand — this keeps
+> mastery judgment identical across Claude Code, Codex, Gemini CLI, etc.
+
 ## 0. Design rationale: Fluency vs Storage Strength (absorbed from the teach skill)
 
 Distinguish two kinds of "knowing":

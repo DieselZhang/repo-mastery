@@ -8,7 +8,7 @@ Learn a project's **usage → architecture → key implementations** the way you
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-skill-0A84FF.svg)](#)
-![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)
+![Version](https://img.shields.io/badge/version-2.1.0-blue.svg)
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)
 
 [简体中文](./README.zh-CN.md) · [Documentation](./docs/ARCHITECTURE.md) · [Contributing](./CONTRIBUTING.md)
@@ -70,6 +70,7 @@ As a developer, reading an open-source project's code rarely equals "mastering" 
 - 🌍 **Adaptive ingest** — small/medium repos read directly; large repos get a lightweight Python index (`code-map.json`).
 - 📦 **Dual-format output** — full Markdown course (`COVERAGE.md`) + shareable interactive HTML course.
 - 🌐 **Bilingual** — teaching language follows your input; code and identifiers stay original.
+- 🧰 **Multi-CLI** — the same skill runs natively on **Claude Code, OpenAI Codex, Gemini CLI**, and AGENTS.md-based tools. The deterministic gate is real code (`scripts/learning_engine.py`) shared by every tool, so mastery math never drifts.
 
 ## How It Works
 
@@ -85,21 +86,43 @@ Core design axiom: **intelligence at the exit, advancement at the gate** — the
 
 ## Installation
 
-The repo itself **is** the skill. Install it into your Claude Code skills directory:
+The repo itself **is** the skill, following the open **Agent Skills** standard
+(agentskills.io) — the same `SKILL.md` runs natively on Claude Code, OpenAI
+Codex, and Gemini CLI. Clone once, install everywhere:
 
 ```bash
-# Clone to your skills directory (recommended, keeps it updatable via git)
-git clone https://github.com/DieselZhang/repo-mastery.git ~/.claude/skills/repo-mastery
+git clone https://github.com/DieselZhang/repo-mastery.git
+cd repo-mastery
 
-# Or copy/symlink a checkout
-cp -r repo-mastery ~/.claude/skills/repo-mastery
+# Install to Claude Code + Codex + Gemini in one step:
+./scripts/install.sh
+
+# …or per tool:
+./scripts/install.sh --only claude        # Claude Code only
+./scripts/install.sh --only codex         # Codex only
+./scripts/install.sh --only gemini        # Gemini CLI only
 ```
+
+**Per-CLI installation commands:**
+
+| Tool | Install command | Entry point |
+|---|---|---|
+| **Claude Code** | `cp -r repo-mastery ~/.claude/skills/repo-mastery` | `SKILL.md` — use `/repo-mastery start <repo>` |
+| **OpenAI Codex** | `cp -r repo-mastery ~/.codex/skills/repo-mastery` | `SKILL.md` + `agents/openai.yaml` — mention *repo-mastery* or ask to master a repo |
+| **Gemini CLI** | `cp -r repo-mastery ~/.gemini/skills/repo-mastery` | skills via `activate_skill`; or copy `GEMINI.md` into a project |
+| **opencode / Cursor** (AGENTS.md tools) | `cp AGENTS.md <project>/AGENTS.md` | `AGENTS.md` protocol |
+
+> **Codex note**: Codex reads only its own directories — it does not read
+> `~/.claude/`. Install to `~/.codex/skills/` (or `~/.agents/skills/`) so it is
+> discovered. Restart the CLI after installing.
+>
+> **Gemini note**: set `GEMINI_SKILLS_DIR` if your Gemini skills directory
+> differs (e.g. `GEMINI_SKILLS_DIR=$HOME/.config/gemini/skills ./scripts/install.sh`).
 
 **Requirements**
 
-- [Claude Code](https://claude.com/claude-code) (the skill runtime).
 - A target repository: a local path or a reachable `github:owner/repo` (the skill auto-runs `git clone --depth 1`).
-- Python 3.8+ — only needed by the large-repo index script (`scripts/index_repo.py`, pure stdlib).
+- Python 3.8+ — needed by the deterministic engine (`scripts/learning_engine.py`) and the large-repo index (`scripts/index_repo.py`), both pure stdlib.
 
 ## Usage
 
@@ -147,14 +170,20 @@ The skill walks you through the four phases. The teaching language follows your 
 
 ```text
 repo-mastery/
-├── SKILL.md                        skill definition (English; loaded by Claude Code)
+├── SKILL.md                        skill definition (English; Agent Skills standard)
 ├── README.md                       this file
 ├── README.zh-CN.md                 Chinese mirror
 ├── ADOPTION.md                     attribution: DeepTutor / docs-to-course / teach
 ├── CONTRIBUTING.md                 contributor guide
+├── AGENTS.md                       protocol for AGENTS.md tools (Codex, opencode, Cursor)
+├── GEMINI.md                       protocol for Gemini CLI
 ├── LICENSE                         MIT
+├── agents/
+│   └── openai.yaml                 Codex / Agent-Skills UI metadata
 ├── scripts/
-│   └── index_repo.py               large-repo code index (pure stdlib)
+│   ├── learning_engine.py          the deterministic gate (mastery/schedule/record/next/validate/init)
+│   ├── index_repo.py               large-repo code index (pure stdlib)
+│   └── install.sh                  install to Claude Code + Codex + Gemini at once
 ├── references/                     skill internals (read by the skill per phase)
 │   ├── curriculum-design.md        course map design from source
 │   ├── mastery-policy.md           mastery / gates / spaced review / error diagnosis
