@@ -4,21 +4,52 @@ A detailed walkthrough of how to use the skill day to day.
 
 ## Installing the skill
 
-The repo itself is the skill (Agent Skills standard). Clone once, install to any
-tool — or all of them:
+The repo itself is the skill (Agent Skills standard). **Five ways to install —
+pick one:**
+
+### 1. npm — one command
 
 ```bash
-git clone https://github.com/DieselZhang/repo-mastery.git
-cd repo-mastery
-./scripts/install.sh          # Claude Code + Codex + Gemini at once
+npx @dieselzhang/repo-mastery install            # any tool, from anywhere
+# or global:
+npm i -g @dieselzhang/repo-mastery && repo-mastery install
+# options: repo-mastery install --only codex / --skip gemini / --dry-run
 ```
 
-Per tool:
+### 2. curl — one line, no npm needed
 
-- **Claude Code**: `cp -r repo-mastery ~/.claude/skills/repo-mastery` → use `/repo-mastery start <repo>`
-- **OpenAI Codex**: `cp -r repo-mastery ~/.codex/skills/repo-mastery` → mention *repo-mastery* or ask to master a repo
-- **Gemini CLI**: `cp -r repo-mastery ~/.gemini/skills/repo-mastery` → activate via `activate_skill`
-- **AGENTS.md tools** (opencode, Cursor): `cp AGENTS.md <project>/AGENTS.md`
+```bash
+curl -fsSL https://raw.githubusercontent.com/DieselZhang/repo-mastery/main/scripts/install.sh | bash
+```
+
+### 3. Claude Code — native plugin install
+
+```bash
+claude plugin marketplace add DieselZhang/repo-mastery
+claude plugin install repo-mastery@repo-mastery
+```
+
+### 4. Conversation-driven — tell the CLI to install it
+
+- **Claude Code**: "Install the repo-mastery skill from github:DieselZhang/repo-mastery into ~/.claude/skills" (or the `/plugin` route above)
+- **OpenAI Codex**: `$skill-installer install https://github.com/DieselZhang/repo-mastery`
+- **Gemini CLI**: "Clone the repo-mastery skill from github:DieselZhang/repo-mastery into your skills directory"
+
+### 5. Manual — clone
+
+```bash
+git clone https://github.com/DieselZhang/repo-mastery ~/.claude/skills/repo-mastery
+cd repo-mastery && ./scripts/install.sh    # from the checkout, install to other tools too
+```
+
+**Where each tool looks**
+
+| Tool | Skill directory | Entry point |
+|---|---|---|
+| **Claude Code** | `~/.claude/skills/` | `SKILL.md` — `/repo-mastery start <repo>` |
+| **OpenAI Codex** | `~/.codex/skills/` (or `~/.agents/skills/`) | `SKILL.md` + `agents/openai.yaml` |
+| **Gemini CLI** | its skills dir (`GEMINI_SKILLS_DIR` overridable) | `activate_skill` / `GEMINI.md` |
+| **opencode / Cursor** (AGENTS.md tools) | project dir | `cp AGENTS.md <project>/AGENTS.md` |
 
 Restart the CLI so the skill is discovered. In Claude Code, verify it appears as
 `repo-mastery` in the skills list.

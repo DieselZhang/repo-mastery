@@ -4,20 +4,51 @@
 
 ## 安装 skill
 
-本仓库本身就是这个 skill（Agent Skills 标准）。clone 一次，可安装到任意工具——或全部：
+本仓库本身就是这个 skill（Agent Skills 标准）。**五种安装方式，任选其一：**
+
+### 1. npm —— 一条命令
 
 ```bash
-git clone https://github.com/DieselZhang/repo-mastery.git
-cd repo-mastery
-./scripts/install.sh          # Claude Code + Codex + Gemini 一次装好
+npx @dieselzhang/repo-mastery install            # 任意工具、任意位置
+# 或全局安装：
+npm i -g @dieselzhang/repo-mastery && repo-mastery install
+# 选项：repo-mastery install --only codex / --skip gemini / --dry-run
 ```
 
-按工具：
+### 2. curl —— 一行，无需 npm
 
-- **Claude Code**：`cp -r repo-mastery ~/.claude/skills/repo-mastery` → 用 `/repo-mastery start <仓库>`
-- **OpenAI Codex**：`cp -r repo-mastery ~/.codex/skills/repo-mastery` → 提到 *repo-mastery* 或要求掌握某仓库
-- **Gemini CLI**：`cp -r repo-mastery ~/.gemini/skills/repo-mastery` → 经 `activate_skill` 激活
-- **AGENTS.md 工具**（opencode、Cursor）：`cp AGENTS.md <项目>/AGENTS.md`
+```bash
+curl -fsSL https://raw.githubusercontent.com/DieselZhang/repo-mastery/main/scripts/install.sh | bash
+```
+
+### 3. Claude Code —— 原生插件安装
+
+```bash
+claude plugin marketplace add DieselZhang/repo-mastery
+claude plugin install repo-mastery@repo-mastery
+```
+
+### 4. 对话安装 —— 让 CLI 自己装
+
+- **Claude Code**："把 github:DieselZhang/repo-mastery 的 repo-mastery skill 安装到 ~/.claude/skills"（或走上面的 `/plugin` 路线）
+- **OpenAI Codex**：`$skill-installer install https://github.com/DieselZhang/repo-mastery`
+- **Gemini CLI**："把 github:DieselZhang/repo-mastery 的 repo-mastery skill clone 到你的 skills 目录"
+
+### 5. 手动 —— clone
+
+```bash
+git clone https://github.com/DieselZhang/repo-mastery ~/.claude/skills/repo-mastery
+cd repo-mastery && ./scripts/install.sh    # 从 checkout 安装到其他工具
+```
+
+**各工具查找位置**
+
+| 工具 | skill 目录 | 入口 |
+|---|---|---|
+| **Claude Code** | `~/.claude/skills/` | `SKILL.md` —— `/repo-mastery start <仓库>` |
+| **OpenAI Codex** | `~/.codex/skills/`（或 `~/.agents/skills/`） | `SKILL.md` + `agents/openai.yaml` |
+| **Gemini CLI** | 其 skills 目录（`GEMINI_SKILLS_DIR` 可覆盖） | `activate_skill` / `GEMINI.md` |
+| **opencode / Cursor**（AGENTS.md 工具） | 项目目录 | `cp AGENTS.md <项目>/AGENTS.md` |
 
 重启 CLI 让 skill 被发现。在 Claude Code 中，用技能列表确认出现 `repo-mastery` 条目。
 

@@ -82,11 +82,19 @@ Read the relevant reference only when you reach that phase:
 
 ## Install
 
+One-command install (published package):
+
 ```bash
-# Place the skill where Gemini CLI finds skills (its skills dir), e.g.:
+npx @dieselzhang/repo-mastery install --only gemini     # Gemini only
+curl -fsSL https://raw.githubusercontent.com/DieselZhang/repo-mastery/main/scripts/install.sh | bash
+# set GEMINI_SKILLS_DIR if your Gemini skills dir differs
+```
+
+Or manually:
+
+```bash
 git clone https://github.com/DieselZhang/repo-mastery.git \
   ~/.gemini/skills/repo-mastery
-# Or run the repo's scripts/install.sh to install across all tools at once.
 ```
 
 You can also copy this file to a project as `GEMINI.md` (or append the

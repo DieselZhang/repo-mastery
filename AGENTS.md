@@ -84,7 +84,14 @@ Read the relevant reference only when you reach that phase (keep context lean):
 
 ## Install hints per tool
 
-- **Claude Code**: `~/.claude/skills/repo-mastery/`
+One-command installs (published package):
+
+```bash
+npx @dieselzhang/repo-mastery install            # all tools
+curl -fsSL https://raw.githubusercontent.com/DieselZhang/repo-mastery/main/scripts/install.sh | bash
+```
+
+- **Claude Code**: `~/.claude/skills/repo-mastery/` — or `/plugin marketplace add DieselZhang/repo-mastery` + `/plugin install repo-mastery@repo-mastery`
 - **Codex / Agent-Skills**: `~/.codex/skills/repo-mastery/` or `~/.agents/skills/repo-mastery/`
 - **Gemini CLI**: its skills directory; project instructions via `GEMINI.md`
 - Or run `scripts/install.sh` to install everywhere at once.
