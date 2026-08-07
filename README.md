@@ -90,7 +90,7 @@ The repo itself **is** the skill, following the open **Agent Skills** standard
 (agentskills.io) — the same `SKILL.md` runs natively on Claude Code, OpenAI
 Codex, and Gemini CLI. **Five ways to install, pick one:**
 
-### 1. npm — one command (once published)
+### 1. npm — one command
 
 ```bash
 npx @dieselzhang/repo-mastery install            # any tool, from anywhere

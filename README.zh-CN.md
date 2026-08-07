@@ -88,7 +88,7 @@ Phase 4  合成 COVERAGE.md + 可选可分享 HTML 课程
 
 本仓库**本身就是**这个 skill，遵循开放的 **Agent Skills 标准**（agentskills.io）——同一份 `SKILL.md` 原生运行于 Claude Code、OpenAI Codex、Gemini CLI。**五种安装方式，任选其一：**
 
-### 1. npm —— 一条命令（发布后可用）
+### 1. npm —— 一条命令
 
 ```bash
 npx @dieselzhang/repo-mastery install            # 任意工具、任意位置
