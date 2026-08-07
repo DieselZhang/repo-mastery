@@ -4,7 +4,7 @@ This document explains how Repo-Mastery works internally: the design axioms, the
 
 ## Overview
 
-Repo-Mastery is a **Claude Code skill** that turns a source repository into a developer-focused mastery course. It is a single SKILL.md orchestrator plus a set of reference documents that the skill reads per phase (to keep context lean) and one optional Python script for large repos.
+Repo-Mastery is an **Agent skill** that turns a source repository into a developer-focused mastery course. It is a single SKILL.md orchestrator plus a set of reference documents that the skill reads per phase (to keep context lean) and one optional Python script for large repos.
 
 ```text
 SKILL.md (orchestrator)

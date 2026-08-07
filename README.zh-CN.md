@@ -7,7 +7,7 @@
 像学一门真实课程一样，掌握一个项目的 **使用 → 架构 → 关键实现** —— 有经你确认的课程地图、确定性掌握度闸门、间隔重复，以及 Markdown + HTML 双形态的课程产出。
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Claude Code](https://img.shields.io/badge/Claude%20Code-skill-0A84FF.svg)](#)
+[![Agent Skills](https://img.shields.io/badge/Agent%20Skills-skill-0A84FF.svg)](#)
 ![Version](https://img.shields.io/badge/version-2.2.1-blue.svg)
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)
 
@@ -41,7 +41,7 @@
 
 ## 这是什么？
 
-Repo-Mastery 是一个 **Claude Code skill**，把任意开源仓库转成结构化的、面向开发者的掌握式课程。给定本地仓库路径或 GitHub URL，它：
+Repo-Mastery 是一个 **Agent skill**，把任意开源仓库转成结构化的、面向开发者的掌握式课程。给定本地仓库路径或 GitHub URL，它：
 
 1. **客观预扫描**代码库，提出**课程地图**（模块 + 知识点）。
 2. 由**你确认并定制**课程地图 —— 与你的 **Mission**（为什么想掌握这个仓库）对齐。

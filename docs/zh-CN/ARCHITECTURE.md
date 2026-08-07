@@ -4,7 +4,7 @@
 
 ## 概览
 
-Repo-Mastery 是一个 **Claude Code skill**，把源码仓库转成面向开发者的掌握式课程。它由一个 SKILL.md 编排器 + 一组按阶段读取的参考文档（保持上下文精简）+ 一个大型仓库用的可选 Python 脚本组成。
+Repo-Mastery 是一个 **Agent skill**，把源码仓库转成面向开发者的掌握式课程。它由一个 SKILL.md 编排器 + 一组按阶段读取的参考文档（保持上下文精简）+ 一个大型仓库用的可选 Python 脚本组成。
 
 ```text
 SKILL.md（编排器）

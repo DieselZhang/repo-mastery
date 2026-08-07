@@ -7,7 +7,7 @@
 Learn a project's **usage → architecture → key implementations** the way you'd learn a real course — with confirmed course maps, deterministic mastery gates, spaced repetition, and dual-format (Markdown + HTML) course output.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Claude Code](https://img.shields.io/badge/Claude%20Code-skill-0A84FF.svg)](#)
+[![Agent Skills](https://img.shields.io/badge/Agent%20Skills-skill-0A84FF.svg)](#)
 ![Version](https://img.shields.io/badge/version-2.2.1-blue.svg)
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)
 
@@ -41,7 +41,7 @@ Learn a project's **usage → architecture → key implementations** the way you
 
 ## What is Repo-Mastery?
 
-Repo-Mastery is a **Claude Code skill** that converts any open-source repository into a structured, developer-focused mastery course. Given a local repo path or a GitHub URL, it:
+Repo-Mastery is an **Agent skill** that converts any open-source repository into a structured, developer-focused mastery course. Given a local repo path or a GitHub URL, it:
 
 1. **Pre-scans** the codebase objectively and proposes a **course map** (modules + knowledge points).
 2. Has **you confirm and customize** the map — aligned with your Mission (why you want to master this repo).
