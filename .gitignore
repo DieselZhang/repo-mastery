@@ -1,0 +1,11 @@
+# npm — never commit auth tokens or local packages
+.npmrc
+node_modules/
+*.tgz
+*.log
+
+# macOS
+.DS_Store
+
+# learning data created at runtime by the skill (never commit)
+.learning/
