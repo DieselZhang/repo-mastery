@@ -1,11 +1,33 @@
 ---
 name: repo-mastery
 description: "把任意开源仓库变成开发者视角的掌握式课程。输入本地仓库路径或 GitHub URL，通过 课程地图确认 → 交互式掌握度学习（诊断/讲解/费曼检验/练习/间隔复习）→ 动手实践 → 笔记沉淀 → 合成完整课程文档，帮助你像学一门课一样逐步掌握一个项目的 使用 → 架构 → 关键实现。触发词：'学会这个仓库'、'把 xx 变成课程'、'深入学习 xx 项目'、'掌握这个代码库'、'从源码学习'。"
+origin: personal
+version: 1.1.0
+tags: [learning, education, codebase, mastery, spaced-repetition]
 ---
 
 # Repo-Mastery — 从源码掌握一个开源项目
 
 > 把任意开源仓库变成**开发者视角的掌握式课程**。你不是在"浏览代码"，而是在像学一门课一样逐步掌握它的 **使用 → 架构 → 关键实现**，并且每一点都有掌握度判定、间隔复习和笔记沉淀。
+
+## When to Activate
+
+使用本 skill 的场景（任何命中即应激活）：
+
+- 用户想"学会 / 掌握 / 吃透 / 深入研究"某个开源仓库或代码库。
+- 用户拿到一个新项目的源码，想系统学习而不是零散浏览。
+- 用户想从**源码**理解一个项目的架构设计与关键实现（不只是会用）。
+- 用户想让学习进度**跨会话持续**（有记忆、有间隔复习）。
+- 用户说"把 xx 仓库变成课程"、"从源码学 xx"、"深入学习 xx 项目"。
+
+不激活的场景：用户只是要一份文档/README 摘要、一次性的代码问答、或面向终端用户的使用教程（那是 `docs-to-course` 的活）。
+
+## Prerequisites
+
+- **Claude Code**（skill 运行时）。
+- **目标仓库**：本地路径，或可访问的 `github:owner/repo`（skill 自动 `git clone --depth 1`）。
+- **Python 3**（仅大型仓库索引脚本 `scripts/index_repo.py` 需要，纯标准库）。
+- **写权限**：会在目标仓库下创建 `.learning/` 目录（自动 gitignore），在 `~/.repo-mastery/` 创建全局记忆。
 
 ## 与 docs-to-course 的区别
 
@@ -90,7 +112,9 @@ description: "把任意开源仓库变成开发者视角的掌握式课程。输
 
 ### Phase 2 — 课程地图确认与定制（用户决策，不可跳过）
 
-把候选地图**呈现给用户**，逐模块说明，然后：
+先确立 **Mission**（吸收自 teach skill 的 MISSION.md）：问用户一个关键问题 —— **"你为什么想掌握这个仓库？"**（要用它、要改它、要面试讲它、要借鉴它的设计……）。把答案写进 `<repo>/.learning/MISSION.md`，它 ground 后面所有教学决策（模块取舍、费曼追问方向、掌握度优先级）。Mission 变了就更新它，并写一条 learning record。
+
+然后把候选地图**呈现给用户**，逐模块说明，然后：
 
 - ✅ 用户删掉不关心的模块 / 增加感兴趣的模块 / 调整知识点粒度。
 - ✅ 用户确认每个模块的 `pass_threshold`（默认 0.7）。
@@ -124,11 +148,15 @@ description: "把任意开源仓库变成开发者视角的掌握式课程。输
 
 ## 数据结构
 
-```
+```text
 <目标仓库>/.learning/                  ← 随仓库走，自动写 .gitignore 避免误提交
+  ├── MISSION.md           学习使命（你为什么想掌握它，ground 所有教学）
   ├── course-map.json      课程地图（已确认版）
   ├── progress.json        LearningProgress（掌握度/间隔复习/卡点，见 mastery-policy.md）
+  ├── records/NNNN-slug.md ADR 式学习记录（理解演化的决策记录，见 learning-records-template.md）
   ├── notes/<module>.md    结构化笔记（自动沉淀 + /note 追加）
+  ├── briefs/<module>.md   模块简报（大型仓库省 token）
+  ├── code-map.json        大型仓库索引（可选）
   └── .gitignore           含 ".learning/"
 ~/.repo-mastery/                     ← 全局轻量记忆（不做 L1/L2/L3 分层）
   ├── profile.md           跨仓库偏好/水平/卡点总结
@@ -142,11 +170,39 @@ description: "把任意开源仓库变成开发者视角的掌握式课程。输
 ## 参考文件（按阶段读取，保持上下文精简）
 
 - `references/curriculum-design.md` — **Phase 1**：从源码设计课程地图
-- `references/mastery-policy.md` — **Phase 3**：掌握度计算、闸门、间隔复习、错误诊断
-- `references/session-flow.md` — **Phase 3**：交互式学习会话协议
+- `references/mastery-policy.md` — **Phase 3**：掌握度计算、闸门、间隔复习、错误诊断、fluency vs storage
+- `references/session-flow.md` — **Phase 3**：交互式学习会话协议（含 ZPD 决策）
 - `references/quiz-design.md` — **Phase 3**：测验设计原则（测应用，不测记忆）
 - `references/module-brief-template.md` — **Phase 3 大型仓库**：预提取源码片段，省 token
 - `references/note-template.md` — **Phase 3**：笔记格式
+- `references/learning-records-template.md` — **全程**：ADR 式学习记录格式（理解演化）
 - `references/gotchas.md` — 全程：失败点检查清单
 - `references/index-script-spec.md` — **Phase 0 大型仓库**：Python 索引脚本说明
 - `references/html-shell/` — **Phase 4**：HTML 课程外壳（复制 verbatim）
+
+## Anti-Patterns（反模式）
+
+> 完整失败点清单见 `references/gotchas.md`。以下是会直接毁掉学习质量的反模式，遇到就停下来：
+
+- ❌ **让 LLM 替代闸门判定** —— 绝不用"你觉得你掌握了吗？"替代 `compute_mastery` / `mastery_assess`。
+- ❌ **跳过课程地图确认** —— 用户必须批准/定制地图（含 Mission），这是用户明确要求。
+- ❌ **期望答案泄漏** —— 题目文本/选项里绝不出现期望答案；只在 `progress.json.pending_question`。
+- ❌ **把"会用"当"掌握"** —— 一次蒙对 / 一次跑通 ≠ 掌握，置信度上限 + 间隔复习才是目标（fluency ≠ storage）。
+- ❌ **整仓塞上下文** —— 学习一个知识点只读相关文件，大型仓库先用 `code-map.json` 定位。
+
+## Related Skills
+
+- `docs-to-course`（codebase-to-course）— 文档 → 终端用户使用课程（本 skill 的方法论与 HTML 外壳来源）。
+- `understand-anything` — 把代码库构建成知识图谱（可与之配合做架构深潜）。
+- `codebase-onboarding` — 快速上手陌生代码库（与 repo-mastery 的 Phase 1 预扫描互补）。
+- `find-docs` — 定位项目文档，可用于 enrich 模块的"一手资源"。
+
+## Verification（完成检查）
+
+开始 / 结束一次学习会话时，用 `references/gotchas.md` 自查，并确认：
+
+- [ ] `.learning/` 已 gitignore，不污染目标仓库。
+- [ ] `course-map.json` 是用户确认后的版本。
+- [ ] `progress.json` 原子写回，无损坏。
+- [ ] 每轮结束笔记已沉淀、`~/.repo-mastery/index.json` 已更新。
+- [ ] 无期望答案泄漏、无未经批准的写操作命令。

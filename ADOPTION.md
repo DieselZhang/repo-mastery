@@ -38,12 +38,23 @@ codebase-to-course 是一个"把工具文档变成终端用户使用课程"的�
 - ❌ "面向终端用户、偏 UI 步骤条而非内部架构图" —— repo-mastery 相反，**架构图/依赖图/调用链是核心内容**。
 - ❌ "不要给课程大纲审批，直接建" —— repo-mastery **强制课程地图确认**（用户决策，不可跳过）。
 
-## 3. 为什么可以复用 codebase-to-course 的外壳
+## 3. 从 mattpocock teach skill 借鉴：学习机制补强
 
-`references/html-shell/` 下的 CSS/JS/HTML 文件由本 skill 作者（DieselZhang）为 codebase-to-course 编写/维护，MIT 许可范围内自由复用。本仓库与 codebase-to-course 同属作者个人技能资产，无第三方版权冲突。
+[mattpocock-skills](https://github.com/mattpocock) 的 `teach` skill（教学型 skill）提供了几个本 skill 没有但很有价值的学习机制，已吸收（见 v1.1.0）：
 
-## 版权与许可
+| 借鉴点 | teach 的做法 | 在 repo-mastery 中的落点 |
+|---|---|---|
+| **Mission 驱动** | `MISSION.md` 记录用户学它的"原因"，ground 所有教学 | `SKILL.md` Phase 2 先问"为什么想掌握这个仓库"，写 `.learning/MISSION.md` |
+| **Learning records（ADR 式）** | `learning-records/` 记录非显而易见的学习、前置知识、被纠正的误解，带 supersession | `references/learning-records-template.md` + `.learning/records/NNNN-slug.md` |
+| **ZPD（最近发展区）** | 每次挑战"刚好够"，由 records + mission 计算 | `mastery-policy.md` §0 + `session-flow.md` §0 |
+| **Fluency vs Storage** | 流利度给虚假掌握感，存储强度才是目标 | `mastery-policy.md` §0（闸门 + 间隔重复的原理依据） |
+| **引用一手来源** | 每课推荐高质量一手资源 | `note-template.md`"资源/一手来源"节 |
+| **测验不给格式线索** | 各选项同字数 | `quiz-design.md`"选项格式"节 |
+| **检索练习优先** | 逼从记忆检索而非识别 | `quiz-design.md`"检索练习优先"节 |
+
+## 4. 版权与许可
 
 - 本仓库：MIT License，见 `LICENSE`。
 - DeepTutor 设计移植：© 2026 HKUDS，MIT License（[github.com/HKUDS/DeepTutor](https://github.com/HKUDS/DeepTutor)）。
 - codebase-to-course 外壳：© 2026 DieselZhang。
+- mattpocock teach 机制借鉴：© mattpocock（[mattpocock-skills](https://github.com/mattpocock)）。

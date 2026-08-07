@@ -25,6 +25,13 @@
 - [ ] **把 user 的 demo 代码当证据却不定性** —— procedure 型动手跑通 = 掌握证据，但要记录结果，别光说"很好"。
 - [ ] **命令不是 verbatim** —— 用户会复制的命令/配置必须原样，不发明 flag。
 
+## Mission 与学习记录阶段
+
+- [ ] **Mission 未确立就开课** —— Phase 2 必须先问"为什么想学这个仓库"，写 MISSION.md；跳过会让模块取舍失去依据。
+- [ ] **Mission 变了不更新** —— 用户学习目的变化时更新 MISSION.md 并写一条 learning record。
+- [ ] **该写 learning record 没写** —— 用户展示真实理解 / 声明前置知识 / 误解被纠正时，写 `records/NNNN-slug.md`；否则 ZPD 基线失真。
+- [ ] **误解纠正后不标记 supersession** —— 旧记录标 `Status: superseded by LR-NNNN`，不删除（演化历史有用）。
+
 ## 笔记与数据阶段
 
 - [ ] **笔记重写整篇** —— 笔记要增量追加，不重写（token 经济）。

@@ -4,7 +4,7 @@
 
 ## 笔记文件组织
 
-```
+```text
 <repo>/.learning/notes/
   ├── m01-run-build.md     # 每模块一份，命名 = <module_id>-<slug>.md
   ├── m02-architecture.md
@@ -50,6 +50,13 @@ deeptutor kb create physics --doc ch1.pdf
 > 定性知识点通过时，记录用户复述的精炼版（一句话）。
 
 - kp01-02 (concept): 用户复述 = "…"
+
+## 资源 / 一手来源（吸收自 teach skill）
+> 每模块推荐 1 个高质量一手来源，供用户深入 —— 官方文档/设计文档/论文/维护者讲解。这是"学完后还能自己走"的入口。
+
+- 官方文档: <链接>
+- 设计文档/ADR: <链接>
+- 建议精读的源码文件: `文件:行`
 
 ## 待复习
 > 从 progress.json 的 review_queue 同步，供后续会话快速进入复习。

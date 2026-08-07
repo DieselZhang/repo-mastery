@@ -2,11 +2,19 @@
 
 > **何时读**：Phase 3。这是每轮学习会话的操作手册。tutor（你）在每个学习轮次里按本协议行动，决策调用 `mastery-policy.md` 的规则。
 
+## 0. 会话前置：Mission + ZPD（吸收自 teach skill）
+
+每次学习会话开始前：
+
+1. **读 MISSION.md** —— 用户为什么想掌握这个仓库。所有讲解、出题、费曼追问都朝 Mission 对齐（学它是为了用它？为了改造？为了讲给别人？）。Mission 未填写就先问，别猜。
+2. **读 `records/` + `progress.json`** —— 判断用户的**最近发展区（ZPD）**：下一步教的内容要"刚好够挑战"。用户已用证据证明掌握的，不重新教；超出太远的，先补前置。
+3. 然后才进 `next_objective` 选出的知识点。
+
 ## 每轮学习循环（单知识点）
 
 对 `next_objective` 给出的动作，走对应流程。**核心循环**：
 
-```
+```text
 diagnostic（诊断，含 test-out）
    → explain（讲解）
    → feynman_check（费曼检验）

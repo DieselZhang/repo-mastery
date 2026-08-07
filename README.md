@@ -36,43 +36,48 @@
 
 ## 主流程一览
 
-```
+```text
 Phase 0  复杂度评估 → 决定提取方式（纯读 / Python 索引脚本）
 Phase 1  预扫描（explore_context 式）→ 课程地图候选
-Phase 2  你确认/定制课程地图（强制步骤）
+Phase 2  确立 Mission + 你确认/定制课程地图（强制步骤）
 Phase 3  交互式掌握度学习（诊断→讲解→费曼→练习→错误诊断→间隔复习）
 Phase 4  合成 COVERAGE.md（Markdown）+ 可选 HTML 分享版
 ```
 
 ## 数据结构
 
-```
+```text
 <目标仓库>/.learning/        随仓库走，自动 gitignore
-  ├── course-map.json       课程地图（已确认版）
-  ├── progress.json         掌握度/间隔复习/卡点
-  ├── notes/<module>.md     结构化笔记
-  ├── briefs/<module>.md    模块简报（大型仓库省 token）
-  └── code-map.json         大型仓库索引（可选）
-~/.repo-mastery/            全局轻量记忆
-  ├── profile.md            跨仓库偏好/水平
-  └── index.json            学过的仓库清单/状态
+  ├── MISSION.md             学习使命（你为什么想掌握它）
+  ├── course-map.json        课程地图（已确认版）
+  ├── progress.json          掌握度/间隔复习/卡点
+  ├── records/NNNN-slug.md   ADR 式学习记录（理解演化）
+  ├── notes/<module>.md      结构化笔记
+  ├── briefs/<module>.md     模块简报（大型仓库省 token）
+  └── code-map.json          大型仓库索引（可选）
+~/.repo-mastery/             全局轻量记忆
+  ├── profile.md             跨仓库偏好/水平
+  └── index.json             学过的仓库清单/状态
 ```
 
 ## 结构
 
-```
+```text
 repo-mastery/
 ├── SKILL.md                        主流程编排
 ├── README.md                       本文件
+├── ADOPTION.md                     采纳与吸收说明（DeepTutor / codebase-to-course）
+├── LICENSE                         MIT
 ├── scripts/
 │   └── index_repo.py               大型仓库代码索引（纯标准库）
 └── references/
     ├── curriculum-design.md        从源码设计课程地图
-    ├── mastery-policy.md           掌握度/闸门/间隔复习/错误诊断
-    ├── session-flow.md             交互式学习会话协议
+    ├── mastery-policy.md           掌握度/闸门/间隔复习/错误诊断/fluency-storage
+    ├── session-flow.md             交互式学习会话协议（含 Mission + ZPD）
     ├── quiz-design.md              测验设计（测应用不测记忆）
     ├── module-brief-template.md    模块简报（预提取源码片段）
     ├── note-template.md            笔记格式
+    ├── learning-records-template.md ADR 式学习记录
     ├── gotchas.md                  失败点检查清单
     ├── index-script-spec.md        索引脚本说明
     └── html-shell/                 HTML 课程外壳（复制自 docs-to-course，verbatim）
