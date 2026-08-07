@@ -15,6 +15,10 @@
 
 </div>
 
+<p align="center">
+  <img src="assets/repo-mastery-flow.png" alt="Repo-Mastery 工作流：输入仓库 → P0 评估 → P1 课程地图 → P2 使命与确认 → P3 交互式掌握度学习 → 完整课程" width="92%">
+</p>
+
 ---
 
 ## 目录

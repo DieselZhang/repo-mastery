@@ -15,6 +15,10 @@ Learn a project's **usage → architecture → key implementations** the way you
 
 </div>
 
+<p align="center">
+  <img src="assets/repo-mastery-flow.png" alt="Repo-Mastery workflow: input repo → P0 assess → P1 course map → P2 mission & confirm → P3 interactive mastery learning → complete course" width="92%">
+</p>
+
 ---
 
 ## Table of Contents
