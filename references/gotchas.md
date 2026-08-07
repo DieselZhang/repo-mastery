@@ -1,47 +1,47 @@
-# Gotchas — 常见失败点检查清单
+# Gotchas — Failure-Point Checklist
 
-> **何时读**：全程。开始主流程、遇到异常、Phase 4 输出前，用这份清单自查。吸收自 docs-to-course 的 `gotchas.md`，叠加本 skill 特有陷阱。
+> **Read in**: all phases. Self-check with this list at the start of the main flow, on exceptions, and before Phase 4 output. Absorbed from docs-to-course's `gotchas.md`, with repo-mastery-specific traps added.
 
-## 课程地图阶段
+## Course-map phase
 
-- [ ] **知识点过粗** —— "理解系统架构"不是可判定单元。拆到"模块间依赖方向 / 请求完整调用链 / 配置加载优先级"。
-- [ ] **模块无证据** —— 地图里的每个模块都能指向真实文件/目录。没有证据就删，宁缺毋滥。
-- [ ] **跳过 Phase 2 确认** —— 用户必须批准/定制地图后才开始学习。这是用户明确要求，不可省。
-- [ ] **预扫描下结论太早** —— Phase 1 只摸清不下结论，结论留给讲解阶段。
+- [ ] **Over-coarse knowledge points** — "understand the system architecture" is not a judgeable unit. Split to "dependency direction between modules / complete request call chain / config load precedence".
+- [ ] **Modules without evidence** — every module in the map points to a real file/dir. No evidence → cut it; better fewer than hollow.
+- [ ] **Skipping Phase 2 confirmation** — the user must approve/customize the map (with Mission). This is an explicit requirement; don't skip.
+- [ ] **Concluding too early in the pre-scan** — Phase 1 only maps; conclusions belong to the explanation phase.
 
-## 学习会话阶段
+## Learning-session phase
 
-- [ ] **让 LLM 替代闸门判定** —— 绝不用"你觉得你掌握了吗？"替代 `compute_mastery` / `mastery_assess`。
-- [ ] **期望答案泄漏** —— 题目文本/选项里绝不能出现期望答案；期望答案只在 `progress.json.pending_question`。
-- [ ] **一次灌多个概念** —— 一个知识点讲透一层，别一次塞三个概念。
-- [ ] **同一道题重测** —— 未达 0.9 时重出不同的题，避免记忆对答案。
-- [ ] **跳过错误诊断** —— 答错直接讲答案，不引导用户自述归因、不登记 `error_records` → 复习优先级就错了。
-- [ ] **费曼只问"懂了吗"** —— 定性判定必须让用户真复述，design 型必须追问设计权衡。
-- [ ] **整仓塞上下文** —— 学习一个知识点只 Read 相关文件（大型仓库先查 `code-map.json` 定位）。
+- [ ] **Letting the LLM replace the gate** — never use "do you feel you've got it?" instead of `compute_mastery` / `mastery_assess`.
+- [ ] **Expected-answer leakage** — the question text/options must never contain the expected answer; it lives only in `progress.json.pending_question`.
+- [ ] **Dumping multiple concepts at once** — one knowledge point, one layer.
+- [ ] **Re-posing the same question** — when below 0.9, pose a different question to avoid memorizing the answer.
+- [ ] **Skipping error diagnosis** — answering the question directly without user self-attribution and an `error_records` entry corrupts review priority.
+- [ ] **Feynman that only asks "got it?"** — the qualitative gate must make the user actually recital; design type must probe tradeoffs.
+- [ ] **Cramming the whole repo into context** — read only the relevant files for the current point (locate via `code-map.json` in large repos).
 
-## 动手实践阶段
+## Hands-on phase
 
-- [ ] **未经批准运行写操作** —— 只读命令可直接跑；改文件/装依赖必须先展示命令给用户并请求批准。
-- [ ] **把 user 的 demo 代码当证据却不定性** —— procedure 型动手跑通 = 掌握证据，但要记录结果，别光说"很好"。
-- [ ] **命令不是 verbatim** —— 用户会复制的命令/配置必须原样，不发明 flag。
+- [ ] **Running mutating commands without approval** — read-only commands may run directly; writing files / installing deps must be shown and approved first.
+- [ ] **Treating the user's demo as evidence without qualifying it** — a procedure point's hands-on pass = mastery evidence, but record the result; don't just say "nice".
+- [ ] **Non-verbatim commands** — commands/config the user will copy must be exact; don't invent flags.
 
-## Mission 与学习记录阶段
+## Mission & learning-records phase
 
-- [ ] **Mission 未确立就开课** —— Phase 2 必须先问"为什么想学这个仓库"，写 MISSION.md；跳过会让模块取舍失去依据。
-- [ ] **Mission 变了不更新** —— 用户学习目的变化时更新 MISSION.md 并写一条 learning record。
-- [ ] **该写 learning record 没写** —— 用户展示真实理解 / 声明前置知识 / 误解被纠正时，写 `records/NNNN-slug.md`；否则 ZPD 基线失真。
-- [ ] **误解纠正后不标记 supersession** —— 旧记录标 `Status: superseded by LR-NNNN`，不删除（演化历史有用）。
+- [ ] **Starting without the Mission** — Phase 2 must first ask "why do you want to master this repo" and write MISSION.md; skipping makes module choices groundless.
+- [ ] **Not updating a changed Mission** — when the learning goal shifts, update MISSION.md and write a learning record.
+- [ ] **Not writing a learning record when due** — when the user shows real understanding / states prior knowledge / a misconception gets corrected, write `records/NNNN-slug.md`; otherwise the ZPD baseline drifts.
+- [ ] **Not marking supersession after a correction** — mark the old record `Status: superseded by LR-NNNN` instead of deleting (the evolution history is useful).
 
-## 笔记与数据阶段
+## Notes & data phase
 
-- [ ] **笔记重写整篇** —— 笔记要增量追加，不重写（token 经济）。
-- [ ] **改写用户笔记原文** —— `/note` 追加的内容 tutor 不改写，只在卡点节登记。
-- [ ] **progress.json 非原子写** —— 先写临时文件再 rename，避免写坏学习进度。
-- [ ] **忘记更新全局记忆** —— 每轮结束更新 `~/.repo-mastery/index.json`（上次学到哪），否则 `continue` 失效。
+- [ ] **Rewriting whole notes** — notes append incrementally, never full rewrites (token economy).
+- [ ] **Rewriting user note text** — `/note` content is kept verbatim; the tutor only registers blockers.
+- [ ] **Non-atomic `progress.json` writes** — temp file + rename, or the learning state can corrupt.
+- [ ] **Forgetting to update global memory** — update `~/.repo-mastery/index.json` (where you left off) each turn, or `continue` breaks.
 
-## Phase 4 输出阶段
+## Phase 4 output phase
 
-- [ ] **重新生成 HTML 外壳** —— `styles.css` / `main.js` / `_footer.html` / `build.sh` 只从 `references/html-shell/` 复制 verbatim，绝不重写。
-- [ ] **HTML 版偏 UI 步骤条** —— 本 skill 的 HTML 课程核心是架构图/依赖图/调用链，不是 UI 截图。
-- [ ] **COVERAGE.md 缺源码引用** —— 完整课程文档必须有 `文件:行` 引用，否则失去"可回溯到源码"的价值。
-- [ ] **交互元素只用既有模式** —— HTML 版交互元素按 `html-shell/interactive-elements.md` 的 class/data-* 约定，别发明新 class（CSS/JS 不会覆盖它）。
+- [ ] **Regenerating the HTML shell** — `styles.css` / `main.js` / `_footer.html` / `build.sh` are only copied verbatim from `references/html-shell/`, never rewritten.
+- [ ] **HTML biased to UI step-strips** — this skill's HTML course centers on architecture diagrams / dependency graphs / call chains, not UI screenshots.
+- [ ] **COVERAGE.md missing source references** — the complete course doc must carry `file:line` references, or it loses its "traceable back to source" value.
+- [ ] **Interactive elements using ad-hoc classes** — follow `html-shell/interactive-elements.md`'s class/data-* conventions; the CSS/JS won't cover invented classes.

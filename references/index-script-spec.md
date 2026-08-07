@@ -1,22 +1,22 @@
-# Index Script Spec — `scripts/index_repo.py` 使用说明
+# Index Script Spec — `scripts/index_repo.py`
 
-> **何时读**：Phase 0 判定仓库为大型时。运行脚本，用 `code-map.json` 支撑课程地图与按需学习，避免整仓塞进上下文。
+> **Read in**: Phase 0, when the repo is judged large. Run the script and use `code-map.json` to build the course map and learn on demand — instead of cramming the whole repo into context.
 
-## 何时需要索引
+## When you need the index
 
-Phase 0 的"大型"判定（任一命中）：源文件 ≥ 10 万行、顶层模块 ≥ 20、依赖复杂/多语言混编。不确定时实际跑一下 `find` + `wc -l`，不要猜。
+Phase 0 "large" judgment (any hit): ≥ 100k source lines, ≥ 20 top-level modules, or complex/multi-language dependencies. When unsure, actually measure with `find` + `wc -l`; don't guess.
 
-## 运行
+## Run
 
 ```bash
 python3 ~/.claude/skills/repo-mastery/scripts/index_repo.py <repo_path> -o <repo_path>/.learning/code-map.json
 ```
 
-- 纯标准库，**无需安装依赖**。
-- 只读扫描仓库，跳过黑名单目录（`.git`、`node_modules`、`.venv`、`dist` 等）。
-- 输出写临时文件后原子 rename，避免半成品。
+- Pure stdlib, **no dependencies to install**.
+- Read-only scan; skips blacklisted dirs (`.git`, `node_modules`, `.venv`, `dist`, etc.).
+- Writes to a temp file then atomically renames, so no half-written output.
 
-## `code-map.json` 结构
+## `code-map.json` structure
 
 ```jsonc
 {
@@ -25,28 +25,28 @@ python3 ~/.claude/skills/repo-mastery/scripts/index_repo.py <repo_path> -o <repo
     "total_source_files": 1234,
     "total_lines": 182340,
     "languages": { "python": 800, "typescript": 300 },
-    "top_dirs": [ { "name": "deeptutor", "files": 600 } ]   // 顶层目录统计
+    "top_dirs": [ { "name": "deeptutor", "files": 600 } ]   // top-level dir stats
   },
   "entry_points": [ "package.json/main: src/index.js", "main.py" ],
-  "dependency_graph": { "src/pipeline.py": ["deeptutor", "core"] },  // 仅项目内边
+  "dependency_graph": { "src/pipeline.py": ["deeptutor", "core"] },  // in-project edges only
   "files": [ { "path": "src/pipeline.py", "lang": "python", "lines": 640 } ],
-  "symbol_lookup": { "python": [ "src/pipeline.py", "..." ] }  // 每语言最重 30 文件
+  "symbol_lookup": { "python": [ "src/pipeline.py", "..." ] }  // heaviest 30 files per language
 }
 ```
 
-## 怎么用它做课程地图（Phase 1）
+## How to use it for the course map (Phase 1)
 
-1. **模块划分** ← `summary.top_dirs` + `dependency_graph`：顶层目录就是候选模块边界；依赖边的聚集处是"关键实现"模块的好候选。
-2. **关键实现定位** ← `symbol_lookup` + `files` 按 `lines` 降序：最重的文件往往是核心。
-3. **使用模块证据** ← `entry_points`：入口文件构成"跑通构建/核心工作流"模块的证据。
-4. **学习时按需 Read** ← 从地图的知识点 → `files` 里的 `path` → Read 对应 `文件:行`。不再整仓扫。
+1. **Module division** ← `summary.top_dirs` + `dependency_graph`: top-level dirs are natural module boundaries; clusters of dependency edges are strong "key implementations" candidates.
+2. **Key-implementation location** ← `symbol_lookup` + `files` sorted by `lines` desc: the heaviest files are often core.
+3. **Usage-module evidence** ← `entry_points`: entry files ground the "build / core workflows" modules.
+4. **Read on demand during learning** ← from the map's knowledge points → the `path` in `files` → Read the relevant `file:line`. No more whole-repo scans.
 
-## 已知局限（诚实说明）
+## Known limitations (honest)
 
-- 依赖提取是**启发式正则**，不是语法树 —— 动态导入、间接引用会漏。它用于"找候选"而非"穷举"。
-- 多语言混编仓库（如 Rust 核心 + Python 封装）只按扩展名归类，跨语言边界仍要靠 README/文档补。
-- 对极端巨型仓库（百万行级 monorepo），建议先对子目录分别建索引，或只索引你最关心的子系统。
+- Dependency extraction is **heuristic regex, not a syntax tree** — dynamic imports and indirect references are missed. It's for "finding candidates", not "exhaustive enumeration".
+- Multi-language repos (e.g. Rust core + Python wrapper) are grouped by extension only; cross-language boundaries still need README/docs.
+- For extreme monorepos (millions of lines), build an index per sub-directory, or index only the subsystem you care about.
 
-## 索引放哪
+## Where to put the index
 
-- 默认建议 `<repo>/.learning/code-map.json`（随仓库走）。仓库很大时也可放 `~/.repo-mastery/caches/<repo-id>/code-map.json`，不污染目标仓库 —— 二选一，保持一致。
+- Default: `<repo>/.learning/code-map.json` (travels with the repo). For very large repos, `~/.repo-mastery/caches/<repo-id>/code-map.json` keeps the target repo clean — pick one and stay consistent.

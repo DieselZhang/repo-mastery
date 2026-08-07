@@ -1,67 +1,67 @@
-# Module Brief Template — 预提取源码片段
+# Module Brief Template — Pre-extracted Source Snippets
 
-> **何时读**：Phase 3，**大型仓库**（或用户要求省 token 时）。学习一个模块前，先写一份 brief 把该模块的**关键源码片段 + 证据位置**预提取出来，之后的学习轮次就不再反复 Read 源码。吸收自 docs-to-course 的 `module-brief-template.md`（它预提取命令/配置，我们预提取源码）。
+> **Read in**: Phase 3, **for large repos** (or when the user asks to save tokens). Before learning a module, write a brief that pre-extracts the module's **key source snippets + evidence locations**, so later turns don't re-Read the source repeatedly. Absorbed from docs-to-course's `module-brief-template.md` (it pre-extracts commands/config; we pre-extract source).
 
-## 机制为什么省 token
+## Why it saves tokens
 
-一个知识点要讲清，通常需要 2–4 段关键源码。如果每轮学习都现读整个文件，token 会重复燃烧。**预提取**把"这段代码在讲什么"浓缩进 brief，tutor 直接引用 brief，只有遇到 brief 没有的细节才按需 Read。
+To explain a knowledge point well, you usually need 2–4 key source snippets. Re-reading whole files every turn burns tokens repeatedly. **Pre-extraction** condenses "what this code does" into the brief; the tutor quotes the brief and only Reads source when the brief lacks detail.
 
-## 何时写 brief
+## When to write a brief
 
-- 大型仓库（Phase 0 判定）：每个模块学习前写一份。
-- 中小型仓库：如果某模块源码多、调用链长，也值得写。
-- 完成后 brief 保留在 `.learning/briefs/`，供后续复习会话复用。
+- Large repos (Phase 0 judgment): one brief per module before learning it.
+- Small/medium repos: worth it when a module has lots of source or a long call chain.
+- Keep the brief at `.learning/briefs/`; reuse it in later review sessions.
 
-## Brief 模板
+## Brief template
 
-写入 `<repo>/.learning/briefs/<module>.md`：
+Write to `<repo>/.learning/briefs/<module>.md`:
 
 ```md
-# 模块 Brief — <module title>（<module_id>）
+# Module Brief — <module title>（<module_id>）
 
-**证据定位**
-- 顶层目录/核心文件: <path>
-- 入口函数: <file>:<line>
+**Evidence locations**
+- Top-level dir / core file: <path>
+- Entry function: <file>:<line>
 
-## 教学弧线
-- 一句话"为什么关心"（实用收益）
-- 关键心智模型（用户该带走的一个核心图景）
-- 本模块的关键实现要点（若有关键实现模块）
+## Teaching arc
+- One-line "why care" (practical payoff)
+- The key mental model (one core picture the user should leave with)
+- Key-implementation highlights of this module (if any)
 
-## 知识点 → 证据映射（核心）
-| 知识点 | 类型 | 预提取源码片段(文件:行) | 一句点评 |
+## Knowledge point → evidence map (core)
+| Knowledge point | type | snippet (file:line) | one-line note |
 |---|---|---|---|
-| kp01-01 | procedure | `src/main.py:42-58` | 启动入口，负责… |
-| kp01-02 | concept | `src/pipeline.py:120-160` | RAG 检索主链路 |
+| kp01-01 | procedure | `src/main.py:42-58` | the launch entry, responsible for… |
+| kp01-02 | concept | `src/pipeline.py:120-160` | RAG retrieval main chain |
 
-## 预提取源码片段（verbatim，含文件:行）
-> 只放讲知识点确实需要的片段，每段 ≤ 20 行。超过 → 拆小段或写一句"见 <file>:<range> 进一步展开"。
+## Pre-extracted snippets (verbatim, with file:line)
+> Only include snippets needed to teach the points; each ≤ 20 lines. Longer → split or write "see <file>:<range> to expand".
 
-### 片段 A — 启动流程（src/main.py:42-58）
+### Snippet A — Launch flow (src/main.py:42-58)
 ```python
-<verbatim 源码>
+<verbatim source>
 ```
-**点评**：这一段做了什么，为什么是这个顺序，哪里是易错点。
+**Note**: what this does, why this order, where it's easy to go wrong.
 
-### 片段 B — RAG 主链路（src/pipeline.py:120-160）
+### Snippet B — RAG main chain (src/pipeline.py:120-160)
 ```python
-<verbatim 源码>
+<verbatim source>
 ```
-**点评**：…
+**Note**: …
 
-## 易错点 / 陷阱
-- 用户容易卡在哪（从错误类型角度预判：structural/deviation/application/metacognitive）
+## Pitfalls / traps
+- Where the user is likely to get stuck (anticipate via error types: structural/deviation/application/metacognitive)
 
-## 相邻模块衔接
-- 前一模块覆盖: …
-- 后一模块覆盖: …
+## Neighboring module handoff
+- Previous module covers: …
+- Next module covers: …
 
-## 本模块的费曼追问（design 型用）
-- 为什么不用方案 B？→ 证据答: …
+## Feynman follow-ups for this module (design type)
+- Why not approach B? → evidence-backed answer: …
 ```
 
-## 铁律
+## Iron rules
 
-- **片段必须 verbatim**：一字不改复制源码，并带 `文件:行`。点评和源码分开，绝不混写。
-- **宁可少不可多**：只预提取讲知识点需要的片段。超过 20 行的段在 brief 里放定位（`文件:行`），不要整段塞进来。
-- **brief 是证据缓存，不是权威**：学习中发现 brief 讲不清的地方，回到源码验证，然后更新 brief。
+- **Snippets must be verbatim**: copy the source unchanged, with `file:line`. Keep notes separate from source; never mix.
+- **Less is more**: only pre-extract what's needed to teach the points. Snippets over 20 lines get a location (`file:line`) in the brief, not the full text.
+- **The brief is an evidence cache, not the authority**: if learning reveals the brief is unclear, go back to source, verify, and update the brief.

@@ -1,117 +1,119 @@
-# Mastery Policy — 掌握度、闸门与间隔复习
+# Mastery Policy — Mastery, Gates, Spaced Review, Error Diagnosis
 
-> **何时读**：Phase 3。这是纯决策引擎 —— **不含 LLM 调用、不含 IO**。tutor 每个学习轮次都 consult 这里的规则。三个核心问题：**这个知识点掌握了吗？下一步该学什么？整张地图什么样？**
+> **Read in**: Phase 3. This is the pure decision engine — **no LLM calls, no I/O**. The tutor consults these rules every learning turn. Three core questions: **Is this knowledge point mastered? What should the learner work on next? What does the whole map look like?**
 
-本策略从 DeepTutor 的 `learning/` 模块移植（`mastery.py` / `policy.py` / `scheduler.py` / `models.py`），只把"学科知识"换成"代码知识"。
+This policy is ported from DeepTutor's `learning/` module (`mastery.py` / `policy.py` / `scheduler.py` / `models.py`), replacing "subject knowledge" with "code knowledge".
 
-## 0. 设计原理：Fluency vs Storage Strength（吸收自 teach skill）
+## 0. Design rationale: Fluency vs Storage Strength (absorbed from the teach skill)
 
-区分两种"会"：
+Distinguish two kinds of "knowing":
 
-- **Fluency（流利度）**：当下就能想起来 —— 刚听完讲解的"我懂了"。它给人**虚假的掌握感**。
-- **Storage（存储强度）**：长期保持，隔一阵还能用对 —— 这才是真正的目标。
+- **Fluency**: retrievable in the moment — the "I get it" right after an explanation. It creates the **illusion of mastery**.
+- **Storage**: long-term retention — still usable after a gap. This is the real goal.
 
-本策略的所有机制都在对抗"流利度幻觉"：
+All mechanisms in this policy fight the fluency illusion:
 
-- 置信度上限（一次蒙对不算掌握）→ 防"流利度冒充掌握度"。
-- 费曼复述（不是点头说懂）→ 强制从存储中检索。
-- 间隔重复（延迟复习）→ 只有能在遗忘后检索出来的才是 storage。
+- Confidence ceiling (one lucky answer ≠ mastery) → prevents fluency masquerading as mastery.
+- Feynman recital (not nodding along) → forces retrieval from storage.
+- Spaced review (delayed review) → only what survives forgetting counts as storage.
 
-**ZPD（最近发展区）**：下一步教什么 = 挑战"刚好够"。判断依据 = `records/`（用户已确立的理解）+ `progress.json`（掌握度）+ Mission（为什么学）。不重新覆盖已掌握的，也不一步跨太远。
+**ZPD (zone of proximal development)**: what to teach next = challenge "just enough". Its inputs = `records/` (established understanding) + `progress.json` (mastery) + Mission (why the learner is here). Don't re-cover what's mastered; don't leap too far.
 
-## 1. 知识类型与闸门（gate）
+## 1. Knowledge types and gates
 
-| type | 闸门类型 | 通过条件 |
+| type | Gate kind | Pass condition |
 |---|---|---|
-| `memory` | 定量 | 近因加权准确率 ≥ **0.9** |
-| `procedure` | 定量 | 近因加权准确率 ≥ **0.9**（且关键动手任务跑通为证据） |
-| `concept` | 定性 | tutor 判定费曼复述通过（`mastery_assess`） |
-| `design` | 定性 | tutor 判定费曼复述 + 设计权衡追问通过 |
+| `memory` | quantitative | recency-weighted accuracy ≥ **0.9** |
+| `procedure` | quantitative | recency-weighted accuracy ≥ **0.9** (with the key hands-on task passing as evidence) |
+| `concept` | qualitative | tutor judges the Feynman recital passed (`mastery_assess`) |
+| `design` | qualitative | tutor judges the recital + design-tradeoff follow-ups passed |
 
-**设计公理**：定量类型（memory/procedure）用精确判定，因为多数有唯一正确答案；概念/设计用定性判定，因为"为什么这么设计"没有唯一标准答案 —— 这正是 DeepTutor 的分裂方式。
+**Design axiom**: quantitative types (memory/procedure) use exact grading because most have a single correct answer; concept/design use qualitative judgment because "why is it designed this way" has no single canonical answer — this is exactly how DeepTutor splits it.
 
-## 2. 定量掌握度计算（`compute_mastery`）
+## 2. Quantitative mastery (`compute_mastery`)
 
 ```text
-输入：某知识点按时间序的答题正确性 [bool, ...]
-取最近最多 5 次，权重从旧到新 = (0.5, 0.7, 0.85, 0.95, 1.0)
-score = Σ(权重 × 对/错) / Σ权重
-置信度上限：仅 1 次记录 → score 上限 0.5；仅 2 次 → 上限 0.8
-mastery = min(score, 上限)
+Input: a knowledge point's chronological answer correctness [bool, ...]
+Take the most recent up-to-5 attempts; weights oldest→newest = (0.5, 0.7, 0.85, 0.95, 1.0)
+score = Σ(weight × right/wrong) / Σ(weights)
+Confidence ceiling: only 1 recorded attempt → score capped at 0.5; only 2 → capped at 0.8
+mastery = min(score, ceiling)
 ```
 
-**含义**：
-- 新的尝试权重大 —— 早期犯错后恢复会被奖励。
-- **一次蒙对不能算掌握** —— 置信度上限把 mastery 压到 0.5/0.8，到不了 0.9 的闸门。
-- 判定是确定性的，记录在 `progress.json`，不依赖 tutor 记忆。
+Meaning:
 
-## 3. 间隔重复调度（spaced repetition）
+- Newer attempts weigh more — recovery after early mistakes is rewarded.
+- **One lucky answer is not mastery** — the confidence ceiling keeps mastery below 0.9 until enough evidence accumulates.
+- The judgment is deterministic, recorded in `progress.json`, independent of tutor memory.
 
-每种类型一套间隔序列（天数）：
+## 3. Spaced-repetition scheduling
 
-| type | 间隔序列 |
+One interval sequence per type (days):
+
+| type | interval sequence |
 |---|---|
 | `memory` | `[0, 1, 3, 7, 14, 30]` |
 | `concept` | `[3, 7, 14, 30]` |
 | `procedure` | `[3, 7, 14]` |
 | `design` | `[14, 28]` |
 
-**调度规则**（`schedule_next`）：
-- 答对：`consecutive_correct += 1`；连续答对 ≥2 次 → 索引 +2；否则 +1。
-- 答错：`consecutive_wrong += 1`；索引回退 1（下限 0）；连续错 ≥2 次 → 计数清零。
-- 索引夹在 `[0, 最大索引]`，`next_review_at = now + 间隔[索引]`。
+**Scheduling rules** (`schedule_next`):
 
-**优先级**：有**错误记录**（active/retrying 状态）的知识点优先级 = 1（最高），否则按类型 `memory:2 / concept:3 / procedure:4 / design:5`。到期的复习任务按优先级排序。
+- Correct: `consecutive_correct += 1`; if `consecutive_correct ≥ 2` → index +2; else +1.
+- Wrong: `consecutive_wrong += 1`; index steps back 1 (floor 0); if `consecutive_wrong ≥ 2` → reset the counter.
+- Index clamped to `[0, max_index]`; `next_review_at = now + interval[index]`.
 
-## 4. 下一步该学什么（`next_objective`）
+**Priority**: knowledge points with **error records** (active/retrying status) get priority 1 (highest); otherwise by type `memory:2 / concept:3 / procedure:4 / design:5`. Due review tasks sort by priority.
 
-**进阶由"已掌握的内容"计算而来，绝不是阶段计数器。** 优先级从高到低：
+## 4. What to learn next (`next_objective`)
 
-1. **有挂起的题目**（`pending_question`）→ 先判定它（`answer_pending`）。
-2. **有到期的复习** → 先复习，不让已掌握的地基衰减（`review`）。
-3. **第一个未掌握的知识点**（按模块 order 再知识点顺序）：
-   - 从未学过 → `probe`（先测能不能跳过 —— **test-out 路径**：已证明掌握的直接跳过，不按固定阶段走）。
-   - 定量类型未达闸门 → `practice`（继续练到过线）。
-   - 定性类型 → `assess`（费曼检验）。
-4. **全部掌握且无到期复习** → `complete`。
+**Advancement is computed from what is already mastered — never from a stage counter.** Priority, high to low:
 
-`NextStep` 动作集：`answer_pending / review / probe / practice / assess / complete`。
+1. **A pending question** (`pending_question`) → grade it first (`answer_pending`).
+2. **A due review** → review first, so mastered ground doesn't decay (`review`).
+3. **The first unmastered knowledge point** (by module order, then point order):
+   - Never touched → `probe` (test whether it can be skipped — **test-out path**: already-proven points are skipped, not forced through fixed stages).
+   - Quantitative type below its gate → `practice` (keep working it until it clears).
+   - Qualitative type → `assess` (Feynman check).
+4. **All mastered and nothing due** → `complete`.
 
-## 5. 错误诊断与元认知
+`NextStep` actions: `answer_pending / review / probe / practice / assess / complete`.
 
-答错/卡壳时，判定**错误类型**（DeepTutor 四分类，映射到代码学习）：
+## 5. Error diagnosis and metacognition
 
-| ErrorType | 含义 | 代码学习例子 |
+When the learner is wrong/stuck, classify the **error type** (DeepTutor's four categories, mapped to code learning):
+
+| ErrorType | Meaning | Code-learning example |
 |---|---|---|
-| `structural`（知识结构性） | 缺前置知识/上下文 | "不懂 `asyncio`，所以看不懂这个异步框架" |
-| `deviation`（理解偏差） | 概念理解错了 | "以为 RAG 是训练模型，其实是检索增强" |
-| `application`（应用错误） | 概念对但用错场景 | "知道有锁，但用在了不该用的地方" |
-| `metacognitive`（元认知型） | 不知道自己不知道 | "以为自己懂了，复述时才发现全是漏洞" |
+| `structural` | missing prerequisite knowledge/context | "can't understand this async framework because I don't know `asyncio`" |
+| `deviation` | a concept is understood wrong | "thought RAG trains the model; it's actually retrieval-augmented" |
+| `application` | concept right but wrong scenario | "knows locks exist but used them where they don't apply" |
+| `metacognitive` | doesn't know what they don't know | "thought I got it, then the recital exposed the gaps" |
 
-每个错误记录：`error_type` + 用户自述归因 + tutor 确认 + 重试历史。**status 流转**：`active → retrying → review → graduated`。active/retrying 的错误会提升该知识点的复习优先级。
+Each error record: `error_type` + user's self-attribution + tutor confirmation + retry history. **Status flow**: `active → retrying → review → graduated`. active/retrying errors raise that point's review priority.
 
-## 6. 定性判定（`mastery_assess`）
+## 6. Qualitative judgment (`mastery_assess`)
 
-concept/design 型知识点的"费曼检验"判定标准：
+Pass criteria for the Feynman check on concept/design points:
 
-- **concept**：用户能用自己的话讲清"是什么 + 为什么 + 与相邻概念的关系"。讲不清 → 判不过 → 回炉讲解，记录错误类型。
-- **design**：除复述外，追加设计权衡追问 —— "为什么不选另一种方案？换一种场景它会怎么失败？扩展点在哪？" 能回答权衡 = 掌握。
+- **concept**: the user can explain in their own words "what + why + relation to adjacent concepts". Can't → not passed → return to explanation, record the error type.
+- **design**: beyond the recital, add design-tradeoff follow-ups — "why not the alternative? in what scenario would it fail? where is the extension point?" Being able to answer the tradeoffs = mastery.
 
-定性判定结果存 `qualitative_mastery: {kp_id: bool}`；通过后地图显示满值，但判定本身是布尔，不是分数。
+Qualitative results live in `qualitative_mastery: {kp_id: bool}`; the map shows full value once passed, but the judgment itself is a boolean, not a score.
 
-## 7. 进度数据结构（`progress.json`）
+## 7. Progress data structure (`progress.json`)
 
 ```jsonc
 {
   "repo": "owner/name",
   "diagnostic": { "module_mastery": {} },
   "modules": [
-    { "id": "m01", "name": "跑通构建与环境", "order": 1,
+    { "id": "m01", "name": "Build & environment", "order": 1,
       "pass_threshold": 0.7,
       "knowledge_points": [ { "id": "kp01-01", "name": "...", "type": "procedure" } ] }
   ],
-  "mastery_levels": { "kp01-01": 0.42 },       // 定量掌握度 0..1
-  "qualitative_mastery": { "kp01-02": true },  // 定性判定结果
+  "mastery_levels": { "kp01-01": 0.42 },       // quantitative mastery 0..1
+  "qualitative_mastery": { "kp01-02": true },  // qualitative judgment
   "knowledge_types": { "kp01-01": "procedure" },
   "quiz_attempts": [ { "question_id": "q1", "knowledge_point_id": "kp01-01",
                        "is_correct": false, "error_type": "deviation",
@@ -127,7 +129,8 @@ concept/design 型知识点的"费曼检验"判定标准：
 }
 ```
 
-**关键点**：
-- `pending_question.expected_answer` **存在服务端（本文件）**，绝不随问题回传给用户 —— 判定永不漂移（DeepTutor `PendingQuestion` 设计）。
-- 所有时间戳用 Unix 秒。
-- 文件一旦存在，每轮学习结束**原子写回**（先写临时文件再改名），避免损坏。
+Key points:
+
+- `pending_question.expected_answer` **lives server-side (this file)** and never round-trips to the user — grading never drifts (DeepTutor's `PendingQuestion`).
+- All timestamps are Unix seconds.
+- Once the file exists, **write it back atomically** (temp file + rename) at the end of each turn to avoid corruption.

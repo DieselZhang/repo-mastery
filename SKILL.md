@@ -1,208 +1,218 @@
 ---
 name: repo-mastery
-description: "把任意开源仓库变成开发者视角的掌握式课程。输入本地仓库路径或 GitHub URL，通过 课程地图确认 → 交互式掌握度学习（诊断/讲解/费曼检验/练习/间隔复习）→ 动手实践 → 笔记沉淀 → 合成完整课程文档，帮助你像学一门课一样逐步掌握一个项目的 使用 → 架构 → 关键实现。触发词：'学会这个仓库'、'把 xx 变成课程'、'深入学习 xx 项目'、'掌握这个代码库'、'从源码学习'。"
+description: "Turn any open-source repository into a developer-focused mastery course. Given a local repo path or GitHub URL, it builds a confirmed course map and drives interactive mastery learning (diagnostic, explanation, Feynman check, practice, spaced review) with hands-on tasks, note-taking, and dual-format (Markdown + HTML) course output — so you fully master a project's usage, architecture, and key implementations like a real course. Triggers: 'learn this repo', 'master this codebase', 'turn X into a course', 'deep-dive into X project'."
 origin: personal
-version: 1.1.0
+version: 2.0.0
 tags: [learning, education, codebase, mastery, spaced-repetition]
 ---
 
-# Repo-Mastery — 从源码掌握一个开源项目
+# Repo-Mastery — Master an Open-Source Project from Source
 
-> 把任意开源仓库变成**开发者视角的掌握式课程**。你不是在"浏览代码"，而是在像学一门课一样逐步掌握它的 **使用 → 架构 → 关键实现**，并且每一点都有掌握度判定、间隔复习和笔记沉淀。
+> Turn any open-source repository into a **developer-focused mastery course**. Instead of "browsing code", you progressively master its **usage → architecture → key implementations**, with per-knowledge-point mastery gates, spaced review, and persistent notes.
 
 ## When to Activate
 
-使用本 skill 的场景（任何命中即应激活）：
+Use this skill whenever any of these applies:
 
-- 用户想"学会 / 掌握 / 吃透 / 深入研究"某个开源仓库或代码库。
-- 用户拿到一个新项目的源码，想系统学习而不是零散浏览。
-- 用户想从**源码**理解一个项目的架构设计与关键实现（不只是会用）。
-- 用户想让学习进度**跨会话持续**（有记忆、有间隔复习）。
-- 用户说"把 xx 仓库变成课程"、"从源码学 xx"、"深入学习 xx 项目"。
+- The user wants to "learn / master / fully understand / deep-dive into" an open-source repo or codebase.
+- The user just got a new project's source and wants systematic learning instead of random browsing.
+- The user wants to understand a project's **architecture and key implementations from source** (not just how to use it).
+- The user wants learning progress to **persist across sessions** (memory + spaced review).
+- The user says "turn X repo into a course", "learn X from source", "deep-dive into X project".
 
-不激活的场景：用户只是要一份文档/README 摘要、一次性的代码问答、或面向终端用户的使用教程（那是 `docs-to-course` 的活）。
+Do **not** activate when: the user just wants a doc/README summary, a one-off code Q&A, or an end-user tutorial for a tool (that is `docs-to-course`'s job).
 
 ## Prerequisites
 
-- **Claude Code**（skill 运行时）。
-- **目标仓库**：本地路径，或可访问的 `github:owner/repo`（skill 自动 `git clone --depth 1`）。
-- **Python 3**（仅大型仓库索引脚本 `scripts/index_repo.py` 需要，纯标准库）。
-- **写权限**：会在目标仓库下创建 `.learning/` 目录（自动 gitignore），在 `~/.repo-mastery/` 创建全局记忆。
+- **Claude Code** (the skill runtime).
+- **Target repository**: a local path, or a reachable `github:owner/repo` (the skill auto-runs `git clone --depth 1`).
+- **Python 3** — only needed by the large-repo indexing script `scripts/index_repo.py` (pure stdlib).
+- **Write permission**: creates `.learning/` inside the target repo (auto-gitignored) and a global `~/.repo-mastery/`.
 
-## 与 docs-to-course 的区别
+## Language
 
-本 skill **不吃文档、面向开发者**。目标学习者是你 —— 一个想彻底理解某个开源项目是怎么被构建出来的开发者，而不是想学会"怎么用"的终端用户。因此：
+Teaching language **follows the user's input language by default** (Chinese input → Chinese teaching; English input → English teaching). You can also pass an explicit language flag:
 
-- 输入是**源码仓库**（本地路径或 GitHub URL），不是文档站。
-- 学习深入到**内部实现**：架构、设计决策、核心算法 —— 这是重点，不是"表面操作"。
-- 驱动方式是**交互式掌握度学习**，不是一次性生成静态课程。
-- 产出是**可续学的学习状态** + 完整课程文档（Markdown + HTML 双形态）。
+```bash
+/repo-mastery start <path|github:owner/repo> --language zh    # force Chinese
+/repo-mastery start <path|github:owner/repo> --language en    # force English
+```
 
-> 方法论上它站在 `docs-to-course` 的肩膀上：课程设计弧线、测验哲学、模块简报预提取、HTML 课程外壳都直接吸收自它；掌握度引擎（确定性闸门、间隔重复、错误诊断）吸收自 DeepTutor 的 `learning` 模块。
+Code, file paths, and identifiers always stay in their original form regardless of language.
 
-## 核心设计公理（必须始终遵守）
+## Difference from docs-to-course
 
-> **智能在出口，进阶在闸门。** 你（tutor）决定教什么、怎么提问、怎么讲解；但"能否进阶"永远是**确定性引擎判定**，绝不是让 LLM 自己拍脑袋说"你掌握了"。
+This skill **does not read docs and targets developers**. The learner is you — a developer who wants to understand how an open-source project was built — not an end-user who wants to learn how to use it. Therefore:
 
-- 定量判定（memory / procedure 型）：`compute_mastery()` 近因加权准确率 ≥ 0.9，且受置信度上限约束 —— **一次蒙对不算掌握**。
-- 定性判定（concept / design 型）：费曼式复述由你判定（`mastery_assess`）。
-- 进阶由"已掌握的内容"计算而来（`next_objective`），**绝不是阶段计数器**。已证明掌握的知识点自动跳过（test-out 路径）。
+- **Input** is source code (local path or GitHub URL), not a docs site.
+- Learning goes **inside the implementation**: architecture, design decisions, core algorithms — that is the point, not "surface operations".
+- Driving mode is **interactive mastery learning**, not one-shot static course generation.
+- Output is **resumable learning state** + a complete course document (Markdown + HTML dual format).
+
+> Methodologically it stands on `docs-to-course`'s shoulders: the course-design arc, quiz philosophy, module-brief pre-extraction, and HTML course shell are absorbed from it; the mastery engine (deterministic gates, spaced repetition, error diagnosis) is adapted from DeepTutor's `learning/` module. See `docs/ARCHITECTURE.md` and `ADOPTION.md`.
+
+## Core Design Axiom (always hold)
+
+> **Intelligence at the exit, advancement at the gate.** You (the tutor) decide what to teach, how to question, how to explain — but whether the learner *may advance* is always a **deterministic engine decision**, never the LLM patting itself on the back.
+
+- Quantitative gate (memory / procedure types): `compute_mastery()` recency-weighted accuracy ≥ 0.9, capped by a confidence ceiling — **one lucky answer is not mastery**.
+- Qualitative gate (concept / design types): a Feynman-style explanation judged by the tutor (`mastery_assess`).
+- Advancement is computed **from what is already mastered** (`next_objective`), never from a stage counter. Knowledge points already proven are skipped (test-out path).
 
 ---
 
-## 命令表
+## Commands
 
 ```bash
-/repo-mastery start <本地路径 | github:owner/repo>   # 主流程：地图→确认→学习→产出
-/repo-mastery continue                                # 续学上次进度（回到 next_objective 指向的知识点）
-/repo-mastery review                                  # 触发间隔复习会话（到期知识点）
-/repo-mastery note "<文本>"                           # 手动向当前模块笔记追加（想法/疑问/卡点）
-/repo-mastery status                                  # 查看当前进度（map_summary 风格）
-/repo-mastery report                                  # 生成掌握度报告 MASTERY.md
-/repo-mastery export [--html]                         # 合成完整课程文档（COVERAGE.md，--html 额外生成 HTML 版）
+/repo-mastery start <local-path | github:owner/repo> [--language zh|en]  # Main flow: map → confirm → learn → output
+/repo-mastery continue                                                  # Resume progress (back to next_objective)
+/repo-mastery review                                                    # Run spaced-review session (due items)
+/repo-mastery note "<text>"                                             # Manually append to the current module notes
+/repo-mastery status                                                    # Show progress (map_summary style)
+/repo-mastery report                                                    # Generate mastery report MASTERY.md
+/repo-mastery export [--html]                                           # Synthesize complete course doc (COVERAGE.md; --html adds HTML)
 ```
 
 ---
 
-## 主流程（`/repo-mastery start`）
+## Main Flow (`/repo-mastery start`)
 
-### Phase 0 — 复杂度评估（决定提取方式）
+### Phase 0 — Complexity Assessment (decide how to ingest)
 
-先对仓库做一次快速规模判断，**再决定用哪种方式消化源码**：
+Make a quick scale judgment first, **then** choose how to digest the source:
 
-| 指标 | 中小型 | 大型 |
+| Metric | Small / Medium | Large |
 |---|---|---|
-| 源文件（`src/` + 非测试）行数 | < 10 万行 | ≥ 10 万行 |
-| 顶层模块/包数量 | < 20 | ≥ 20 |
-| 依赖复杂度 / 多语言混编 | 简单 | 复杂 |
+| Source lines (`src/` + non-test) | < 100k | ≥ 100k |
+| Top-level modules / packages | < 20 | ≥ 20 |
+| Dependency complexity / multi-language | simple | complex |
 
-- **中小型** → 纯 skill 直接读源码（Grep/Glob/Read + explore_context 式预扫描），无需 Python 依赖。
-- **大型** → 先运行 `scripts/index_repo.py` 生成 `code-map.json`（模块/依赖/符号表，见 `references/index-script-spec.md`），课程地图基于它构建，学习时按需从索引定位源码，避免整仓塞进上下文。
-- 判断不确定时，用 `find` + `wc -l` 实际数一下，不要猜。
+- **Small / medium** → pure skill reads the source directly (Grep/Glob/Read + explore_context-style pre-scan), no Python dependency.
+- **Large** → first run `scripts/index_repo.py` to generate `code-map.json` (modules/dependencies/symbol locations; see `references/index-script-spec.md`), build the course map on top of it, and locate source on demand during learning instead of cramming the whole repo into context.
+- When unsure, measure with `find` + `wc -l`; do not guess.
 
-### Phase 1 — 预扫描 → 课程地图候选
+### Phase 1 — Pre-scan → Course Map Candidates
 
-以 **explore_context 式客观预扫描**开始：先冷静地把仓库摸清楚（读 README、入口文件、目录结构、构建配置、核心模块），**不要边看边给结论**。然后按 `references/curriculum-design.md` 生成课程地图候选：
+Start with an **explore_context-style objective pre-scan**: calmly map the repo first (README, entry files, directory structure, build config, core modules) **without jumping to conclusions**. Then generate course-map candidates per `references/curriculum-design.md`:
 
 ```jsonc
 {
   "repo": "owner/name",
-  "summary": "一段客观的仓库概览",
+  "summary": "an objective overview of the repo",
   "modules": [
     {
       "id": "m01",
-      "name": "跑通构建与环境",
+      "name": "Build & environment",
       "order": 1,
       "pass_threshold": 0.7,
       "knowledge_points": [
-        {"id": "kp01-01", "name": "如何从零构建并运行", "type": "procedure"},
-        {"id": "kp01-02", "name": "项目目录结构的心智模型", "type": "concept"}
+        {"id": "kp01-01", "name": "Build and run from scratch", "type": "procedure"},
+        {"id": "kp01-02", "name": "Mental model of the directory structure", "type": "concept"}
       ]
     }
-    // ...
   ]
 }
 ```
 
-**模块弧线**（吸收自 docs-to-course 的"reference → route"，为源码学习改造）：
+**Module arc** (absorbed from docs-to-course's "reference → route", adapted for source learning):
 
-> **first win（跑通构建）→ 整体架构心智模型 → 核心工作流/模块 → 关键实现 → 动手实验 → 排错 → 深入参考**
+> **First win (build) → overall architecture mental model → core workflows/modules → key implementations → hands-on labs → troubleshooting → deep references**
 
-这是菜单不是清单 —— 按仓库实际选 4–8 个模块，少而深胜过薄而多。知识点的 `type` 决定它的判定方式（见 `mastery-policy.md`）。
+This is a menu, not a checklist — pick 4–8 modules that fit the repo; fewer, deeper beats more, thinner. The knowledge point's `type` decides its gate (see `mastery-policy.md`).
 
-### Phase 2 — 课程地图确认与定制（用户决策，不可跳过）
+### Phase 2 — Course Map Confirmation & Customization (user decision, never skipped)
 
-先确立 **Mission**（吸收自 teach skill 的 MISSION.md）：问用户一个关键问题 —— **"你为什么想掌握这个仓库？"**（要用它、要改它、要面试讲它、要借鉴它的设计……）。把答案写进 `<repo>/.learning/MISSION.md`，它 ground 后面所有教学决策（模块取舍、费曼追问方向、掌握度优先级）。Mission 变了就更新它，并写一条 learning record。
+First establish the **Mission** (absorbed from the teach skill's MISSION.md): ask the user one key question — **"Why do you want to master this repo?"** (use it? modify it? explain it in interviews? borrow its design? …). Write the answer to `<repo>/.learning/MISSION.md`; it grounds every later teaching decision (module choices, Feynman follow-ups, mastery priority). When the Mission changes, update it and write a learning record.
 
-然后把候选地图**呈现给用户**，逐模块说明，然后：
+Then **present the candidate map** to the user, explain each module, and:
 
-- ✅ 用户删掉不关心的模块 / 增加感兴趣的模块 / 调整知识点粒度。
-- ✅ 用户确认每个模块的 `pass_threshold`（默认 0.7）。
-- ✅ **用户批准后**才开始学习。这是强制步骤 —— 和 docs-to-course 的"不要给大纲审批"相反。
+- ✅ User removes irrelevant modules / adds interesting ones / adjusts knowledge-point granularity.
+- ✅ User confirms each module's `pass_threshold` (default 0.7).
+- ✅ **Learning starts only after user approval.** This is mandatory — the opposite of docs-to-course's "don't get outline approval".
 
-确认后写入 `<repo>/.learning/course-map.json`，并初始化 `.learning/` 结构（见下）。
+After confirmation, write `<repo>/.learning/course-map.json` and initialize the `.learning/` structure (below).
 
-### Phase 3 — 交互式掌握度学习
+### Phase 3 — Interactive Mastery Learning
 
-按 `references/session-flow.md` 驱动。核心循环（每知识点）：
+Drive per `references/session-flow.md`. Core loop (per knowledge point):
 
-> **诊断（已知多少，可 test-out 跳过）→ 讲解 → 费曼检验 → 练习（定量测验 / 按需动手）→ 错误诊断 → 间隔复习调度**
+> **diagnostic (probe how much is known; test-out skip) → explain → Feynman check → practice (quiz / hands-on) → error diagnosis → spaced-review scheduling**
 
-- 下一站永远由 `next_objective` 决定（优先级：待判定的题 → 到期的复习 → 第一个未掌握的知识点 → 完成）。
-- 定量判定（memory/procedure）：出题，按 `mastery-policy.md` 的 `compute_mastery` 计算，≥0.9 才算掌握。
-- 定性判定（concept/design）：让用户用费曼复述，你判定 `passed`，不过则回炉。
-- **按需动手**：procedure 型知识点引导用户实际跑（构建/测试/写 demo 验证）。只读命令（`build`、`test` 等）可直接运行；**写操作（改文件、装依赖）必须先经用户批准**。动手结果作为掌握证据记录。
-- **自动沉淀笔记**：每次讲解/判定后自动写入 `<repo>/.learning/notes/<module>.md`（格式见 `note-template.md`）；用户随时 `/repo-mastery note "..."` 追加。
-- **命令执行约定**：本 skill 需要运行仓库命令时，默认只运行只读/无副作用命令；任何会修改用户文件系统或安装依赖的操作，先把命令展示给用户并请求批准。
+- The next station is always decided by `next_objective` (priority: pending question → due review → first unmastered point → complete).
+- Quantitative gate (memory/procedure): pose a question, compute via `compute_mastery` per `mastery-policy.md`; advance only at ≥ 0.9.
+- Qualitative gate (concept/design): have the user do a Feynman recital; you judge `passed`; retry if not.
+- **Hands-on on demand**: for procedure points, guide the user to actually run things (build/test/write a small demo). Read-only commands (`build`, `test`, `--help`) may run directly; **mutating operations (writing files, installing deps) require explicit user approval first**. The hands-on result is recorded as mastery evidence.
+- **Auto notes**: after each explanation/judgment, automatically append to `<repo>/.learning/notes/<module>.md` (format: `note-template.md`); the user can `/repo-mastery note "..."` at any time.
+- **Command convention**: only run read-only/no-side-effect commands by default; show any command that modifies the user's filesystem or installs dependencies and request approval.
 
-### Phase 4 — 合成完整课程文档（双形态）
+### Phase 4 — Synthesize the Complete Course Document (dual format)
 
-学习到完成（或用户主动 `/repo-mastery export`）时，把 **课程地图 + 讲解笔记 + 用户实践记录 + 掌握度与卡点** 合成为完整课程文档：
+When learning completes (or the user runs `/repo-mastery export`), synthesize **course map + explanation notes + user practice records + mastery & blockers** into a complete course document:
 
-1. **Markdown 全量版** `COVERAGE.md`：完整内容，含代码引用、模块讲解、掌握度、卡点、复习排期。这是主产物。
-2. **HTML 分享版**（`/repo-mastery export --html`）：**复用 `references/html-shell/` 的成品外壳**（styles.css / main.js / _base.html / _footer.html / build.sh —— 复制 verbatim，绝不重新生成），把 COVERAGE.md 的模块内容转化为 `modules/0N-slug.html`，用 `build.sh` 装配出 `index.html`。交互元素（flow 动画、group chat、glossary tooltip、情景测验）按 `references/html-shell/interactive-elements.md` 的模式添加。
+1. **Markdown full version** `COVERAGE.md`: complete content with source references, module explanations, mastery, blockers, and review schedule. This is the primary artifact.
+2. **HTML share version** (`/repo-mastery export --html`): **reuse the finished shell in `references/html-shell/`** (styles.css / main.js / _base.html / _footer.html / build.sh — copy verbatim, never regenerate), convert COVERAGE.md module content into `modules/0N-slug.html`, and assemble `index.html` with `build.sh`. Interactive elements (flow animations, group chat, glossary tooltips, scenario quizzes) follow the patterns in `references/html-shell/interactive-elements.md`.
 
-> 注意：HTML 版的视觉应服务"源码理解"——**架构图、依赖图、调用链是核心内容**，这与 docs-to-course 的"偏 UI 步骤条"相反。
+> Note: the HTML version's visuals serve "source understanding" — **architecture diagrams, dependency graphs, call chains are the core content**, the opposite of docs-to-course's "UI step-strips bias".
 
 ---
 
-## 数据结构
+## Data Structures
 
 ```text
-<目标仓库>/.learning/                  ← 随仓库走，自动写 .gitignore 避免误提交
-  ├── MISSION.md           学习使命（你为什么想掌握它，ground 所有教学）
-  ├── course-map.json      课程地图（已确认版）
-  ├── progress.json        LearningProgress（掌握度/间隔复习/卡点，见 mastery-policy.md）
-  ├── records/NNNN-slug.md ADR 式学习记录（理解演化的决策记录，见 learning-records-template.md）
-  ├── notes/<module>.md    结构化笔记（自动沉淀 + /note 追加）
-  ├── briefs/<module>.md   模块简报（大型仓库省 token）
-  ├── code-map.json        大型仓库索引（可选）
-  └── .gitignore           含 ".learning/"
-~/.repo-mastery/                     ← 全局轻量记忆（不做 L1/L2/L3 分层）
-  ├── profile.md           跨仓库偏好/水平/卡点总结
-  └── index.json           学过的仓库清单与状态（上次学到哪）
+<target-repo>/.learning/                  ← travels with the repo; auto-gitignored
+  ├── MISSION.md           learning mission (why you want to master it; grounds teaching)
+  ├── course-map.json      course map (confirmed version)
+  ├── progress.json        LearningProgress (mastery / spaced review / blockers; see mastery-policy.md)
+  ├── records/NNNN-slug.md ADR-style learning records (understanding evolution)
+  ├── notes/<module>.md    structured notes (auto + /note append)
+  ├── briefs/<module>.md   module briefs (large repos, token-saving)
+  ├── code-map.json        large-repo index (optional)
+  └── .gitignore           contains ".learning/"
+~/.repo-mastery/                     ← global lightweight memory (no L1/L2/L3 layering)
+  ├── profile.md           cross-repo preferences / level / blocker summary
+  └── index.json           repos studied + state (last learned where)
 ```
 
-进度采用 JSON 文件、每知识点为一条记录；**待判定题目的期望答案存在服务端（progress.json），绝不回传给你复述** —— 判定永不漂移（吸收 DeepTutor 的 `PendingQuestion` 设计）。
+Progress is stored in JSON, one record per knowledge point; the **expected answer of a pending question lives server-side (`progress.json`) and never round-trips to the user** — grading never drifts (absorbed from DeepTutor's `PendingQuestion`).
 
 ---
 
-## 参考文件（按阶段读取，保持上下文精简）
+## Reference Files (read per phase to keep context lean)
 
-- `references/curriculum-design.md` — **Phase 1**：从源码设计课程地图
-- `references/mastery-policy.md` — **Phase 3**：掌握度计算、闸门、间隔复习、错误诊断、fluency vs storage
-- `references/session-flow.md` — **Phase 3**：交互式学习会话协议（含 ZPD 决策）
-- `references/quiz-design.md` — **Phase 3**：测验设计原则（测应用，不测记忆）
-- `references/module-brief-template.md` — **Phase 3 大型仓库**：预提取源码片段，省 token
-- `references/note-template.md` — **Phase 3**：笔记格式
-- `references/learning-records-template.md` — **全程**：ADR 式学习记录格式（理解演化）
-- `references/gotchas.md` — 全程：失败点检查清单
-- `references/index-script-spec.md` — **Phase 0 大型仓库**：Python 索引脚本说明
-- `references/html-shell/` — **Phase 4**：HTML 课程外壳（复制 verbatim）
+- `references/curriculum-design.md` — **Phase 1**: designing the course map from source
+- `references/mastery-policy.md` — **Phase 3**: mastery, gates, spaced review, error diagnosis, fluency vs storage
+- `references/session-flow.md` — **Phase 3**: interactive learning session protocol (incl. Mission + ZPD)
+- `references/quiz-design.md` — **Phase 3**: quiz design (test application, not memory)
+- `references/module-brief-template.md` — **Phase 3, large repos**: pre-extract source snippets, save tokens
+- `references/note-template.md` — **Phase 3**: note format
+- `references/learning-records-template.md` — **All phases**: ADR-style learning record format
+- `references/gotchas.md` — **All phases**: failure-point checklist
+- `references/index-script-spec.md` — **Phase 0, large repos**: Python indexing script docs
+- `references/html-shell/` — **Phase 4**: HTML course shell (copy verbatim)
 
-## Anti-Patterns（反模式）
+## Anti-Patterns
 
-> 完整失败点清单见 `references/gotchas.md`。以下是会直接毁掉学习质量的反模式，遇到就停下来：
+> The full failure checklist is in `references/gotchas.md`. These anti-patterns destroy learning quality outright — stop when you see one:
 
-- ❌ **让 LLM 替代闸门判定** —— 绝不用"你觉得你掌握了吗？"替代 `compute_mastery` / `mastery_assess`。
-- ❌ **跳过课程地图确认** —— 用户必须批准/定制地图（含 Mission），这是用户明确要求。
-- ❌ **期望答案泄漏** —— 题目文本/选项里绝不出现期望答案；只在 `progress.json.pending_question`。
-- ❌ **把"会用"当"掌握"** —— 一次蒙对 / 一次跑通 ≠ 掌握，置信度上限 + 间隔复习才是目标（fluency ≠ storage）。
-- ❌ **整仓塞上下文** —— 学习一个知识点只读相关文件，大型仓库先用 `code-map.json` 定位。
+- ❌ **Letting the LLM replace the gate** — never use "do you feel you've mastered it?" instead of `compute_mastery` / `mastery_assess`.
+- ❌ **Skipping course-map confirmation** — the user must approve/customize the map (with Mission); this is an explicit requirement.
+- ❌ **Leaking the expected answer** — the question text/options must never contain it; only `progress.json.pending_question` does.
+- ❌ **Confusing "worked once" with "mastered"** — one lucky answer / one successful run ≠ mastery; the confidence ceiling + spaced review are the real goal (fluency ≠ storage).
+- ❌ **Cramming the whole repo into context** — read only the files relevant to the current knowledge point; use `code-map.json` to locate on demand in large repos.
 
 ## Related Skills
 
-- `docs-to-course`（codebase-to-course）— 文档 → 终端用户使用课程（本 skill 的方法论与 HTML 外壳来源）。
-- `understand-anything` — 把代码库构建成知识图谱（可与之配合做架构深潜）。
-- `codebase-onboarding` — 快速上手陌生代码库（与 repo-mastery 的 Phase 1 预扫描互补）。
-- `find-docs` — 定位项目文档，可用于 enrich 模块的"一手资源"。
+- `docs-to-course` (codebase-to-course) — docs → end-user usage course (source of this skill's methodology & HTML shell).
+- `understand-anything` — builds a knowledge graph of a codebase (pair well for architecture deep dives).
+- `codebase-onboarding` — quick ramp on unfamiliar codebases (complements this skill's Phase 1 pre-scan).
+- `find-docs` — locate project docs; useful for enriching a module's "primary sources".
 
-## Verification（完成检查）
+## Verification (completion checks)
 
-开始 / 结束一次学习会话时，用 `references/gotchas.md` 自查，并确认：
+When starting / ending a learning session, self-check with `references/gotchas.md` and confirm:
 
-- [ ] `.learning/` 已 gitignore，不污染目标仓库。
-- [ ] `course-map.json` 是用户确认后的版本。
-- [ ] `progress.json` 原子写回，无损坏。
-- [ ] 每轮结束笔记已沉淀、`~/.repo-mastery/index.json` 已更新。
-- [ ] 无期望答案泄漏、无未经批准的写操作命令。
+- [ ] `.learning/` is gitignored; the target repo is not polluted.
+- [ ] `course-map.json` is the user-confirmed version.
+- [ ] `progress.json` written atomically, uncorrupted.
+- [ ] Notes appended and `~/.repo-mastery/index.json` updated each turn.
+- [ ] No expected-answer leakage; no unapproved mutating commands.

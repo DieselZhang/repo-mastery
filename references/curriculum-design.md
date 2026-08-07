@@ -1,65 +1,65 @@
-# Curriculum Design — 从源码生成课程地图
+# Curriculum Design — Designing the Course Map from Source
 
-> **何时读**：Phase 1。你的工作是把一个源码仓库的*结构树*变成一条学习*路线*。学习者是你（开发者），目标是彻底理解这个项目：**使用 → 架构 → 关键实现**。
+> **Read in**: Phase 1. Your job is to turn a source repo's *structure tree* into a learning *route*. The learner is you (a developer), and the goal is to fully understand the project: **usage → architecture → key implementations**.
 
-## 核心动作：reference → route（吸收自 docs-to-course）
+## The core move: reference → route (absorbed from docs-to-course)
 
-源码仓库的组织是供*查找*的（按模块、按目录、按语言习惯）。课程是供*学习*的 —— 每一步为下一步挣得基础。**不要镜像目录树，要重排它。**
+Source repos are organized for *lookup* (by module, by directory, by language convention). A course is organized for *learning* — each step earns the next. **Do not mirror the directory tree; re-sequence it.**
 
-代码学习的课程脊骨：
+The spine of a code-learning course:
 
-> **first win（跑通构建）→ 整体架构心智模型 → 核心工作流/模块 → 关键实现 → 动手实验 → 排错 → 深入参考**
+> **First win (build) → overall architecture mental model → core workflows/modules → key implementations → hands-on labs → troubleshooting → deep references**
 
-## 模块菜单（menu，不是 checklist）
+## The module menu (a menu, not a checklist)
 
-每个候选模块取自真实的仓库证据 —— 文件、目录、构建配置、README、issue。选 4–8 个，少而深。
+Each candidate module comes from real repo evidence — files, directories, build config, README, issues. Pick 4–8; fewer, deeper is better.
 
-| # | 模块 | 从哪来 | 为什么开发者在乎 |
-|---|------|--------|------------------|
-| 1 | **跑通构建与环境** | README 快速开始、Dockerfile、Makefile、pyproject/package.json | 信任。看到它跑起来，之后所有代码讨论才有载体。**几乎总是保留。** |
-| 2 | **整体架构心智模型** | 顶层目录、入口文件（main/app/__init__）、依赖图、README 架构段 | 让你能预测行为，而不是逐行背代码。 |
-| 3 | **核心工作流** | 高频入口 API、CLI 命令、请求-响应主链路 | 这是"会用"的主体。 |
-| 4 | **关键实现（内部）** | 核心算法、数据结构、异步/并发机制、插件/扩展点 | **本 skill 的招牌模块** —— docs-to-course 明确不碰这里，我们专攻这里。 |
-| 5 | **动手实验** | 测试套件、示例目录、可改造的 demo | 把"懂了"变成"会做"。 |
-| 6 | **排错与边界** | 常见 issue、错误路径、异常处理、配置陷阱 | 遇到问题时能自己站稳。 |
-| 7 | **深入参考** | API 文档、贡献指南、内部设计文档 | 课程结束后的自助入口。 |
-
-**如何选**：
-- 小型 CLI/库：模块 1、2、3、5、6。~5 个。
-- 中型应用：1、2、3、4、5、6。~6 个。
-- 大型平台（多语言/多入口/插件生态）：1–7 全部，必要时拆"关键实现"为多个模块。用并行构建路径。
-
-## 知识点：粒度与类型
-
-每个模块下拆 **3–8 个知识点**。粒度的经验法则：*每个知识点应该是"学完能用一个词说出会不会"的单元*。一个知识点对应一次可判定的交互，不要含糊。
-
-每个知识点必须有 `type`（决定判定方式，见 `mastery-policy.md`）：
-
-| type | 含义（对代码学习） | 判定 | 例子 |
+| # | Module | Where it comes from | Why a developer cares |
 |---|---|---|---|
-| `memory` | 记住的 API/命令/关键常量 | 定量（测验） | "`deeptutor kb create` 的语法" |
-| `procedure` | 会操作：构建/运行/调用 | 定量 + 动手验证 | "从零构建并启动项目" |
-| `concept` | 理解核心概念/数据结构 | 定性（费曼复述） | "理解 RAG 检索流程" |
-| `design` | 能讲清为什么这样设计/能扩展 | 定性 + 设计权衡追问 | "为什么用消息队列而非 RPC" |
+| 1 | **Build & environment** | README quickstart, Dockerfile, Makefile, pyproject/package.json | Trust. Seeing it run gives every later code discussion a vehicle. **Almost always keep.** |
+| 2 | **Overall architecture mental model** | top-level dirs, entry files (main/app/__init__), dependency graph, README architecture section | Lets you predict behavior instead of memorizing code line by line. |
+| 3 | **Core workflows** | high-frequency entry APIs, CLI commands, main request-response paths | The "how to use it" body. |
+| 4 | **Key implementations (internals)** | core algorithms, data structures, async/concurrency mechanisms, plugin/extension points | **This skill's signature module** — docs-to-course explicitly avoids it; we specialize in it. |
+| 5 | **Hands-on labs** | test suites, examples dir, modifiable demos | Turns "understood" into "can do". |
+| 6 | **Troubleshooting & boundaries** | common issues, error paths, exception handling, config traps | Lets you stand on your own when things break. |
+| 7 | **Deep references** | API docs, contributing guide, internal design docs | Your self-service entry after the course. |
 
-> 一个常见错误是知识点写得过粗（"理解系统架构"）。把它拆到可判定的单元："模块间依赖方向"、"请求的完整调用链"、"配置的加载优先级"。
+**How to choose**:
+- Small CLI/lib: modules 1, 2, 3, 5, 6. ~5 modules.
+- Medium app: 1, 2, 3, 4, 5, 6. ~6 modules.
+- Large platform (multi-language/multi-entry/plugin ecosystem): all of 1–7; split "key implementations" into several modules if needed. Use the parallel build path.
 
-## 用证据生成，不编造
+## Knowledge points: granularity and type
 
-每个模块/知识点都要能指向**仓库里的具体证据**：
+Break each module into **3–8 knowledge points**. Granularity rule of thumb: *each knowledge point should be a unit you can answer "do I know it or not" in one word*. One point = one judgeable interaction; never vague.
 
-- 模块 → 顶层目录或核心文件路径。
-- 知识点 → 具体文件/函数/文档段落。
-- 关键实现模块 → 那部分代码所在的文件与入口函数。
+Every knowledge point must have a `type` (it decides the gate; see `mastery-policy.md`):
 
-如果你在设计地图时对某个模块没有证据，要么去读，要么别放。**宁可少一个模块，不要有一个虚的。**
+| type | Meaning (for code learning) | Gate | Example |
+|---|---|---|---|
+| `memory` | remembered APIs/commands/key constants | quantitative (quiz) | "syntax of `deeptutor kb create`" |
+| `procedure` | can operate: build/run/call | quantitative + hands-on | "build and launch the project from scratch" |
+| `concept` | understand core concepts/data structures | qualitative (Feynman recital) | "understand the RAG retrieval flow" |
+| `design` | can explain why it's designed this way / extend it | qualitative + design tradeoff follow-ups | "why message queue instead of RPC" |
 
-## 预扫描的顺序（explore_context 式）
+> A common mistake is over-coarse points ("understand the system architecture"). Split to judgeable units: "dependency direction between modules", "the complete call chain of a request", "config load precedence".
 
-1. README / 顶层文档 —— 仓库想让你怎么理解它。
-2. 构建配置（pyproject.toml / package.json / Cargo.toml / Makefile / Dockerfile）—— 怎么跑起来。
-3. 目录结构与入口文件（`find` 顶层 + 读 `main`/`app`/`__init__.py`）。
-4. 核心模块 —— 挑证据最重的 3–5 个读接口级。
-5. 测试与示例 —— 看出真实的用法。
+## Generate from evidence, not invention
 
-**保持客观**：这个阶段只"摸清"，不"下结论"。结论在讲解阶段下。
+Every module/knowledge point must point to **concrete evidence in the repo**:
+
+- Module → top-level dir or core file path.
+- Knowledge point → specific file/function/doc section.
+- Key-implementation module → the file and entry function where that code lives.
+
+If you have no evidence for a module while designing the map, either go read it or leave it out. **Better one fewer module than one that's hollow.**
+
+## Pre-scan order (explore_context style)
+
+1. README / top-level docs — how the repo wants to be understood.
+2. Build config (pyproject.toml / package.json / Cargo.toml / Makefile / Dockerfile) — how it runs.
+3. Directory structure & entry files (`find` top-level + read `main`/`app`/`__init__.py`).
+4. Core modules — read the 3–5 heaviest at interface level.
+5. Tests & examples — see the real usage.
+
+**Stay objective**: this phase only *maps*; conclusions come in the explanation phase.

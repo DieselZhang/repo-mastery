@@ -1,47 +1,47 @@
-# Learning Records Template — ADR 式学习记录
+# Learning Records Template — ADR-style Learning Records
 
-> **何时读**：全程。学习记录（learning records）与笔记（notes）是**两层**东西：
-> - `notes/<module>.md` = 内容笔记 —— 每个模块讲了什么（知识沉淀）。
-> - `records/NNNN-slug.md` = 决策记录 —— **学习者的理解如何演化**（非显而易见的学习、已声明的前置知识、被纠正的误解）。它喂给 ZPD 决策和后续会话。
+> **Read in**: all phases. Learning records and notes are **two layers**:
+> - `notes/<module>.md` = content notes — what each module covered (knowledge accumulation).
+> - `records/NNNN-slug.md` = decision records — **how the learner's understanding evolved** (non-obvious learnings, stated prior knowledge, corrected misconceptions). These feed ZPD decisions and future sessions.
 >
-> 格式吸收自 mattpocock teach skill 的 `LEARNING-RECORD-FORMAT.md`（teaching 版的 ADR）。
+> Format absorbed from mattpocock teach skill's `LEARNING-RECORD-FORMAT.md` (the teaching-world ADR).
 
-## 存放与编号
+## Location & numbering
 
-- 位置：`<repo>/.learning/records/`，文件名 `0001-slug.md`、`0002-slug.md` …… 递增。
-- 懒创建：写第一条时才建目录。
+- Location: `<repo>/.learning/records/`, filenames `0001-slug.md`, `0002-slug.md`, … incrementing.
+- Lazy creation: only create the directory when the first record is written.
 
-## 模板（极简）
+## Template (minimal)
 
 ```md
-# {一句标题：这次学到了/确立了什么}
+# {one-line title: what was learned / established}
 
-{1-3 句：学到了什么（或确立了什么前置知识），为什么它对后续会话重要。}
+{1-3 sentences: what was learned (or what prior knowledge was established), and why it matters for future sessions.}
 
-Status: active | superseded by LR-NNNN   ← 仅在必要时
-Evidence: {用户如何证明了这个理解：答对一题/跑通一个 demo/引用了先验经验}
-Implications: {这对后续解锁/排除了什么}
+Status: active | superseded by LR-NNNN   ← only when needed
+Evidence: {how the user demonstrated this: answered a question / ran a demo / cited prior experience}
+Implications: {what this unlocks or rules out for future sessions}
 ```
 
-**整个格式就是这几行。** 学习记录的价值在于"记录这件事现在已知了 + 它改变接下来教什么"，不在于填满章节。
+**The whole format is these few lines.** The value of a record is capturing "this is now known" + "it changes what to teach next" — not filling out sections.
 
-## 何时写一条
+## When to write one
 
-1. **用户展示了对某个非平凡知识点的真实理解** —— 不只是"看过"，而是有证据能用对（答对、demo 跑通）。这给"接下来教什么"设了新地板。
-2. **用户声明了前置知识** —— "这个我早就懂"。记下来 + 记录声称的深度，后续别再重复教。
-3. **一个误解被纠正** —— 用户原先理解错了，现在看到为什么错。高价值：能预测相关主题未来的绊脚石。
-4. **Mission 因学习而变** —— 用户发现自己在意的和原来想的不一样。更新 `MISSION.md` 并交叉链接。
+1. **The user demonstrated genuine understanding of something non-trivial** — not just exposure, but evidence they can use it correctly (answered, demo ran). This sets a new floor for what to teach next.
+2. **The user disclosed prior knowledge** — "I already know X." Record it, and the claimed depth, so future sessions don't re-teach it.
+3. **A misconception was corrected** — the user believed something wrong and now sees why. High value: predicts future stumbling blocks for related topics.
+4. **The Mission shifted in response to learning** — the user discovered they care about something different. Update `MISSION.md` and cross-link.
 
-### 不算什么
+### What does *not* qualify
 
-- 只是"讲过"的材料。覆盖 ≠ 学习，等证据。
-- glossary 里已有一句术语定义的东西，不重复。
-- 逐会话活动日志。学习记录不是日志，是决策级洞察。
+- Material merely covered. Coverage is not learning; wait for evidence.
+- Anything already captured tersely as a glossary term. Don't duplicate.
+- Session-by-session activity logs. Records are not a journal — they're decision-grade insights.
 
-## 失效与演进（supersession）
+## Supersession
 
-当一条后来的记录推翻更早的理解（用户的认知加深或被纠正），**标记旧记录 `Status: superseded by LR-NNNN`，不要删** —— 理解如何演化的历史本身是有用信号（吸收自 teach 的 supersession 设计）。
+When a later record contradicts an earlier one (understanding deepened or corrected), mark the old record `Status: superseded by LR-NNNN` rather than deleting it — the history of how understanding evolved is itself useful signal (absorbed from teach's supersession).
 
-## 与 ZPD 的关系
+## Relationship to ZPD
 
-每条记录都更新"用户已知什么"的基线。会话开始时，读 `records/` + `progress.json` 判断**最近发展区**：下一步教的内容应该"刚好够挑战"，不是重新覆盖已确立的知识，也不是一步跨太远。
+Each record updates the baseline of "what the user already knows". At session start, read `records/` + `progress.json` to judge the **zone of proximal development**: teach what's "just challenging enough" — not re-covering established knowledge, not leaping too far.

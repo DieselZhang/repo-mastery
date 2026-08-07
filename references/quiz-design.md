@@ -1,66 +1,60 @@
-# Quiz Design — 测验设计原则（测应用，不测记忆）
+# Quiz Design — Principles (Test Application, Not Memory)
 
-> **何时读**：Phase 3，出定量题时。本原则吸收自 docs-to-course 的 `content-philosophy.md`，为"代码理解"改造。
+> **Read in**: Phase 3, when posing quantitative questions. This principle is absorbed from docs-to-course's `content-philosophy.md`, adapted for "code understanding".
 
-## 铁律：测验应用，不测记忆
+## The iron rule: test application, not memory
 
-判定的价值在于：**答错这道题暴露的是"不会用/不理解"，而不是"没记住"**。定义题是工具提示（glossary）的职责，不是测验的职责。
+The value of a question is: **a wrong answer reveals "can't use / don't understand", not "didn't memorize"**. Definitions are the job of a glossary tooltip, not a quiz.
 
-**测什么（按价值排序）**：
-1. **"你会怎么做"场景题** —— "你想在项目里加一个 X 功能，你会用哪个扩展点/模块？" 金标准。
-2. **追踪题** —— "这个请求从入口到落库，依次经过哪些模块？" 测调用链理解。
-3. **排错场景** —— "启动时报 `ImportError: xxx`，最可能的原因和第一步检查是什么？"
-4. **权衡/决策题** —— "任务 Z，你会选 A 还是 B 实现？为什么？" 测 design 理解。
-5. **"这是什么/为什么"** —— 简短定义 + 一个为什么。
+**What to test (best first)**:
+1. **"What would you do" scenarios** — "to add feature X to this project, which extension point/module would you use?" Gold standard.
+2. **Tracing** — "which modules does this request pass through, from entry to storage?" Tests call-chain understanding.
+3. **Troubleshooting scenarios** — "startup fails with `ImportError: xxx` — most likely cause and first thing to check?"
+4. **Tradeoff/decision questions** — "for task Z, would you pick A or B? Why?" Tests design understanding.
+5. **"What is it / why"** — short definition + one why.
 
-**不测什么**：
-- ❌ 逐字定义（那是记忆，且能被滚屏回答）。
-- ❌ 精确 flag/参数拼写（除非该知识点明确是 memory 型）。
-- ❌ 任何"往上翻就能看到答案"的东西。
+**What NOT to test**:
+- ❌ Verbatum definitions (that's memory, and scrollable).
+- ❌ Exact flag/argument spelling (unless the point is explicitly a memory type).
+- ❌ Anything answerable by scrolling up.
 
-## 出题形式（对代码学习）
+## Question formats (for code learning)
 
-| 形式 | 适用 | 示例 |
+| Form | Use for | Example |
 |---|---|---|
-| 选择题（带场景） | 快速判分，多数 memory/procedure | "以下哪个是配置加载的正确优先级？A) … B) … C) …" |
-| 排序题 | 调用链/流程 | "把构建 → 安装 → 启动的步骤按真实顺序排列" |
-| 填空/简答（短答案） | procedure，需要写对 | "`deeptutor kb create` 建库后，用什么命令搜索？" |
-| 代码小改 | 理解一个函数的行为 | "给这段代码加一处改动，让它输出 X —— 改哪一行？" |
+| Multiple choice (with scenario) | fast grading, most memory/procedure | "which is the correct config-load precedence? A) … B) … C) …" |
+| Sequencing | call chains / flows | "arrange build → install → launch in the real order" |
+| Fill-in / short answer | procedure, must write it | "after `deeptutor kb create`, which command searches the KB?" |
+| Small code change | understanding a function's behavior | "change one line here to make it output X — which line?" |
 
-## 判定与反馈的语气
+## Tone of grading and feedback
 
-- **错误答案给鼓励性解释**，且解释必须教学："不太对 —— 这里应该用 B，因为 A 会绕过配置加载层……" 绝不惩罚、不展示"分数焦虑"。
-- 正确答案**强化原理**而不是只夸对。
-- 题目数量：一个知识点 1–3 道足够判定；不要为多而多。
+- **Wrong answers get encouraging, teaching explanations**: "not quite — B is right here because A bypasses the config-loading layer…" Never punitive, no score anxiety.
+- Correct answers **reinforce the principle**, not just praise.
+- Quantity: 1–3 questions per point is enough to judge; don't inflate.
 
-## 选项格式：不给线索（吸收自 teach skill）
+## Option formatting: no clues (absorbed from the teach skill)
 
-- 多选题的**每个选项尽量同字数/同长度** —— 别让"长的就是对的"这类格式线索泄露答案。
-- 别用"以上都对 / 以上都错"这种避重就轻的干扰项。
-- 干扰项要像真的 —— 取自真实易混的配置/模块/调用，而不是瞎编的。
+- In multiple choice, keep **every option roughly equal in length** — don't let "the long one is right" leak the answer.
+- Avoid "all of the above / none of the above" cop-out distractors.
+- Distractors should look real — taken from genuinely confusable configs/modules/calls, not invented.
 
-## 检索练习优先（吸收自 teach skill）
+## Retrieval practice first (absorbed from the teach skill)
 
-判定要逼**从记忆里检索**，而不是"看到答案觉得对"：
+Grading should force **retrieval from memory**, not "recognizing the answer feels right":
 
-- 简答/填空 > 识别型选择：能自己写出调用链，比能认出正确选项更能证明 storage。
-- 复习轮次尤其用简答：间隔复习的价值就在于"遗忘后还能检索出来"。
-- 选择题尽量设为"场景 → 你会怎么做"，让用户先在心里给答案再比对选项。
+- Short-answer/fill-in > recognition multiple-choice: being able to write the call chain proves storage better than recognizing the right option.
+- Review turns especially use short-answer: the whole point of spaced review is retrieving after forgetting.
+- Frame multiple-choice as "scenario → what would you do", so the user forms the answer in their head before comparing options.
 
-## 期望答案管理（不可违反）
+## How grading drives mastery
 
-- 出题时把 `expected_answer` 写入 `progress.json.pending_question`。
-- **题目文本里绝不包含期望答案**（选项题要把正确项混在干扰项里）。
-- 判定对 `pending_question.expected_answer` 比对，绝不让用户/tutor 凭记忆判定。
+- Each attempt appends to that point's `quiz_attempts`.
+- `compute_mastery` recomputes (recency-weighted + confidence ceiling; see `mastery-policy.md`).
+- ≥ 0.9 advances; below → back to explain, then pose a **different question** (never the same one — avoid memorizing the answer).
 
-## 判定如何驱动掌握度
+## When not to quiz
 
-- 每次作答追加到该知识点的 `quiz_attempts`。
-- `compute_mastery` 重算（近因加权 + 置信度上限，见 `mastery-policy.md`）。
-- ≥0.9 进阶；未达 → 回到 explain 补充，再出**不同的题**（不要同一道题重测，避免记忆对答案）。
-
-## 什么时候不出题
-
-- 一个知识点已经有 2 次正确尝试且 mastery ≥ 0.9 → 出更难的"深化题"或直接进阶。
-- 用户明确表示"想先听讲完再测" → 尊重节奏，先 explain。
-- 动手验证（procedure）已通过 → 可以作为掌握证据，不必再加无意义的题。
+- A point already has 2 correct attempts and mastery ≥ 0.9 → pose a harder "deepening" question or just advance.
+- The user explicitly wants to hear the explanation first → respect the pace, explain first.
+- A hands-on verification (procedure) already passed → it counts as evidence; no need to pile on a pointless question.

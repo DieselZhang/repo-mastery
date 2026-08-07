@@ -1,75 +1,75 @@
-# Note Template — 笔记格式
+# Note Template — Note Format
 
-> **何时读**：Phase 3。每个模块的讲解/判定后，tutor **自动**把要点沉淀为 `notes/<module>.md`；用户随时 `/repo-mastery note "<文本>"` 追加个人想法/疑问/卡点。笔记是后续复习和会话的上下文（吸收 DeepTutor 的 notebook 思路）。
+> **Read in**: Phase 3. After each module's explanations/judgments, the tutor **automatically** accumulates key points into `notes/<module>.md`; the user appends personal thoughts/questions/blockers at any time with `/repo-mastery note "<text>"`. Notes are the context for later review and sessions (absorbed from DeepTutor's notebook idea).
 
-## 笔记文件组织
+## Note file organization
 
 ```text
 <repo>/.learning/notes/
-  ├── m01-run-build.md     # 每模块一份，命名 = <module_id>-<slug>.md
+  ├── m01-run-build.md     # one per module; named <module_id>-<slug>.md
   ├── m02-architecture.md
-  └── README.md            # 笔记索引：模块 → 文件 + 一句话状态
+  └── README.md            # note index: module → file + one-line status
 ```
 
-## 每模块笔记结构
+## Per-module note structure
 
 ```md
-# 模块 N — <title>
+# Module N — <title>
 
-> 状态: 学习中 / 已掌握 / 有卡点
-> 掌握度: <模块级平均值 | 定性判定结果>
-> 上次更新: <ISO 日期> <UTC 时间>
+> Status: in-progress / mastered / has-blockers
+> Mastery: <module-level average | qualitative result>
+> Last updated: <ISO date> <UTC time>
 
-## 本模块要点（自动沉淀）
-> 讲解后自动追加。每条 = 一句可自检的结论，配源码引用（文件:行）。
+## Key points (auto-accumulated)
+> Appended after each explanation. Each = one self-checkable takeaway with a source reference (file:line).
 
-- **要点标题** — 结论一句话。`src/pipeline.py:120` `RAG 主链路：…`
+- **Takeaway title** — one-sentence conclusion. `src/pipeline.py:120` `RAG main chain: …`
 - …
 
-## 命令 / 配置速查
-> 用户能复制使用为准，verbatim。
+## Command / config cheatsheet
+> Verbatim, so the user can copy-and-use.
 
 ```bash
 deeptutor kb create physics --doc ch1.pdf
 ```
 
-## 我的笔记（/note 追加）
-> 用户手动追加的内容，原样保留，tutor 不改写用户的文字。
+## My notes (/note appended)
+> User-appended content, kept verbatim; the tutor never rewrites the user's words.
 
-- 2026-08-07: 这里我不懂为什么用消息队列不用 RPC —— <用户原文>
+- 2026-08-07: I don't get why message queue instead of RPC here —— <user text>
 - …
 
-## 卡点
-> 诊断出的卡点（错误类型 + 归因），对应复习任务。
+## Blockers
+> Diagnosed blockers (error type + attribution), mapped to review tasks.
 
-| 知识点 | 卡点 | 错误类型 | 状态 |
+| Knowledge point | Blocker | Error type | Status |
 |---|---|---|---|
-| kp01-01 | 不懂 async 前置 | structural | active |
+| kp01-01 | don't understand async prerequisite | structural | active |
 
-## 费曼自检
-> 定性知识点通过时，记录用户复述的精炼版（一句话）。
+## Feynman self-check
+> When a qualitative point passes, record the distilled version of the user's recital (one line).
 
-- kp01-02 (concept): 用户复述 = "…"
+- kp01-02 (concept): user recital = "…"
 
-## 资源 / 一手来源（吸收自 teach skill）
-> 每模块推荐 1 个高质量一手来源，供用户深入 —— 官方文档/设计文档/论文/维护者讲解。这是"学完后还能自己走"的入口。
+## Resources / primary sources (absorbed from the teach skill)
+> Recommend 1 high-quality primary source per module for going deeper — official docs / design docs / papers / maintainer talks. This is the "keep going on your own" entry point.
 
-- 官方文档: <链接>
-- 设计文档/ADR: <链接>
-- 建议精读的源码文件: `文件:行`
+- Official docs: <link>
+- Design doc / ADR: <link>
+- Source file worth reading closely: `file:line`
 
-## 待复习
-> 从 progress.json 的 review_queue 同步，供后续会话快速进入复习。
+## Due reviews
+> Synced from `progress.json`'s `review_queue`, for quick entry into review in later sessions.
 ```
 
-## 自动沉淀 vs 手动追加的分工
+## Division of labor: auto vs manual
 
-- **自动沉淀**（tutor 负责）：本模块要点、命令速查、卡点表、费曼自检、待复习。讲解结束 + 每次判定后更新。
-- **手动追加**（用户负责）：`/repo-mastery note "..."` 的原样追加进"我的笔记"节。**tutor 永不改写用户原文** —— 但可以在"卡点"节把它登记为待复习知识点。
+- **Auto-accumulated** (tutor's job): key points, command cheatsheet, blocker table, Feynman self-checks, due reviews. Updated after each explanation and judgment.
+- **Manual append** (user's job): `/repo-mastery note "..."` goes verbatim into the "My notes" section. **The tutor never rewrites the user's words** — but may register it as a blocker/review point in the Blockers section.
 
-## 铁律
+## Iron rules
 
-- 笔记里的源码引用带 `文件:行`，方便回溯。
-- 命令/配置必须 verbatim（用户会复制）。
-- 笔记更新要**增量**：新内容追加，不重写整篇（保持 token 经济）。
-- 复习会话优先读笔记而不是重读源码 —— 笔记就是你的长期记忆。
+- Source references in notes carry `file:line` for traceability.
+- Commands/config must be verbatim (the user will copy them).
+- Notes update **incrementally**: append new content, don't rewrite the whole file (token economy).
+- Review sessions read notes first rather than re-reading source — notes are your long-term memory.
