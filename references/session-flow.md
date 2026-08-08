@@ -91,6 +91,7 @@ diagnostic (probe; includes test-out)
 - Explain from source, judge by engine — **never replace the gate with "do you feel you've got it?"**.
 - A stuck user is a diagnostic signal, not a teaching failure — guide self-attribution.
 - Keep momentum: close the loop on one point per turn where possible (judge + write back + note).
+- Ask **one question at a time** (batching is bewildering). When a decision is needed, offer your evidence-based recommendation with the question; assessment questions (quiz / Feynman) never carry a hint (absorbed from the grilling skill).
 
 ## Token-saving rules for large repos
 
