@@ -2,7 +2,7 @@
 name: repo-mastery
 description: "Turn any open-source repository into a developer-focused mastery course. Given a local repo path or GitHub URL, it builds a confirmed course map and drives interactive mastery learning (diagnostic, explanation, Feynman check, practice, spaced review) with hands-on tasks, note-taking, and dual-format (Markdown + HTML) course output — so you fully master a project's usage, architecture, and key implementations like a real course. Triggers: 'learn this repo', 'master this codebase', 'turn X into a course', 'deep-dive into X project'."
 origin: personal
-version: 2.2.1
+version: 2.3.0
 tags: [learning, education, codebase, mastery, spaced-repetition]
 ---
 
@@ -142,13 +142,15 @@ This is a menu, not a checklist — pick 4–8 modules that fit the repo; fewer,
 
 ### Phase 2 — Course Map Confirmation & Customization (user decision, never skipped)
 
-First establish the **Mission** (absorbed from the teach skill's MISSION.md): ask the user one key question — **"Why do you want to master this repo?"** (use it? modify it? explain it in interviews? borrow its design? …). Write the answer to `<repo>/.learning/MISSION.md`; it grounds every later teaching decision (module choices, Feynman follow-ups, mastery priority). When the Mission changes, update it and write a learning record.
+First establish the **Mission** (absorbed from the teach skill's MISSION.md): clarify **"Why do you want to master this repo?"** (use it? modify it? explain it in interviews? borrow its design? …) as a **decision-tree interview** — see `references/clarification-interview.md`. Ask one question at a time, carry an evidence-based recommended answer with each, and look up any fact the repo can settle instead of asking. Write the settled answer to `<repo>/.learning/MISSION.md`; it grounds every later teaching decision (module choices, Feynman follow-ups, mastery priority). When the Mission changes, update it and write a learning record.
 
-Then **present the candidate map** to the user, explain each module, and:
+Then **present the candidate map** to the user, explain each module, and walk each one as a decision (keep / adjust / drop) with your recommended answer:
 
 - ✅ User removes irrelevant modules / adds interesting ones / adjusts knowledge-point granularity.
 - ✅ User confirms each module's `pass_threshold` (default 0.7).
 - ✅ **Learning starts only after user approval.** This is mandatory — the opposite of docs-to-course's "don't get outline approval".
+
+> Confirmation questions are asked **one at a time** — never batched. Recommended answers belong to **decision questions only**; Phase 3 assessment (quiz / Feynman) never leaks the answer.
 
 After confirmation, write `<repo>/.learning/course-map.json` and initialize the `.learning/` structure (below).
 

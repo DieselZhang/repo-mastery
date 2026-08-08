@@ -8,6 +8,8 @@
 - [ ] **Modules without evidence** — every module in the map points to a real file/dir. No evidence → cut it; better fewer than hollow.
 - [ ] **Skipping Phase 2 confirmation** — the user must approve/customize the map (with Mission). This is an explicit requirement; don't skip.
 - [ ] **Concluding too early in the pre-scan** — Phase 1 only maps; conclusions belong to the explanation phase.
+- [ ] **Batching confirmation questions** — ask one at a time (see `clarification-interview.md`); dumping the whole tree at once is bewildering.
+- [ ] **Blank-prompt decisions** — every decision question carries the tutor's evidence-based recommendation; assessment questions (Phase 3) never do.
 
 ## Learning-session phase
 
