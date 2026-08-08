@@ -1,6 +1,6 @@
 # ADOPTION — What This Skill Adopts and Absorbs
 
-Repo-Mastery stands on the shoulders of three upstreams: **DeepTutor** (HKUDS, MIT), **docs-to-course** (a.k.a. codebase-to-course), and **mattpocock's `teach` skill**. This document lists, per upstream, what was adopted/absorbed and why.
+Repo-Mastery stands on the shoulders of four upstreams: **DeepTutor** (HKUDS, MIT), **docs-to-course** (a.k.a. codebase-to-course), and two of mattpocock's skills — **`teach`** and **`grilling`**. This document lists, per upstream, what was adopted/absorbed and why.
 
 ## 1. From DeepTutor (HKUDS, MIT): the mastery learning engine
 
@@ -56,9 +56,24 @@ DeepTutor is MIT-licensed (see its repo `LICENSE`). These designs are attributed
 
 The `references/html-shell/` CSS/JS/HTML files were written/maintained by this skill's author (DieselZhang) for codebase-to-course and are freely reusable under MIT. Both repos are the same author's personal skill assets; there is no third-party copyright conflict.
 
+## 5. From mattpocock's `grilling` skill: the decision-clarification interview
+
+[`grilling`](https://github.com/mattpocock/skills) (user entry `grill-me`) is a relentless interview that walks a plan's decision tree until shared understanding. Repo-Mastery absorbs its interview technique to harden Phase 2 (Mission + course-map confirmation), where a single open question used to stand:
+
+| Adopted design | grilling's approach | Where in repo-mastery |
+|---|---|---|
+| **Decision-tree walk** — resolve decisions in dependency order, parent first | walks every branch of the plan | `clarification-interview.md` §2 |
+| **One question at a time** — batching is bewildering | asks and waits, one at a time | `clarification-interview.md` §3; `session-flow.md` tutor voice |
+| **Facts vs decisions separation** — look up facts, ask only decisions | explores the environment instead of asking | `clarification-interview.md` §4 |
+| **Recommended answer with each decision question** | reacts to a proposal, not a blank prompt | `clarification-interview.md` §5 |
+| **Shared-understanding gate** — don't act until confirmed | confirms before enacting | `clarification-interview.md` §6 |
+
+**Deliberate differences**: `grilling` is stateless (writes nothing); repo-mastery's clarification is stateful — settled decisions are written to `.learning/MISSION.md` and `course-map.json` because they ground every later teaching decision. And the recommended-answer habit is **scoped to decision questions only**; Phase 3 assessment (quiz / Feynman) never leaks answers, keeping `pending_question.expected_answer` server-side.
+
 ## Licenses & copyright
 
 - This repo: MIT License, see `LICENSE`.
 - DeepTutor design port: © 2026 HKUDS, MIT License ([github.com/HKUDS/DeepTutor](https://github.com/HKUDS/DeepTutor)).
 - docs-to-course shell: © 2026 DieselZhang.
 - mattpocock `teach` mechanisms: © mattpocock ([mattpocock-skills](https://github.com/mattpocock)).
+- mattpocock `grilling` interview technique: © mattpocock ([mattpocock-skills](https://github.com/mattpocock)).
