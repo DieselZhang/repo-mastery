@@ -12,3 +12,8 @@ node_modules/
 
 # internal design docs (never commit)
 .local/
+
+# Python cache artifacts
+__pycache__/
+*.pyc
+.pytest_cache/

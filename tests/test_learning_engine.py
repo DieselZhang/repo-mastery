@@ -75,3 +75,27 @@ def test_next_objective_falls_back_when_all_same_type():
     }
     out = next_objective(progress, now=1)
     assert out["knowledge_point_id"] == "kp1"
+
+
+def test_record_attempt_to_next_objective_roundtrip():
+    """record_attempt writes difficulty/stability/last_review_type/review_queue,
+    and next_objective still drives the next step."""
+    from learning_engine import record_attempt
+
+    progress = {
+        "modules": [{"id": "m01", "order": 1, "name": "M",
+                     "knowledge_points": [{"id": "kp1", "type": "procedure"}]}],
+        "mastery_levels": {}, "knowledge_types": {},
+        "quiz_attempts": [], "repetition_states": {},
+        "review_queue": [], "error_records": [],
+    }
+    record_attempt(progress, kp_id="kp1", kp_type="procedure", is_correct=True,
+                   question_id="q1")
+    # core data-model writes
+    assert progress["last_review_type"] == "procedure"
+    assert progress["repetition_states"]["kp1"]["difficulty"] == 0.45
+    assert progress["repetition_states"]["kp1"]["stability"] == 1.2
+    assert any(t["knowledge_point_id"] == "kp1" for t in progress["review_queue"])
+    # next_objective still works and picks the unmastered point
+    out = next_objective(progress, now=1)
+    assert out["action"] in ("practice", "probe", "complete")
