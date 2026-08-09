@@ -61,7 +61,7 @@ Grading should force **retrieval from memory**, not "recognizing the answer feel
 
 ## Flashcard quality standards (absorbed from the flashcards skill)
 
-A quiz/review card is a **self-test, not a reading note**. Quality rules:
+A quiz/review card is a **self-test, not a reading note**. These rules govern how to craft **`memory`-type and review cards**; the iron rule above still holds — application questions remain the gold standard for comprehension points. Quality rules:
 
 1. **Force recall, not recognition** — ask open questions where the answer must
    be reconstructed, not recognized from options.
@@ -71,8 +71,8 @@ A quiz/review card is a **self-test, not a reading note**. Quality rules:
 5. **Understanding before memorizing** — cover fundamentals first, then build up.
 6. **Elaborate and connect** — link the fact to something known, a vivid image, a
    concrete example; extra retrieval paths make recall easier.
-7. **Context built into the question** — good: "What does ATP mean in
-   biochemistry?"; bad: "[Biochemistry] What does ATP mean?"
+7. **Context built into the question** — good: "What does `git stash pop`
+   restore?"; bad: "[Git] What does stash pop do?"
 8. **Break up lists** — split enumerations into single questions, or use
    overlapping cards (A then B, B then C).
 9. **Distinguish similar concepts** — give confusable items distinguishing context.
