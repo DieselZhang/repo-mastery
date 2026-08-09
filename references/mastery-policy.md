@@ -80,6 +80,8 @@ values (FSRS-inspired, simplified to pure deterministic math; see `ADOPTION.md` 
   - `difficulty = min(1.0, difficulty + 0.15)`.
   - `stability = max(1.0, stability × 0.5)`.
 
+Index is clamped to `[0, max_index]`.
+
 **Effective interval** (replaces `next_review_at = now + interval[index]`):
 
 ```text
@@ -162,7 +164,7 @@ Qualitative results live in `qualitative_mastery: {kp_id: bool}`; the map shows 
                                        "consecutive_wrong": 0, "difficulty": 0.5,
                                        "stability": 1.0, "next_review_at": 1754571490 } },
   "review_queue": [ { "id": "review_kp01-01", "knowledge_point_id": "kp01-01",
-                      "due_at": 1754571490, "priority": 1 } ],
+                      "knowledge_type": "procedure", "due_at": 1754571490, "priority": 1 } ],
   "pending_question": { "question_id": "q3", "knowledge_point_id": "kp01-01",
                         "prompt": "...", "question_type": "short", "expected_answer": "..." },
   "last_review_type": "concept",
