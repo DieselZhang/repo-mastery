@@ -168,9 +168,15 @@ def next_objective(progress: dict, *, now: int | None = None) -> dict:
             "reason": "A posed question awaits the learner's answer.",
         }
 
-    # 2) due spaced-repetition reviews.
+    # 2) due spaced-repetition reviews. Equal-priority reviews interleave
+    #    types: a review whose type differs from the last one wins, so
+    #    consecutive reviews mix types instead of stacking one type.
     due = [t for t in progress.get("review_queue", []) if t.get("due_at", 0) <= now]
-    due.sort(key=lambda t: t.get("priority", 99))
+    last_type = progress.get("last_review_type")
+    due.sort(key=lambda t: (
+        t.get("priority", 99),
+        1 if last_type and t.get("knowledge_type") == last_type else 0,
+    ))
     if due:
         task = due[0]
         kp = _find(kps, task.get("knowledge_point_id"))
@@ -276,6 +282,7 @@ def record_attempt(progress: dict, *, kp_id: str, kp_type: str, is_correct: bool
     if pending and (not question_id or pending.get("question_id") == question_id):
         progress["pending_question"] = None
 
+    progress["last_review_type"] = kp_type
     _rebuild_review_queue(progress)
     return {
         "mastery": round(progress["mastery_levels"][kp_id], 3),
