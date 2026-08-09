@@ -8,10 +8,11 @@ Before each learning session:
 
 0. **Recall warm-up** (absorbed from claude-teach-skill): pose **2–3 quick
    recall questions** drawn from `review_queue` (due first, then soonest
-   `next_review_at`). Each answer goes through `record_attempt` (updates mastery /
+   `due_at`). Each answer goes through `record_attempt` (updates mastery /
    difficulty / stability / schedule). A forgotten point → re-teach it before
    anything new, and record the error. This forces retrieval from storage, not
-   recognition.
+   recognition. A correct warm-up answer feeds `consecutive_correct` →
+   `stability`, so a good warm-up streak lengthens the next interval.
 
 1. **Read MISSION.md** — why the user wants to master this repo. Align every explanation, question, and Feynman follow-up to the Mission (learning to use it? to modify it? to teach it?). If the Mission isn't filled in, ask — don't guess.
 2. **Read `records/` + `progress.json`** — judge the user's **zone of proximal development (ZPD)**: the next thing to teach should be "just challenging enough". Don't re-teach what the user has proven; bridge missing prerequisites before leaping.
@@ -46,7 +47,7 @@ diagnostic (probe; includes test-out)
 - Control length: one knowledge point, one layer at a time — don't dump three concepts at once.
 - **Vivid encoding (optional, `memory`-type points)**: offer a memorable
   hook — an exaggerated image, a color/action cue, a pun, an interaction
-  (SMASHIN-style) — or let the learner ask for a mnemonic / mini memory-palace.
+  (SMASHIN-style: Senses, Movement, Action, Humor, Imagination, Numbers) — or let the learner ask for a mnemonic / mini memory-palace.
   Encoding is a *suggested* aid, never graded.
 
 ## 3. feynman_check — qualitative gate (concept / design)
