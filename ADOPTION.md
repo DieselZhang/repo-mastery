@@ -1,6 +1,6 @@
 # ADOPTION — What This Skill Adopts and Absorbs
 
-Repo-Mastery stands on the shoulders of four upstreams: **DeepTutor** (HKUDS, MIT), **docs-to-course** (a.k.a. codebase-to-course), and two of mattpocock's skills — **`teach`** and **`grilling`**. This document lists, per upstream, what was adopted/absorbed and why.
+Repo-Mastery stands on the shoulders of five upstreams: **DeepTutor** (HKUDS, MIT), **docs-to-course** (a.k.a. codebase-to-course), two of mattpocock's skills — **`teach`** and **`grilling`** — and the **evidence-based memory mechanisms** community (FSRS, learning-science meta-analyses, and several open learning skills). This document lists, per upstream, what was adopted/absorbed and why.
 
 ## 1. From DeepTutor (HKUDS, MIT): the mastery learning engine
 
@@ -70,6 +70,27 @@ The `references/html-shell/` CSS/JS/HTML files were written/maintained by this s
 
 **Deliberate differences**: `grilling` is stateless (writes nothing); repo-mastery's clarification is stateful — settled decisions are written to `.learning/MISSION.md` and `course-map.json` because they ground every later teaching decision. And the recommended-answer habit is **scoped to decision questions only**; Phase 3 assessment (quiz / Feynman) never leaks answers, keeping `pending_question.expected_answer` server-side.
 
+## 6. From the memory-mechanisms ecosystem: evidence-based retention
+
+Repo-Mastery's retention engine absorbs techniques from several open learning
+sources, all grounded in cognitive-science findings (active recall and spaced
+repetition have the highest effect sizes in the learning-science literature):
+
+| Adopted design | Source | Where in repo-mastery |
+|---|---|---|
+| **FSRS-inspired personalized scheduling** — difficulty + stability scale the review interval | [open-spaced-repetition](https://github.com/open-spaced-repetition/free-spaced-repetition-scheduler) (FSRS, DSR model) | `mastery-policy.md` §3; `learning_engine.py` `schedule_next` |
+| **Session recall warm-up + streak** — start each session by retrieving prior points | [claude-teach-skill](https://github.com/tanishg98/claude-teach-skill) (spaced-retrieval loop) | `session-flow.md` §0 |
+| **Causal questioning** — probe "why / what-if / what breaks" | [RetainCraft](https://github.com/kaixiad/retaincraft) | `mastery-policy.md` §6 |
+| **Vivid encoding** — SMASHIN-style memorable hooks for memory points | [memory-palace](https://github.com/Algiras/memory-palace) | `session-flow.md` §2 |
+| **Flashcard quality standards** — force recall, one fact per card, elaborate & connect | [flashcards skill](https://getspace.app/blog/flashcards-skill) | `quiz-design.md` |
+| **Low-effectiveness anti-patterns** — rereading/highlighting ≠ memory | learning-science literature (Dunlosky et al. 2013; Donoghue & Hattie 2021) | `gotchas.md` |
+
+**Deliberate simplifications**: repo-mastery implements a *simplified* FSRS —
+two parameters (difficulty, stability) with pure deterministic formulas instead
+of FSRS's full parameter-optimized DSR model — to stay pure-stdlib and
+tool-agnostic. Memory-palace is absorbed as *encoding suggestions only*, not its
+full spatial-knowledge system.
+
 ## Licenses & copyright
 
 - This repo: MIT License, see `LICENSE`.
@@ -77,3 +98,5 @@ The `references/html-shell/` CSS/JS/HTML files were written/maintained by this s
 - docs-to-course shell: © 2026 DieselZhang.
 - mattpocock `teach` mechanisms: © mattpocock ([mattpocock-skills](https://github.com/mattpocock)).
 - mattpocock `grilling` interview technique: © mattpocock ([mattpocock-skills](https://github.com/mattpocock)).
+- FSRS algorithm design: © open-spaced-repetition (MIT).
+- claude-teach-skill / RetainCraft / memory-palace / flashcards ideas: respective authors (see §6 links).
