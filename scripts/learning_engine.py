@@ -84,11 +84,13 @@ def schedule_next(
     is_correct: bool,
     state: dict,
 ) -> dict:
-    """Advance a repetition state per the interval sequence for *kp_type*.
+    """Advance a repetition state with FSRS-inspired personalized scheduling.
 
-    Correct: consecutive_correct += 1; two in a row → interval_index +2.
-    Wrong:   consecutive_wrong += 1; interval_index steps back 1 (floor 0).
-    Returns the new state dict with next_review_at in Unix seconds.
+    Each knowledge point carries a `difficulty` (0.1..1.0, how hard it is for
+    this learner) and a `stability` (1.0..5.0, how durable the memory is). The
+    review interval is the base interval scaled by stability and reduced by
+    difficulty, so hard points are reviewed sooner and stable points deferred.
+    Pure stdlib; deterministic; matches references/mastery-policy.md §3.
     """
     intervals = INTERVAL_SEQUENCES.get(kp_type, INTERVAL_SEQUENCES["memory"])
     max_index = len(intervals) - 1
@@ -96,10 +98,16 @@ def schedule_next(
     state.setdefault("interval_index", 0)
     state.setdefault("consecutive_correct", 0)
     state.setdefault("consecutive_wrong", 0)
+    state.setdefault("difficulty", 0.5)
+    state.setdefault("stability", 1.0)
 
     if is_correct:
         state["consecutive_wrong"] = 0
         state["consecutive_correct"] += 1
+        state["difficulty"] = max(0.1, state["difficulty"] - 0.05)
+        state["stability"] = min(
+            5.0, state["stability"] * (1 + 0.2 * min(state["consecutive_correct"], 5))
+        )
         if state["consecutive_correct"] >= 2:
             state["interval_index"] += 2
             state["consecutive_correct"] = 0
@@ -109,12 +117,15 @@ def schedule_next(
         state["consecutive_wrong"] += 1
         state["consecutive_correct"] = 0
         state["interval_index"] = max(0, state["interval_index"] - 1)
+        state["difficulty"] = min(1.0, state["difficulty"] + 0.15)
+        state["stability"] = max(1.0, state["stability"] * 0.5)
         if state["consecutive_wrong"] >= 2:
             state["consecutive_wrong"] = 0
 
     state["interval_index"] = max(0, min(state["interval_index"], max_index))
-    days = intervals[state["interval_index"]]
-    state["next_review_at"] = int(time.time()) + days * 86400
+    base_days = intervals[state["interval_index"]]
+    days = base_days * state["stability"] * (1 - state["difficulty"] * 0.5)
+    state["next_review_at"] = int(time.time()) + int(days * 86400)
     return state
 
 
