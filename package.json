@@ -1,6 +1,6 @@
 {
   "name": "@dieselzhang/repo-mastery",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "Turn any open-source repository into a developer-focused mastery course — usage, architecture, key implementations, with deterministic mastery gates and spaced review. Installable as a skill for Claude Code, OpenAI Codex, and Gemini CLI.",
   "bin": {
     "repo-mastery": "bin/repo-mastery.js"
