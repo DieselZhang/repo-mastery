@@ -8,7 +8,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-skill-0A84FF.svg)](#)
-![Version](https://img.shields.io/badge/version-2.4.0-blue.svg)
+![Version](https://img.shields.io/badge/version-2.10.0-blue.svg)
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)
 
 [English](./README.md) · [文档](./docs/zh-CN/ARCHITECTURE.md) · [贡献指南](./CONTRIBUTING.md)
@@ -150,7 +150,7 @@ cd repo-mastery && ./scripts/install.sh    # 从 checkout 安装到其他工具
 ## 使用
 
 ```bash
-/repo-mastery start <本地路径 | github:owner/repo> [--language zh|en]
+/repo-mastery start <本地路径 | github:owner/repo> [--language zh|en] [--fresh]
 ```
 
 示例 —— 从 GitHub URL 学一个项目：
@@ -165,13 +165,12 @@ skill 会带你走完四个阶段。讲解语言默认跟随你的输入；传 `
 
 | 命令 | 作用 |
 |---|---|
-| `/repo-mastery start <路径\|url>` | 主流程：地图 → 确认 → 学习 → 产出 |
-| `/repo-mastery continue` | 续学上次进度（回到 `next_objective`） |
-| `/repo-mastery review` | 间隔复习会话（到期项） |
-| `/repo-mastery note "<文本>"` | 手动向当前模块笔记追加 |
-| `/repo-mastery status` | 查看进度（地图摘要风格） |
-| `/repo-mastery report` | 生成掌握度报告 `MASTERY.md` |
-| `/repo-mastery export [--html]` | 合成完整课程文档（`COVERAGE.md`；`--html` 额外生成可分享 HTML 课程） |
+| `/repo-mastery preview <路径\|url>` | 探路 — 只出宏观简报（这是什么 / 架构全景 / 功能差异 / 关键亮点 / 建议深学候选）；零副作用、不建 `.learning/`；说「深学」转入 start |
+| `/repo-mastery start <路径\|url>` | 主流程：价值简报 → 地图 → 确认 → 概览 → 学习（默认每模块教材式章节）；`--fresh` 重启已有课程 |
+| `/repo-mastery continue` | 续学 — 智能路由：无 `.learning/`？引导 start；未完成？Session Preamble → 到期复习（标记）→ 新内容；已完成？报告。裸 `/repo-mastery` 即此命令 |
+| `/repo-mastery review` | 仅间隔复习 — 刷到期项，绝不打开新内容 |
+| `/repo-mastery note ["<文本>"]` | 整理自上次 note 以来的讨论进当前模块笔记（分类归纳）；可选 text 逐字追加 |
+| `/repo-mastery status` | 刷新单页状态看板 `MASTERY.md`（进度 / 掌握度 / 复习待办 / 下一步） |
 
 ## 数据模型
 
@@ -180,9 +179,13 @@ skill 会带你走完四个阶段。讲解语言默认跟随你的输入；传 `
   ├── MISSION.md              学习使命（为什么想掌握它）
   ├── course-map.json         已确认的课程地图
   ├── progress.json           掌握度 / 间隔复习 / 卡点
+  ├── MASTERY.md              单页状态看板（进度 / 掌握度 / 复习待办 / 下一步）
   ├── records/NNNN-slug.md    ADR 式学习记录（理解演化）
-  ├── notes/<module>.md       结构化笔记（自动 + 手动）
+  ├── notes/<module>.md       结构化笔记（自动 + 手动 /note 区间归纳）
+  ├── notes/.boundary.json    /note 区间边界（module_id + 时间戳）
+  ├── chapters/<module>.md    教材式章节材料（默认路径；每模块一份）
   ├── briefs/<module>.md      模块简报（大型仓库省 token）
+  ├── export/                 HTML 课程输出（index.html + modules/0N-slug.html；见 Phase 4）
   └── code-map.json           大型仓库索引（可选）
 ~/.repo-mastery/              全局轻量记忆
   ├── profile.md              跨仓库偏好 / 水平 / 卡点
@@ -234,6 +237,7 @@ repo-mastery/
 
 - [架构设计](./docs/zh-CN/ARCHITECTURE.md) —— 设计、掌握度引擎、各阶段、数据模型。
 - [使用指南](./docs/zh-CN/USAGE.md) —— 详细命令参考与学习流程。
+- [变更日志](./CHANGELOG.md) —— 各版本显著改动（v1.0.0 → v2.10.0）。
 - [采纳与归属](./ADOPTION.md) —— 本 skill 从 DeepTutor、docs-to-course、teach skill 吸收了哪些设计。
 
 ## 贡献

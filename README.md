@@ -8,7 +8,7 @@ Learn a project's **usage → architecture → key implementations** the way you
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-skill-0A84FF.svg)](#)
-![Version](https://img.shields.io/badge/version-2.4.0-blue.svg)
+![Version](https://img.shields.io/badge/version-2.10.0-blue.svg)
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)
 
 [简体中文](./README.zh-CN.md) · [Documentation](./docs/ARCHITECTURE.md) · [Contributing](./CONTRIBUTING.md)
@@ -155,7 +155,7 @@ cd repo-mastery && ./scripts/install.sh    # from the checkout, install to other
 ## Usage
 
 ```bash
-/repo-mastery start <local-path | github:owner/repo> [--language zh|en]
+/repo-mastery start <local-path | github:owner/repo> [--language zh|en] [--fresh]
 ```
 
 Example — learn a project from a GitHub URL:
@@ -170,13 +170,12 @@ The skill walks you through the four phases. The teaching language follows your 
 
 | Command | Purpose |
 |---|---|
-| `/repo-mastery start <path\|url>` | Main flow: map → confirm → learn → output |
-| `/repo-mastery continue` | Resume progress (back to `next_objective`) |
-| `/repo-mastery review` | Run a spaced-review session (due items) |
-| `/repo-mastery note "<text>"` | Manually append to current module notes |
-| `/repo-mastery status` | Show progress (map-summary style) |
-| `/repo-mastery report` | Generate a mastery report `MASTERY.md` |
-| `/repo-mastery export [--html]` | Synthesize the complete course doc (`COVERAGE.md`; `--html` adds a shareable HTML course) |
+| `/repo-mastery preview <path\|url>` | Recon — macro brief only (what / architecture / differentiation / key highlights / deep-dive candidates); zero side effects, no `.learning/` created; say "深学" to hand off into start |
+| `/repo-mastery start <path\|url>` | Main flow: value brief → map → confirm → overview → learn (textbook-mode chapter by default per module); `--fresh` restarts an existing course |
+| `/repo-mastery continue` | Resume — smart route: no `.learning/`? guide to start; incomplete? session preamble, due review (signposted), then new content; complete? report done. A bare `/repo-mastery` is this command. |
+| `/repo-mastery review` | Spaced-review only — drains due reviews, never opens new content |
+| `/repo-mastery note ["<text>"]` | Consolidate the discussion since the last note into the module note (categorized); optional text appended verbatim |
+| `/repo-mastery status` | Refresh the one-page status dashboard `MASTERY.md` (progress / mastery % / review due / next objective) |
 
 ## Data Model
 
@@ -185,9 +184,13 @@ The skill walks you through the four phases. The teaching language follows your 
   ├── MISSION.md                  learning mission (why you want to master it)
   ├── course-map.json             confirmed course map
   ├── progress.json               mastery / spaced review / blockers
+  ├── MASTERY.md                  one-page status dashboard (progress / mastery % / review due / next objective)
   ├── records/NNNN-slug.md        ADR-style learning records (understanding evolution)
-  ├── notes/<module>.md           structured notes (auto + manual)
+  ├── notes/<module>.md           structured notes (auto + manual /note interval consolidation)
+  ├── notes/.boundary.json        /note interval boundary (module_id + timestamp)
+  ├── chapters/<module>.md        textbook-mode chapter material (default path; one per module)
   ├── briefs/<module>.md          module briefs (large repos, token-saving)
+  ├── export/                     HTML course output (index.html + modules/0N-slug.html; see Phase 4)
   └── code-map.json               large-repo index (optional)
 ~/.repo-mastery/                  global lightweight memory
   ├── profile.md                  cross-repo preferences / level / blockers
@@ -239,6 +242,7 @@ repo-mastery/
 
 - [Architecture](./docs/ARCHITECTURE.md) — design, mastery engine, phases, data model.
 - [Usage](./docs/USAGE.md) — detailed command reference and learning walkthrough.
+- [Changelog](./CHANGELOG.md) — per-version notable changes (v1.0.0 → v2.10.0).
 - [Adoption & attribution](./ADOPTION.md) — what this skill absorbs from DeepTutor, docs-to-course, and the teach skill.
 
 ## Contributing
