@@ -1,0 +1,9 @@
+# Python cache — never ship compiled artifacts in the npm tarball
+__pycache__/
+*.pyc
+
+# macOS
+.DS_Store
+
+# local tarballs
+*.tgz

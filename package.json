@@ -13,8 +13,11 @@
     "ADOPTION.md",
     "LICENSE",
     "README.md",
+    "CHANGELOG.md",
     "references/",
-    "scripts/",
+    "scripts/index_repo.py",
+    "scripts/install.sh",
+    "scripts/learning_engine.py",
     "agents/",
     ".claude-plugin/"
   ],
