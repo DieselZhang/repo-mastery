@@ -53,6 +53,7 @@ Phase 4 — Continuously-generated course note: COVERAGE.md generated at Phase 2
 ## Textbook Mode (chapter) — default on entering each module
 Five steps (engine-gated):
 1. Generate chapters/<module>.md (intro → sections [each = one knowledge point: explain + source walk file:line + recap + review questions aligned to knowledge_point_ids] → chapter summary → cheatsheet) → chapter-start.
+   Each section's source walk pastes the relevant source (file:line locator + inline key fragment + collapsible `<details>` full source) — see `note-template.md`.
 2. Walk section by section; after each section STOP and wait for explicit user reply before chapter-advance --section N.
 3. Q&A (status=qna): user asks freely.
 4. Verification (status=verifying): 1-2 deep questions on key nodes → set-qualitative / record-attempt.

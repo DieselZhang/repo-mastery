@@ -86,10 +86,18 @@ Tutor: Phase 3.0 — one-page global overview (entry → core data flow → key
        chapter-start --module m01 --sections 4
        --- section 1 walk (open) ---
        "Why care: every API call funnels through sqlite3_open_v2. Concept:
-        the connection owns a pager, and the pager owns the page cache. Code
-        (large repo — locate via `code-map.json`'s symbol table → file:line,
-        then Read the slice): src/sqlite3.c sqlite3_open_v2 →
-        sqlite3_open_internal → pager_open.
+        the connection owns a pager, and the pager owns the page cache.
+        Source walk (three-part, per note-template.md) — the tutor pastes
+        the source, not just a pointer:
+          · file:line locator:  src/sqlite3.c sqlite3_open_v2 →
+              sqlite3_open_internal → pager_open  (locate via
+              `code-map.json`'s symbol table, then Read the slice)
+          · inline key fragment (teaching core, 3-15 lines), pasted from
+              the file: sqlite3_open_v2() → allocates the pager →
+              pager_open() — the handoff that makes the connection own the
+              page cache
+          · <details> full source: the same slice verbatim, collapsed under
+              a `<details>` block so the learner can expand it when wanted
         This section is done — any questions? If none, we move on."
 User:  「继续，理解了 open 的流程」
 Tutor: chapter-advance --section 1   (never before an explicit reply)
