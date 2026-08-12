@@ -92,4 +92,4 @@ The "when to pick it" column is the evidence anchor for m00's `kp00-03`.
   search* or as a row in "facts to verify（待验证）". **Never** as a gated
   reference answer, never as a MISSION.md claim, never in a quiz.
 - **Degraded mode**: no search tool → build the brief from repo evidence and
-  mark peer rows `[unv]` / "需验证". **Never fabricate a source.**
+  mark peer rows `[unv]` / "待验证". **Never fabricate a source.**
