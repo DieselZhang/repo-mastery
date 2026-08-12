@@ -52,8 +52,8 @@ back, restate in their own words. There is **no independent blank-prompt
 answering** for concept/design.
 
 **Review stays recall-first**: the whole point of spaced review is retrieving
-after forgetting. But a stuck user gets the reference answer as a catch-up
-(补答), never a grinding blank prompt:
+after forgetting. But a stuck user gets the reference answer as a catch-up,
+never a grinding blank prompt:
 
 - Short-answer/fill-in > recognition multiple-choice for review turns: being able to write the call chain proves storage better than recognizing the right option.
 - Frame multiple-choice as "scenario → what would you do", so the user forms the answer in their head before comparing options.

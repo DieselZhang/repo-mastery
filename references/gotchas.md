@@ -10,8 +10,8 @@
   with zero artifacts (see `references/preview-brief.md` §3).
 - [ ] **Preview inventing peer differentiation** — preview's vs-peer rows follow
   the same `[src]`/`[web]` discipline as `positioning-brief.md`; unsourced
-  claims are 「需验证」, never fabricated.
-- [ ] **Re-reconning in start after a preview** — a "深学" hand-off reuses the
+  claims are marked "to verify", never fabricated.
+- [ ] **Re-reconning in start after a preview** — a "deep-dive" hand-off reuses the
   preview brief as Phase 2's value-brief input instead of rescanning the repo.
 
 ## Course-map & clarification phase
@@ -25,7 +25,7 @@
 - [ ] **Clarifying without a value brief** — Phase 2 must first present what this repo can teach and what makes it stand out vs peers (see `clarification-interview.md` §0), before asking "what do you want to master". Skipping it makes the Mission groundless.
 - [ ] **Designing `memory` points as gate-able knowledge points** — parameter/command/API trivia is reference-note material (cheatsheet), never a knowledge point with a gate. Put it in the module's reference notes.
 - [ ] **Running the ecosystem scan in Phase 1** — Phase 1 stays repo-internal and objective; peer/ecosystem facts belong in Phase 2's `positioning.md`, never the pre-scan (see `SKILL.md` Phase 2 "External retrieval").
-- [ ] **Clarifying differentiation without a source** — the value brief's "stands out vs peers" is read from `.learning/positioning.md`, never improvised; an unsourced peer claim is 「需验证」, not a fact (see `clarification-interview.md` §0).
+- [ ] **Clarifying differentiation without a source** — the value brief's "stands out vs peers" is read from `.learning/positioning.md`, never improvised; an unsourced peer claim is marked "to verify", not a fact (see `clarification-interview.md` §0).
 - [ ] **Producing the positioning matrix only after the Mission** — the two-pass rule of `positioning-brief.md`: generalized draft *before* the Mission interview, prune/deepen *after*. Producing it once, post-Mission only, loses the pre-Mission breadth.
 
 ## Learning-session phase
@@ -55,10 +55,10 @@
 - [ ] **Skipping `set-qualitative` after a passed concept/design check** — a passed Feynman judgment must be written via `set-qualitative` (writes `qualitative_mastery` **and** initialises the point's spaced review); flipping the boolean by hand leaves the point unscheduled for review.
 - [ ] **Entering a new module in interactive mode by default** — textbook-mode chapter is the default on entering each new module; after the module overview, auto-start it (`chapter-start`) with one line of notice, don't silently offer per-point nodes. Switch to per-point only when the learner asks for it, for that module.
 - [ ] **Dumping the textbook once and skipping the section walk** — `chapter` mode means the tutor teaches the material section by section (`chapter-advance`), not generating a document and moving on. A one-shot material dump has no teaching, no Q&A, no gate.
-- [ ] **Advancing to the next section without the user's confirmation** — after each section the tutor MUST stop and hand control back ("这一节讲完了，有疑问吗？没有就进入下一节") and wait for an explicit user reply before `chapter-advance --section N`. Chaining multiple sections in one turn is a violation even if every call is valid — the engine can't see the conversation, so the pause is the tutor's job. Same pause before teaching → `--status qna`.
+- [ ] **Advancing to the next section without the user's confirmation** — after each section the tutor MUST stop and hand control back ("This section is done — any questions? If none, we move to the next section.") and wait for an explicit user reply before `chapter-advance --section N`. Chaining multiple sections in one turn is a violation even if every call is valid — the engine can't see the conversation, so the pause is the tutor's job. Same pause before teaching → `--status qna`.
 - [ ] **After-class checking that misses the module's key nodes** — the 1–2 deep questions must land on the module's critical knowledge points and go through the engine (`set-qualitative` / `record-attempt`), not trivia.
 - [ ] **Reading "chapter done" as "module mastered"** — `chapter-complete` covers the module but does not fake mastery; unchecked points are verified later via spaced review. Never write a mastery score for a point the learner never actually answered (fluency ≠ storage).
-- [ ] **Showing a covered module's points as unmastered** — in `status` / `COVERAGE.md`, a point whose module is in `chapter_covered_modules` is labelled 「已覆盖 · 待复习验证」, a third state between unmastered and mastered (real engine records). Listing it under the unmastered column misreads "studied, awaiting review verification" as "not studied".
+- [ ] **Showing a covered module's points as unmastered** — in `status` / `COVERAGE.md`, a point whose module is in `chapter_covered_modules` is labelled "Covered · awaiting review verification", a third state between unmastered and mastered (real engine records). Listing it under the unmastered column misreads "studied, awaiting review verification" as "not studied".
 
 ## Hands-on phase
 
@@ -78,7 +78,7 @@
 - [ ] **Rewriting whole notes** — notes append incrementally, never full rewrites (token economy).
 - [ ] **Rewriting user note text** — `/note` content is kept verbatim; the tutor only registers blockers.
 - [ ] **Re-consolidating what auto already wrote** — `/repo-mastery note` consolidates the **interval since the last note** (`notes/.boundary.json`), deduplicated against the per-turn auto diary; re-summarizing already-written key points is wasted tokens (see `session-flow.md` §6.5).
-- [ ] **Inventing pre-compaction interval content** — when the note interval starts before a context compaction (cross-session resume), recover from `notes/<module>.md` + `records/` and mark unrecoverable detail 「需回顾」; never fabricate take-aways the tutor can no longer see.
+- [ ] **Inventing pre-compaction interval content** — when the note interval starts before a context compaction (cross-session resume), recover from `notes/<module>.md` + `records/` and mark unrecoverable detail "to revisit"; never fabricate take-aways the tutor can no longer see.
 - [ ] **Interval spanning modules consolidated into one note** — when the interval's discussion crosses modules, route each part to its own module's note; `notes/.boundary.json` records the last-consolidated module.
 - [ ] **Skipping the first note because there's no boundary** — no `.boundary.json` means the interval is from session/module start, not "nothing to consolidate"; write the boundary after the first note.
 - [ ] **Non-atomic `progress.json` writes** — temp file + rename, or the learning state can corrupt.

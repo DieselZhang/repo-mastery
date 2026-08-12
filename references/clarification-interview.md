@@ -22,7 +22,7 @@ study). Two parts, both grounded in the Phase 1 pre-scan:
    `positioning-brief.md`, Phase 2), **never improvised on the spot**. Pick
    2–3 matrix rows that fit the learner's direction (e.g. for DeepTutor vs
    other tutor platforms: agent-native single loop + multi-engine RAG +
-   three-layer memory). Unsourced peer claims are 「需验证」, never presented
+   three-layer memory). Unsourced peer claims are marked "to verify", never presented
    as fact.
 
 Present this as a proposal, then let the interview locate which dimension the
