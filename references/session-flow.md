@@ -129,6 +129,8 @@ checked as a whole. Engine actions per step (`chapter_start` /
                                          spaced-review; module added to chapter_covered_modules
 ```
 
+Each section's source walk **pastes the relevant source directly** — a `file:line` locator, an inline key fragment (3-15 core lines), and the full source in a `<details>` collapsible block (see `note-template.md`). The tutor reads the source from the repo (or `code-map.json`/`briefs/` for large repos) and pastes it, instead of only citing the location.
+
 **Section-by-section confirmation (mandatory).** After finishing each section the
 tutor **stops and hands control back** — never auto-advance. Give a natural
 confirmation point ("This section is done. Any questions? If not, let's move on
