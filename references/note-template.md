@@ -1,6 +1,6 @@
 # Note Template — Note Format
 
-> **Read in**: Phase 3. After each section's discussion, the tutor **automatically consolidates** the conversation (key takeaways + your Q&A conclusions + cheatsheet + blockers + Feynman records) into `notes/<module>.md` — the **per-turn diary**, always fresh on substance (mechanical turns skip it; see `session-flow.md` §7). `/repo-mastery note ["<text>"]` is the **manual interval complement**: it consolidates **the discussion since the last note** (deduplicated against the auto diary) into a `### Interval recap (区间整理)` recap block + the relevant sections, updates `notes/.boundary.json`, and appends any `<text>` verbatim to "My notes". Notes are the context for later review and sessions (absorbed from DeepTutor's notebook idea).
+> **Read in**: Phase 3. After each section's discussion, the tutor **automatically consolidates** the conversation (key takeaways + your Q&A conclusions + cheatsheet + blockers + Feynman records) into `notes/<module>.md` — the **per-turn diary**, always fresh on substance (mechanical turns skip it; see `session-flow.md` §7). `/repo-mastery note ["<text>"]` is the **manual interval complement**: it consolidates **the discussion since the last note** (deduplicated against the auto diary) into a `### Interval synthesis (区间整理)` recap block + the relevant sections, updates `notes/.boundary.json`, and appends any `<text>` verbatim to "My notes". Notes are the context for later review and sessions (absorbed from DeepTutor's notebook idea).
 
 ## Note file organization
 
@@ -37,7 +37,7 @@ deeptutor kb create physics --doc ch1.pdf
 ## Interval consolidation (/repo-mastery note)
 > Manual, on-demand synthesis of the discussion **since the last note** — the differentiator vs the per-turn auto diary above. **Deduplicated**: never re-write what auto already wrote (repetition is wasted tokens). Boundary tracked in `notes/.boundary.json` — read it for the interval start, update it after each note; absent → from session/module start. Cross-session / pre-compaction intervals are recovered from this note + `records/`; unrecoverable detail is marked 「需回顾」 ("needs review"), never invented.
 
-### Interval recap (区间整理) — <ISO date> <UTC>, since last note <time> — <one-line recap>
+### Interval synthesis (区间整理) — <ISO date> <UTC>, since last note <time> — <one-line recap>
 - <2–4 distilled takeaways from this interval's discussion>
 - <new Mission links, if any>
 - <Q&A conclusions / new blockers / cheatsheet additions / Feynman records — landed in their sections above, deduplicated>
@@ -74,7 +74,7 @@ deeptutor kb create physics --doc ch1.pdf
 ## Division of labor: auto vs manual
 
 - **Auto-consolidated** (tutor's job): after each section's discussion — and every other **substantive** turn — consolidate key points + Q&A conclusions + command cheatsheet + blocker table + Feynman self-checks + due reviews into the module note. Updated after each explanation and judgment; mechanical turns (review drain, simple confirmation) skip it and defer to the next substantive turn (see `session-flow.md` §7).
-- **Manual trigger** (user's job): `/repo-mastery note ["<text>"]` consolidates **the discussion since the last note** — read `notes/.boundary.json` for the interval start (absent → session/module start), extract that interval's Q&A conclusions / new blockers / cheatsheet additions / Feynman records **deduplicated against the auto diary**, write a `### Interval recap (区间整理)` recap block, then update `notes/.boundary.json`. Any `<text>` goes verbatim into "My notes". **The tutor never rewrites the user's words** — but may register it as a blocker/review point in the Blockers section.
+- **Manual trigger** (user's job): `/repo-mastery note ["<text>"]` consolidates **the discussion since the last note** — read `notes/.boundary.json` for the interval start (absent → session/module start), extract that interval's Q&A conclusions / new blockers / cheatsheet additions / Feynman records **deduplicated against the auto diary**, write a `### Interval synthesis (区间整理)` recap block, then update `notes/.boundary.json`. Any `<text>` goes verbatim into "My notes". **The tutor never rewrites the user's words** — but may register it as a blocker/review point in the Blockers section.
 
 ## Chapter material (textbook-mode) template — `chapters/<module>.md`
 
