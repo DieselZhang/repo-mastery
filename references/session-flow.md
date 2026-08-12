@@ -8,7 +8,15 @@ Before each learning session:
 
 0. **Session Preamble** (SKILL.md "Session Preamble", **mandatory** on every
    resume — `continue`, or the bare command that routes into it, display-only —
-   no questions). **Layered by session
+   no questions). **New course vs resume**:
+   - **New course** (current dir has no `.learning/`, or a fresh `start` on a
+     new target): start **clean** — do NOT read `~/.repo-mastery/` preferences
+     or `index.json`; teaching language follows the user's current input.
+   - **Resume** (current dir has `.learning/`): the preamble below reads the
+     current dir's files. Global memory (`~/.repo-mastery/profile.md`) is
+     referenced **only if the user explicitly asks** ("use my saved
+     preferences").
+   **Layered by session
    type**: a **cross-session resume** (fresh session / long gap) replays the
    **full preamble** — **value replay** (read `MISSION.md` + `positioning.md`
    when present; one line: what this repo teaches + differentiation — the
