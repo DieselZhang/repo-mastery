@@ -17,7 +17,7 @@ To explain a knowledge point well, you usually need 2–4 key source snippets. R
 Write to `<repo>/.learning/briefs/<module>.md`:
 
 ```md
-# Module Brief — <module title>（<module_id>）
+# Module Brief — <module title> (<module_id>)
 
 **Evidence locations**
 - Top-level dir / core file: <path>
