@@ -349,17 +349,20 @@ hand-written). Status lives in MASTERY.md, not in COVERAGE.md's header.
 ## Failure recovery — concrete steps when something breaks
 
 - **`set-phase` fails** → read the current `flow_phase` from `progress.json`,
-  re-run `next_objective` so the cursor resumes from the actual phase, then
-  retry the matching command (`set-phase ... module_overview --module mNN` while
-  the overview is unfinished, else `set-phase ... learning`).
-- **`chapter-advance` rejected** → confirm the learner gave an explicit reply (a
-  question, or "continue / got it"). The engine cannot see the conversation, so
-  this pause is the protocol's job, not the engine's; only then retry
-  `chapter-advance --section N`. Never chain sections to work around a
-  rejection — that is a violation even if each call is individually valid.
+  re-run `next-objective` (the CLI subcommand; `next_objective` is the
+  engine's function/return value — don't type the underscore form) so the
+  cursor resumes from the actual phase, then retry the matching command
+  (`set-phase ... module_overview --module mNN` while the overview is
+  unfinished, else `set-phase ... learning`).
+- **`chapter-advance` rejected by the engine** → read the error and branch:
+  (a) the message says "no active chapter" → re-run `chapter-start
+  --module <m> --sections N` first; (b) invalid `--status` → pass a valid
+  `teaching|qna|verifying`. Separately, as a protocol rule: after each section,
+  pause and wait for an explicit learner reply before advancing — never chain
+  sections in one turn (the engine can't see the conversation).
 - **`.boundary.json` missing** → the interval starts at the session / module
   start (first note), not an invented earlier boundary. Consolidate from there,
   then write the boundary (`{"module_id": ..., "last_consolidated_at": <now unix>}`).
 - **Value brief with no search tool** → degraded repo-evidence mode: build the
   brief from repo facts only, mark unsourced peer rows `[unv]`, and **never
-  fabricate a source** (see `positioning-brief.md` §Degraded mode).
+  fabricate a source** (see `positioning-brief.md` §Source rules).
