@@ -55,7 +55,7 @@ Five steps (engine-gated):
 2. Walk section by section; after each section STOP and wait for explicit user reply before chapter-advance --section N.
 3. Q&A (status=qna): user asks freely.
 4. Verification (status=verifying): 1-2 deep questions on key nodes → set-qualitative / record-attempt.
-5. Complete (chapter-complete): module-level gate — covered points get initialized spaced review (not fake mastery); module joins chapter_covered_modules; points still enter review queue. Status shows three states: 未掌握 / 已覆盖 · 待复习验证 / 已掌握 (not-yet-learned / covered-awaiting-review / mastered) — covered ≠ mastered.
+5. Complete (chapter-complete): module-level gate — covered points get initialized spaced review (not fake mastery); module joins chapter_covered_modules; points still enter review queue. Status shows three states: 未掌握 / 已覆盖 · 待复习验证 / 已掌握 (not-yet-learned / Covered · awaiting review verification / mastered) — covered ≠ mastered.
 
 ## Data Structures
 <target-repo>/.learning/: MISSION.md, positioning.md, course-map.json, progress.json, MASTERY.md, records/, notes/ (incl .boundary.json), chapters/, briefs/, code-map.json, export/, .gitignore

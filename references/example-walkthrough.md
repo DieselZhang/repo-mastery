@@ -154,6 +154,6 @@ Tutor: set-qualitative --kp m01-01 --type concept --pass
     source.
 · next-objective returns complete → the course is done: show the final
     COVERAGE.md summary (modules covered, verified points, mastery %), then
-    offer: refresh the HTML course (/repo-mastery start --fresh or the HTML
-    build step), start over, or switch repos.
+    offer: refresh the HTML course from the final COVERAGE.md (HTML build
+    step), start over, or switch repos.
 ```

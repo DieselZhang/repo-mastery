@@ -10,7 +10,7 @@
   with zero artifacts (see `references/preview-brief.md` §3).
 - [ ] **Preview inventing peer differentiation** — preview's vs-peer rows follow
   the same `[src]`/`[web]` discipline as `positioning-brief.md`; unsourced
-  claims are marked "to verify", never fabricated.
+  claims are marked "facts to verify", never fabricated.
 - [ ] **Re-reconning in start after a preview** — a "deep-dive" hand-off reuses the
   preview brief as Phase 2's value-brief input instead of rescanning the repo.
 
@@ -25,7 +25,7 @@
 - [ ] **Clarifying without a value brief** — Phase 2 must first present what this repo can teach and what makes it stand out vs peers (see `clarification-interview.md` §0), before asking "what do you want to master". Skipping it makes the Mission groundless.
 - [ ] **Designing `memory` points as gate-able knowledge points** — parameter/command/API trivia is reference-note material (cheatsheet), never a knowledge point with a gate. Put it in the module's reference notes.
 - [ ] **Running the ecosystem scan in Phase 1** — Phase 1 stays repo-internal and objective; peer/ecosystem facts belong in Phase 2's `positioning.md`, never the pre-scan (see `SKILL.md` Phase 2 "External retrieval").
-- [ ] **Clarifying differentiation without a source** — the value brief's "stands out vs peers" is read from `.learning/positioning.md`, never improvised; an unsourced peer claim is marked "to verify", not a fact (see `clarification-interview.md` §0).
+- [ ] **Clarifying differentiation without a source** — the value brief's "stands out vs peers" is read from `.learning/positioning.md`, never improvised; an unsourced peer claim is marked "facts to verify", not a fact (see `clarification-interview.md` §0).
 - [ ] **Producing the positioning matrix only after the Mission** — the two-pass rule of `positioning-brief.md`: generalized draft *before* the Mission interview, prune/deepen *after*. Producing it once, post-Mission only, loses the pre-Mission breadth.
 
 ## Learning-session phase

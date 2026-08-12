@@ -195,7 +195,7 @@ in `.learning/positioning.md` (cited `[web]` / `[src]`), never tutor memory:
   makes that choice *fail* — where does X's weakness show?" Passing = naming
   the failure mode on the other side of the tradeoff, echoing neither side.
 
-An unsourced vs-peer claim is a needs-verification search seed, never the reference
+An unsourced vs-peer claim is a "facts to verify" search seed, never the reference
 answer behind these probes.
 
 Qualitative results live in `qualitative_mastery: {kp_id: bool}`; the map shows full value once passed, but the judgment itself is a boolean, not a score.
@@ -280,7 +280,9 @@ remove covered points from review. The module is then added to
 `chapter_covered_modules` is shown as **"Covered · awaiting review verification"**, not as
 unmastered — covered means "module studied, true mastery pending spaced
 review", a third state alongside unmastered and mastered (real engine
-records). Never list a covered point under the unmastered column.
+records). Never list a covered point under the unmastered column. Display
+labels localize to the teaching language. English canonical: not-yet-learned /
+Covered · awaiting review verification / mastered.
 
 **This gate never fabricates mastery**: unverified points get real spaced
 review and build mastery only from actual correct/incorrect attempts — the
