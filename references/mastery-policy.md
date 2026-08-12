@@ -183,19 +183,19 @@ comparison (single source of truth; `quiz-design.md` and `session-flow.md`
 only cross-reference this). Pick the applicable one(s); the peer facts must be
 in `.learning/positioning.md` (cited `[web]` / `[src]`), never tutor memory:
 
-- **Swap (迁移判断)** — "if we swapped this repo for <peer> in the setup your
+- **Swap** — "if we swapped this repo for <peer> in the setup your
   Mission motivates, what breaks, what survives, and where does the migration
   pain concentrate?" Passing = naming concrete touchpoints from the matrix
   rows, not a vague "it'd be different".
-- **Decision (选型判据)** — "give me the decision rule: under what conditions
+- **Decision** — "give me the decision rule: under what conditions
   is <peer> the right pick, and under what conditions is this repo? Point to
   the matrix row that makes the call." Passing = a transferable criterion, not
   a feature list.
-- **Boundary (取舍边界)** — "this repo chose X over Y vs <peer>. What scenario
+- **Boundary** — "this repo chose X over Y vs <peer>. What scenario
   makes that choice *fail* — where does X's weakness show?" Passing = naming
   the failure mode on the other side of the tradeoff, echoing neither side.
 
-An unsourced vs-peer claim is a 「需验证」 search seed, never the reference
+An unsourced vs-peer claim is a needs-verification search seed, never the reference
 answer behind these probes.
 
 Qualitative results live in `qualitative_mastery: {kp_id: bool}`; the map shows full value once passed, but the judgment itself is a boolean, not a score.
@@ -277,7 +277,7 @@ remove covered points from review. The module is then added to
 `chapter_covered_modules` (dedup) and the `chapter` state cleared.
 
 **Display convention (status / COVERAGE.md)**: a point whose module is in
-`chapter_covered_modules` is shown as **「已覆盖 · 待复习验证」**, not as
+`chapter_covered_modules` is shown as **"Covered · awaiting review verification"**, not as
 unmastered — covered means "module studied, true mastery pending spaced
 review", a third state alongside unmastered and mastered (real engine
 records). Never list a covered point under the unmastered column.

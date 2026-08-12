@@ -20,7 +20,8 @@ Before each learning session:
    `action: "chapter"`, resume the textbook-mode chapter from its current
    section; entering a new module defaults to the textbook-mode chapter flow).
    A **same-session continue** (context already holds Mission / map / progress)
-   uses the **slim preamble** — one line: "上次学到 X，下一步 Y，due N 条复习",
+   uses the **slim preamble** — one line: "Last session: learned X, next Y, N
+   reviews due",
    read from `MASTERY.md`, no re-replay. Only after this does the cursor
    advance.
 
@@ -52,7 +53,7 @@ deliver a one-page **architecture narrative** (entry → core data flow → key
 modules), a **module map** (each module in one line), **key-implementation
 highlights**, and a **differentiation summary** ("what makes this project stand
 out vs peers" — reuse the one-liner/rows from `.learning/positioning.md`, see
-`positioning-brief.md`; the full matrix stays there, 详见 positioning.md).
+`positioning-brief.md`; the full matrix stays there, see positioning.md).
 Write it to `notes/overview.md`. No grading, no interruption — the learner sees
 the skeleton before any node. Then advance:
 
@@ -94,7 +95,7 @@ overview (global + module)            ← once each, not per point
    → write back progress.json + auto-note
 ```
 
-## Textbook-mode chapter flow (flipped classroom / 教材式)
+## Textbook-mode chapter flow (flipped classroom)
 
 **The default on entering each new module.** After the module overview, the
 tutor auto-starts this flow (`chapter-start`) unless the learner asks for the
@@ -106,31 +107,32 @@ checked as a whole. Engine actions per step (`chapter_start` /
 `mastery-policy.md` §7 for the `chapter` state):
 
 ```text
-1. generate chapters/<module>.md   (完整教材；其 HTML 页随 HTML 课程生成——start 时确认 + 完成时刷新，输出至 .learning/export/)
-     → chapter-start --module <m> --sections N      (校验 flow_phase=learning、module 存在、未 covered、无 pending)
-2. walk the chapter section by section    tutor 逐节讲，用户跟随材料，可随时打断提问
-     → 【每讲完一节必须停】给自然确认点，等用户明确回复后才 chapter-advance --section N
-       (支持中断恢复)；绝不未经确认连续推进多节
-     → 讲完全部节同样停下确认后再 advance --status qna
-3. after-class Q&A → status=qna          用户自由提问，tutor 答疑消化 (可写 learning record)
-4. after-class checking → status=verifying  针对章节关键节点提 1-2 个深度题：
-     concept/design → 深度问答 + tutor 判定 → set-qualitative --kp <id> --type concept|design --pass|--fail
-     procedure     → pending_question + record-attempt (现有机制复用) + 可选实际运行验证
-5. chapter-complete                      模块级闸门：关键节点保留真实记录；未检验点初始化
-                                         spaced-review；模块加入 chapter_covered_modules
+1. generate chapters/<module>.md   (full teaching material; its HTML page is generated with the HTML course — confirmed at start + refreshed on completion, output to .learning/export/)
+     → chapter-start --module <m> --sections N      (validates flow_phase=learning, module exists, not covered, no pending)
+2. walk the chapter section by section    tutor explains section by section; the user follows the material and may interrupt with questions anytime
+     → [must pause after each section] give a natural confirmation point; call chapter-advance --section N only after an explicit user reply
+       (supports interrupt/resume); never advance multiple sections in a row without confirmation
+     → after all sections, pause for confirmation the same way before advance --status qna
+3. after-class Q&A → status=qna          user asks freely; the tutor answers and digests (may write a learning record)
+4. after-class checking → status=verifying  pose 1-2 deep questions on the chapter's key nodes:
+     concept/design → deep Q&A + tutor judgment → set-qualitative --kp <id> --type concept|design --pass|--fail
+     procedure     → pending_question + record-attempt (reuse the existing mechanism) + optional hands-on run verification
+5. chapter-complete                      module-level gate: key nodes keep their real records; unverified points get initialized
+                                         spaced-review; module added to chapter_covered_modules
 ```
 
 **Section-by-section confirmation (mandatory).** After finishing each section the
 tutor **stops and hands control back** — never auto-advance. Give a natural
-confirmation point ("这一节讲完了。有疑问吗？没有的话我们进入下一节。"), then
-**wait for an explicit user reply** (a question, or "继续 / 懂了"). Only after the
+confirmation point ("This section is done. Any questions? If not, let's move on
+to the next."), then
+**wait for an explicit user reply** (a question, or "continue / got it"). Only after the
 user confirms does the tutor call `chapter-advance --section N`. Use the same
-pause before advancing out of `teaching` into `--status qna` (课后答疑). The
+pause before advancing out of `teaching` into `--status qna` (after-class Q&A). The
 engine cannot see the conversation, so *this pause is the protocol's job, not
 the engine's* — chaining several sections in one turn is a violation even if
 every `chapter-advance` call is individually valid.
 
-The chapter's **课后思考题 must align with the course-map `knowledge_point_ids`** —
+The chapter's **after-class reflection questions must align with the course-map `knowledge_point_ids`** —
 that is what lets after-class checking go through the engine's gate
 (`set-qualitative` / `record-attempt`). Large repos: pre-extract source
 snippets into `briefs/<module>.md` (module-brief-template) before writing the
@@ -232,7 +234,7 @@ the chapter gate so scattered-time review never blocks mid-chapter.
 - Review form: one question per due point (quantitative) or a quick recital (qualitative).
 - Review stays **recall-first** (that's the point — retrieval after
   forgetting), but a stuck user is never left staring at a blank prompt: offer
-  the reference answer as a **catch-up (补答)** when they ask or after one
+  the reference answer as a **catch-up** when they ask or after one
   attempt, record the error, and reschedule. Retrieval intent is preserved
   without grinding the user.
 - Results update `repetition_states` + `review_queue`.
@@ -259,12 +261,12 @@ wrote — and distills it into the note. Execute it this way:
    new blockers, cheatsheet additions, Feynman records, and the user's own
    words. If the interval start predates a context compaction (cross-session
    resume), recover from `notes/<module>.md` + `records/` — unrecoverable detail
-   is marked 「需回顾」, never invented.
+   is marked needs-review, never invented.
 3. **Consolidate into `notes/<module>.md`** (route to each module's note when the
    interval spans modules):
    - **Key points / Q&A / cheatsheet / blockers / Feynman** sections: **deduplicated**
      — only what auto hasn't already written (re-writing it is wasted tokens).
-   - A **`### 区间整理（<ISO date> <UTC>，自上次 note <time> 以来）— <one-line recap>`**
+   - A **`### Interval synthesis (<ISO date> <UTC>, since last note <time>) — <one-line recap>`**
      block: 2–4 distilled takeaways + any new Mission links. This is note's
      differentiator — auto is the per-turn diary, note is the interval synthesis.
    - `<text>` (if given) → **verbatim** into "My notes" (never rewritten; may be
@@ -314,7 +316,7 @@ a direct state change.
   points N/M, current module + chapter section/status.
 - **Mastery** — overall % and per-knowledge-type lines (from `mastery_levels` /
   `quiz_attempts` / `qualitative_mastery`); chapter-covered modules carry the
-  「已覆盖 · 待复习验证」 display convention, never "unmastered".
+  "Covered · awaiting review verification" display convention, never "unmastered".
 - **Review due** — `review_queue` count + earliest `due_at`; `--mode review`
   drains it.
 - **Next objective** — what `next_objective` returned (review / chapter /
@@ -343,3 +345,21 @@ hand-written). Status lives in MASTERY.md, not in COVERAGE.md's header.
 - When learning a point, only Read files relevant to it (locate via `course-map.json` evidence paths / `code-map.json`); **don't read the whole repo**.
 - Large repos: consult `code-map.json`'s symbol table to locate `file:line`, then Read the needed slice.
 - Once source snippets are captured in notes, prefer reading the notes over re-reading source in later sessions.
+
+## Failure recovery — concrete steps when something breaks
+
+- **`set-phase` fails** → read the current `flow_phase` from `progress.json`,
+  re-run `next_objective` so the cursor resumes from the actual phase, then
+  retry the matching command (`set-phase ... module_overview --module mNN` while
+  the overview is unfinished, else `set-phase ... learning`).
+- **`chapter-advance` rejected** → confirm the learner gave an explicit reply (a
+  question, or "continue / got it"). The engine cannot see the conversation, so
+  this pause is the protocol's job, not the engine's; only then retry
+  `chapter-advance --section N`. Never chain sections to work around a
+  rejection — that is a violation even if each call is individually valid.
+- **`.boundary.json` missing** → the interval starts at the session / module
+  start (first note), not an invented earlier boundary. Consolidate from there,
+  then write the boundary (`{"module_id": ..., "last_consolidated_at": <now unix>}`).
+- **Value brief with no search tool** → degraded repo-evidence mode: build the
+  brief from repo facts only, mark unsourced peer rows `[unv]`, and **never
+  fabricate a source** (see `positioning-brief.md` §Degraded mode).
