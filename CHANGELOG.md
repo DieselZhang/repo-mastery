@@ -10,11 +10,30 @@ Format follows [Keep a Changelog](https://keepachangelog.com/), versioning follo
 
 > **追溯说明 / Provenance**：v1.0.0–v2.4.0 的日期取自 git commit；v2.5.0–v2.9.0 的
 > 改动在 git 仓库**从未提交**（留存在本地工作区），日期按会话记录与记忆文件时间追溯
-> 估计——v2.5.0 / v2.6.0 为推断值。v3.1.0 为本轮发版。
+> 估计——v2.5.0 / v2.6.0 为推断值。v3.2.0 为本轮发版。
 >
 > v2.5.0–v2.9.0 were never committed to git (they lived in the working tree); their
 > dates are reconstructed from session notes and memory-file timestamps — v2.5.0 /
-> v2.6.0 are inferred. v3.1.0 is the current release.
+> v2.6.0 are inferred. v3.2.0 is the current release.
+
+---
+
+## [3.2.0] — 2026-08-12 — Source-inline chapters + HTML highlighting / 源码内联章节 + HTML 语法高亮
+
+**新增 Added**
+- 章节源码走读改**三段式内联**：`file:line` 定位 + 教学核心片段 + `<details>` 可折叠全文，
+  源码直接贴进讲解，不再跨文件跳转。(Chapter source walk is now a three-part inline format —
+  `file:line` locator + teaching-core fragment + collapsible `<details>` full source — pasted
+  straight into the walk, no cross-file jumping.)
+- HTML 课程语法高亮：highlight.js v11.11.1（common build，36 语言）vendor 进 html-shell 本地
+  加载，translation-code 块跳过高亮。(HTML courses get syntax highlighting — highlight.js
+  v11.11.1 (common build, 36 languages) vendored into html-shell and loaded locally, skipping
+  translation-code blocks.)
+- html-shell 代码块与可折叠详情样式，hljs 内框中和。(Code-block and collapsible-details styling
+  in html-shell; hljs inner frame neutralized.)
+
+**更改 Changed**
+- 版本号 bump 至 3.2.0。(Version bump to 3.2.0.)
 
 ---
 
