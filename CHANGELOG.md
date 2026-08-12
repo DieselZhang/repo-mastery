@@ -10,11 +10,26 @@ Format follows [Keep a Changelog](https://keepachangelog.com/), versioning follo
 
 > **追溯说明 / Provenance**：v1.0.0–v2.4.0 的日期取自 git commit；v2.5.0–v2.9.0 的
 > 改动在 git 仓库**从未提交**（留存在本地工作区），日期按会话记录与记忆文件时间追溯
-> 估计——v2.5.0 / v2.6.0 为推断值。v2.10.0 为本轮发版。
+> 估计——v2.5.0 / v2.6.0 为推断值。v3.0.0 为本轮发版。
 >
 > v2.5.0–v2.9.0 were never committed to git (they lived in the working tree); their
 > dates are reconstructed from session notes and memory-file timestamps — v2.5.0 /
-> v2.6.0 are inferred. v2.10.0 is the current release.
+> v2.6.0 are inferred. v3.0.0 is the current release.
+
+---
+
+## [3.0.0] — 2026-08-12 — Skill v3 English refactor / 全英文重构
+
+**更改 Changed**
+- SKILL.md 重写为精简英文协议（约 200 行）；命令面精简。(SKILL.md rewritten to a lean
+  English protocol (~200 lines); command surface cut.)
+- 全部 14 个 references 英文化——协议与模板统一为英文，术语一致化。(All 14 references
+  anglicized — protocol and template files unified in English.)
+- 版本号 bump 至 3.0.0。(Version bump to 3.0.0.)
+
+**新增 Added**
+- `references/example-walkthrough.md`——端到端示例走读（含失败恢复）。
+  (End-to-end example walkthrough with failure recovery.)
 
 ---
 
