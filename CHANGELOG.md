@@ -10,11 +10,23 @@ Format follows [Keep a Changelog](https://keepachangelog.com/), versioning follo
 
 > **追溯说明 / Provenance**：v1.0.0–v2.4.0 的日期取自 git commit；v2.5.0–v2.9.0 的
 > 改动在 git 仓库**从未提交**（留存在本地工作区），日期按会话记录与记忆文件时间追溯
-> 估计——v2.5.0 / v2.6.0 为推断值。v3.0.0 为本轮发版。
+> 估计——v2.5.0 / v2.6.0 为推断值。v3.1.0 为本轮发版。
 >
 > v2.5.0–v2.9.0 were never committed to git (they lived in the working tree); their
 > dates are reconstructed from session notes and memory-file timestamps — v2.5.0 /
-> v2.6.0 are inferred. v3.0.0 is the current release.
+> v2.6.0 are inferred. v3.1.0 is the current release.
+
+---
+
+## [3.1.0] — 2026-08-12 — Current-directory-first / 当前目录优先
+
+**修复 Fixed**
+- 命令以当前目录 `.learning/` 为唯一自动状态来源：裸 `/repo-mastery` 在当前目录无记录时直接对其开启新课程；`start` path 缺省当前目录；`continue` 优先当前目录而非全局记忆中的项目。
+  (Commands now use the current directory's `.learning/` as the sole automatic state source: the bare command opens a course on the current dir when none exists; `start` defaults path to the current dir; `continue` reads the current dir first, never a project from global memory.)
+- 全局记忆 `~/.repo-mastery/` 降级为可选档案——默认不读取，仅用户明确要求时参考。(Global memory `~/.repo-mastery/` is now an opt-in profile — not read automatically, consulted only on explicit request.)
+
+**更改 Changed**
+- 版本号 bump 至 3.1.0。(Version bump to 3.1.0.)
 
 ---
 

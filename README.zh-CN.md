@@ -8,7 +8,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-skill-0A84FF.svg)](#)
-![Version](https://img.shields.io/badge/version-3.0.0-blue.svg)
+![Version](https://img.shields.io/badge/version-3.1.0-blue.svg)
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)
 
 [English](./README.md) · [文档](./docs/zh-CN/ARCHITECTURE.md) · [贡献指南](./CONTRIBUTING.md)
@@ -237,7 +237,7 @@ repo-mastery/
 
 - [架构设计](./docs/zh-CN/ARCHITECTURE.md) —— 设计、掌握度引擎、各阶段、数据模型。
 - [使用指南](./docs/zh-CN/USAGE.md) —— 详细命令参考与学习流程。
-- [变更日志](./CHANGELOG.md) —— 各版本显著改动（v1.0.0 → v3.0.0）。
+- [变更日志](./CHANGELOG.md) —— 各版本显著改动（v1.0.0 → v3.1.0）。
 - [采纳与归属](./ADOPTION.md) —— 本 skill 从 DeepTutor、docs-to-course、teach skill 吸收了哪些设计。
 
 ## 贡献

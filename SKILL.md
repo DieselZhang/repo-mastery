@@ -2,7 +2,7 @@
 name: repo-mastery
 description: "Turn any open-source repository into a developer-focused mastery course. Given a local repo path or GitHub URL, build a confirmed course map and drive overview-first learning (architecture picture, then key-node discussion, then spaced review) with hands-on tasks and a continuously-updated course note (Markdown + HTML). Triggers: 'learn this repo', 'master this codebase', 'turn X into a course', 'deep-dive into X project'."
 origin: personal
-version: 3.0.0
+version: 3.1.0
 tags: [learning, education, codebase, mastery, spaced-repetition]
 ---
 
