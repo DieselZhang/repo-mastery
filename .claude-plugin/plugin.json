@@ -1,7 +1,7 @@
 {
   "name": "repo-mastery",
   "description": "Turn any open-source repository into a developer-focused mastery course — usage, architecture, and key implementations, with deterministic mastery gates and spaced review.",
-  "version": "2.10.0",
+  "version": "3.0.0",
   "author": {
     "name": "Diesel Zhang"
   },

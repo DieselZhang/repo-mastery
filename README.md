@@ -8,7 +8,7 @@ Learn a project's **usage → architecture → key implementations** the way you
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-skill-0A84FF.svg)](#)
-![Version](https://img.shields.io/badge/version-2.10.0-blue.svg)
+![Version](https://img.shields.io/badge/version-3.0.0-blue.svg)
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)
 
 [简体中文](./README.zh-CN.md) · [Documentation](./docs/ARCHITECTURE.md) · [Contributing](./CONTRIBUTING.md)
@@ -242,7 +242,7 @@ repo-mastery/
 
 - [Architecture](./docs/ARCHITECTURE.md) — design, mastery engine, phases, data model.
 - [Usage](./docs/USAGE.md) — detailed command reference and learning walkthrough.
-- [Changelog](./CHANGELOG.md) — per-version notable changes (v1.0.0 → v2.10.0).
+- [Changelog](./CHANGELOG.md) — per-version notable changes (v1.0.0 → v3.0.0).
 - [Adoption & attribution](./ADOPTION.md) — what this skill absorbs from DeepTutor, docs-to-course, and the teach skill.
 
 ## Contributing
