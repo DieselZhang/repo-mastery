@@ -105,7 +105,7 @@ entering the module (large repos: pre-extract snippets via
 > 讲解（概念 + 一个比喻 + 为什么这样设计）。源码走读用三段式：`file:line` 定位 →
 > **关键片段**（教学核心）→ `<details>` 折叠的完整源码。逐节循环：
 
-**Source walk** — `src/pipeline.py:120-145`
+**Source walk** — `src/pipeline.py:120-125`
 
 ```python
 # Key fragment (teaching core, 3-15 lines) — 教学核心，短而美
@@ -113,7 +113,7 @@ def build_chain(self):
     return rag_chain  # 检索 + 生成 串成一条链
 ```
 
-<details><summary>Full source · `src/pipeline.py:120-145` (click to expand)</summary>
+<details><summary>Full source · `src/pipeline.py:120-125` (click to expand)</summary>
 
 ```python
 # Full implementation — 完整实现，折叠展示
@@ -127,9 +127,13 @@ def build_chain(self):
 
 > Source-walk format notes（三段式格式说明）：
 > - `file:line` stays as a locator — 仅作定位，学习者可回 IDE 看更广的上下文。
-> - The key fragment is the teaching core — 教学核心，短而美（3-15 行）。
+> - The key fragment is the teaching core — 教学核心，短而美（3-15 行）。It is cut
+>   from the full source below (a subset of it) — 从下方完整源码中剪出的教学核心（子集）。
 > - The full source lives in a `<details>` block（Markdown-compatible）：Claude Code
 >   终端与 GitHub 上均可折叠，HTML 课程渲染同样折叠。
+> - The code-fence language follows the source file's extension (py/c/ts/go/rs…) —
+>   代码围栏语言跟随文件扩展名（py/c/ts/go/rs…）。Otherwise the HTML course
+>   highlighting breaks — 否则 HTML 课程语法高亮失效。
 
 ### 1.3 小结
 > 3-4 条 takeaways，可自查。
