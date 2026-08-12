@@ -6,7 +6,7 @@
 
 To explain a knowledge point well, you usually need 2–4 key source snippets. Re-reading whole files every turn burns tokens repeatedly. **Pre-extraction** condenses "what this code does" into the brief; the tutor quotes the brief and only Reads source when the brief lacks detail.
 
-> **Feeds the source walk**: for large repos, the pre-extracted source snippets in `briefs/` are what the tutor pastes into the chapter's source walk (file:line + inline key fragment + collapsible `<details>` full source) — so the source is available without re-reading.
+> **Feeds the source walk**: the pre-extracted snippets in `briefs/` feed the chapter's source walk — the key fragment (3-15 lines) directly, and the full `<details>` source when the slice is within the brief's 20-line cap. For longer slices the tutor Reads the wider range from the repo (located via `code-map.json`), so the full source is never truncated.
 
 ## When to write a brief
 
