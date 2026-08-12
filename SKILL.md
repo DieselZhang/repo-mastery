@@ -20,25 +20,26 @@ Do NOT activate for doc/README summaries, one-off code Q&A, or end-user tutorial
 ## Setup
 - Target: local path or github:owner/repo (auto git clone --depth 1)
 - Python 3: only for the large-repo index (scripts/index_repo.py, pure stdlib)
-- Creates .learning/ in the target (auto-gitignored) + global ~/.repo-mastery/
+- Creates .learning/ in the target (auto-gitignored). ~/.repo-mastery/ (profile + index) is an OPT-IN profile — not read automatically; consulted only when the user explicitly asks for saved preferences. The current directory's .learning/ is the sole automatic state source.
 - Teaching language follows the user's input (--language zh|en to force); code, paths, identifiers keep original form
 - Runs on Claude Code / Codex / Gemini CLI / AGENTS.md tools (agentskills.io)
 
 ## Commands
 (6 commands — each: signature + one imperative line)
 /repo-mastery preview <path|url>    # zero-side-effect recon: macro brief in chat, no .learning/, no engine. Say "deep-dive" (or the user's language for "go deeper") to hand off into start.
-/repo-mastery start <path|url> [--language zh|en] [--fresh]   # value brief → map confirm → overview-first learning (textbook-mode chapter per module by default); --fresh restarts an existing course.
-/repo-mastery continue              # resume: session preamble (value replay + progress + due) first, then next-objective. (Bare /repo-mastery == continue.)
+/repo-mastery start [path|url] [--language zh|en] [--fresh]   # value brief → map confirm → overview-first learning (textbook-mode chapter per module by default); path defaults to the current directory; --fresh restarts an existing course.
+/repo-mastery continue              # resume the current directory's .learning/ (session preamble first, then next-objective). If none, say so and guide to start on the current dir — never jump to a project from global memory.
 /repo-mastery review                # spaced review only: drain due reviews, bypass overview gate, never open new content.
 /repo-mastery note ["<text>"]       # consolidate discussion since last note into notes/<module>.md (categorized); <text> appended verbatim.
 /repo-mastery status                # refresh MASTERY.md one-page dashboard from progress.json + course-map.json.
 
-(The shared due-review pool: continue runs next-objective end-to-end and signposts due reviews; review drains them alone and bypasses the flow_phase overview gate. Preview is zero-side-effect: brief in chat, handoff on "deep-dive". Both continue and review loop next-objective, act on the returned action (overview | module_overview | chapter | answer_pending | review | complete), and stop on a non-review action.)
+(Bare /repo-mastery routes by the current directory: has .learning/ → continue; no .learning/ → start a course on the current directory. The shared due-review pool: continue runs next-objective end-to-end and signposts due reviews; review drains them alone and bypasses the flow_phase overview gate. Preview is zero-side-effect: brief in chat, handoff on "deep-dive". Both continue and review loop next-objective, act on the returned action (overview | module_overview | chapter | answer_pending | review | complete), and stop on a non-review action.)
 
 (Gate invariant — always hold: advancement is a deterministic engine decision, never an LLM self-assessment; mastery is built from real attempts, never faked.)
 
 ## Session Preamble (mandatory on every resume)
-- Cross-session (fresh/long gap): value replay (MISSION.md + positioning.md, one line) → current map + progress (MASTERY.md) → due review/chapter first. Display-only, no questions.
+- New course (current dir has no .learning/ / fresh start): start clean — do NOT read ~/.repo-mastery/ preferences or index.json; teaching language follows the user's current input.
+- Resume (current dir has .learning/): read the current dir's MISSION.md + positioning.md (value replay) → MASTERY.md (map + progress) → due review/chapter first. Display-only, no questions. Global memory (profile.md) is referenced only if the user explicitly asks ("use my saved preferences" / 「用我之前的偏好」).
 - Same-session: one line — "Last learned X, next objective Y, N reviews due" (Chinese example: 「上次学到 X，下一步 Y，due N 条复习」).
 - Then advance per next-objective. While flow_phase is overview/module_overview, next-objective refuses knowledge points (engine-enforced).
 
@@ -59,7 +60,7 @@ Five steps (engine-gated):
 
 ## Data Structures
 <target-repo>/.learning/: MISSION.md, positioning.md, course-map.json, progress.json, MASTERY.md, records/, notes/ (incl .boundary.json), chapters/, briefs/, code-map.json, export/, .gitignore
-~/.repo-mastery/: profile.md, index.json
+~/.repo-mastery/: profile.md, index.json   (opt-in profile — not read automatically; consulted only on explicit request)
 
 Expected answers of pending questions live server-side in progress.json — never round-trip to the user before grading.
 
