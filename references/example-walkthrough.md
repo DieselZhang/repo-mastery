@@ -38,7 +38,7 @@ start` re-runs Phase 0/1/2 and the brief is regenerated at start time.
 
 ```text
 Tutor: /repo-mastery start sqlite/sqlite --language zh
-       Phase 0 — measured ~260k lines C → small/medium, read directly, no index.
+       Phase 0 — ~260k lines C → large → run `scripts/index_repo.py` → `code-map.json`.
        Phase 1 — pre-scan (repo-internal only): README, main entry, build,
        structure, core modules → course-map candidates per curriculum-design.md.
        Phase 2 — value brief:
@@ -86,8 +86,10 @@ Tutor: Phase 3.0 — one-page global overview (entry → core data flow → key
        chapter-start --module m01 --sections 4
        --- section 1 walk (open) ---
        "Why care: every API call funnels through sqlite3_open_v2. Concept:
-        the connection owns a pager, and the pager owns the page cache. Code:
-        src/sqlite3.c sqlite3_open_v2 → sqlite3_open_internal → pager_open.
+        the connection owns a pager, and the pager owns the page cache. Code
+        (large repo — locate via `code-map.json`'s symbol table → file:line,
+        then Read the slice): src/sqlite3.c sqlite3_open_v2 →
+        sqlite3_open_internal → pager_open.
         This section is done — any questions? If none, we move on."
 User:  「继续，理解了 open 的流程」
 Tutor: chapter-advance --section 1   (never before an explicit reply)
