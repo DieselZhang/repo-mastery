@@ -102,8 +102,34 @@ entering the module (large repos: pre-extract snippets via
 > 本节学完你能回答什么问题（1-2 条，可检验）。
 
 ### 1.2 讲解 + 源码走读
-> 讲解（概念 + 一个比喻 + 为什么这样设计）；源码走读带 `file:line`，
-> 引用关键函数/调用链/数据结构，必要时贴精简代码片段。
+> 讲解（概念 + 一个比喻 + 为什么这样设计）。源码走读用三段式：`file:line` 定位 →
+> **关键片段**（教学核心）→ `<details>` 折叠的完整源码。逐节循环：
+
+**Source walk** — `src/pipeline.py:120-145`
+
+```python
+# Key fragment (teaching core, 3-15 lines) — 教学核心，短而美
+def build_chain(self):
+    return rag_chain  # 检索 + 生成 串成一条链
+```
+
+<details><summary>Full source · `src/pipeline.py:120-145` (click to expand)</summary>
+
+```python
+# Full implementation — 完整实现，折叠展示
+def build_chain(self):
+    retriever = self._make_retriever(top_k=5)
+    prompt = hub.pull("rag/prompt")
+    llm = self._model
+    return rag_chain
+```
+</details>
+
+> Source-walk format notes（三段式格式说明）：
+> - `file:line` stays as a locator — 仅作定位，学习者可回 IDE 看更广的上下文。
+> - The key fragment is the teaching core — 教学核心，短而美（3-15 行）。
+> - The full source lives in a `<details>` block（Markdown-compatible）：Claude Code
+>   终端与 GitHub 上均可折叠，HTML 课程渲染同样折叠。
 
 ### 1.3 小结
 > 3-4 条 takeaways，可自查。
