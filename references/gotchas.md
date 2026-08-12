@@ -72,6 +72,8 @@
 - [ ] **Not updating a changed Mission** — when the learning goal shifts, update MISSION.md and write a learning record.
 - [ ] **Not writing a learning record when due** — when the user shows real understanding / states prior knowledge / a misconception gets corrected, write `records/NNNN-slug.md`; otherwise the ZPD baseline drifts.
 - [ ] **Not marking supersession after a correction** — mark the old record `Status: superseded by LR-NNNN` instead of deleting (the evolution history is useful).
+- [ ] **Applying saved global preferences to a new course** — a fresh `start` (or the bare command on a dir with no `.learning/`) must be **clean**: do not inherit `~/.repo-mastery/profile.md` style/depth/language preferences; the current input language and the new Mission drive it. Global memory is consulted only on explicit request.
+- [ ] **Routing `continue` by global memory instead of the current dir** — `continue` resumes the current directory's `.learning/`; if there is none, say so and guide to `start` on the current dir. Never jump to a project listed in `~/.repo-mastery/index.json` because it was "last learned".
 
 ## Notes & data phase
 
