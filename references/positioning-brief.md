@@ -1,4 +1,4 @@
-# Positioning Brief — 生态定位与差异化（读于 Phase 2）
+# Positioning Brief (read in Phase 2)
 
 > **Read in**: Phase 2. Turns the value brief's "what makes it stand out vs
 > peers" from an improvised one-liner into a **sourced, persistent comparison
@@ -45,30 +45,30 @@ The value brief stays a conversation proposal; it is **not** merged into
 
 ```markdown
 # Positioning — <repo>
-> 更新: <ISO date> ｜ 来源: [src]=repo 源码 · [web]=外部 URL+访问日期 · [unv]=未验证 tutor 记忆
-> 生态会过期：事实变化时更新本文件，并按 learning-records 规则写学习记录。
+> Updated: <ISO date> ｜ Sources: [src]=repo 源码 · [web]=外部 URL+访问日期 · [unv]=未验证 tutor 记忆
+> The ecosystem goes stale: when facts change, update this file and write a learning record per the learning-records rules.
 
-## 一句话定位
-<什么 niche、为谁、拒绝成为什么>  [src] <file:line> 或 [web] <URL>
+## One-line positioning
+<what niche, for whom, what it deliberately is not>  [src] <file:line> or [web] <URL>
 
-## 生态对比表
-| 同类项目 | 比较维度 | 同类做法 | 本项目做法 | 关键取舍 | 何时选本项目 | 来源 |
+## Ecosystem comparison table
+| Peer 同类项目 | Dimension 维度 | Peer's approach 同类做法 | This repo's approach 本项目做法 | Key tradeoff 关键取舍 | When to pick this 何时选本项目 | Source 来源 |
 |---|---|---|---|---|---|---|
-| <peer> | <维度> | <同类> | <本项目> | <取舍> | <判据> | [web] URL(日期) 或 [src] 或 [unv] |
+| <peer> | <dimension> | <peer's approach> | <this repo's approach> | <key tradeoff> | <when to pick this> | [web] URL(date) or [src] or [unv] |
 | ...    | ...    | ...    | ...    | ...    | ...    | ...    |
 
-## 何时选它 / 何时选同类（可迁移判据）
-- 选本项目 if: ...
-- 选同类 if: ...
-- 判据（跨项目可迁移的规则）: ...
+## When to pick it / when to pick a peer (transferable criteria)
+- Pick this repo if: ...
+- Pick a peer if: ...
+- Criteria (rules transferable across projects): ...
 
-## 待验证事实（禁止混入对比表）
-- <claim> — 无来源，需 WebSearch 或标 [unv]
+## Facts to verify (never enter the comparison table)
+- <claim> — no source; needs a WebSearch or mark [unv]
 
-## 反模式
-- 无来源比较行 → 只能进「待验证」，禁止进对比表
-- 用 tutor 记忆伪装成源码结论 → 禁止
-- 外部事实进 MISSION.md / COVERAGE.md → 禁止；只进本文件
+## Anti-patterns
+- An uncited comparison row → may only enter "facts to verify（待验证）", never the table
+- Passing off tutor memory as a source-walk conclusion → forbidden
+- External facts into MISSION.md / COVERAGE.md → forbidden; this file only
 ```
 
 The matrix has **7 fixed columns** (peer × dimension × peer's approach × this
@@ -89,7 +89,7 @@ The "when to pick it" column is the evidence anchor for m00's `kp00-03`.
   contradict, present both and note the difference instead of resolving
   silently; date-stamp every external fact.
 - **`[unv]`** — an uncited tutor-memory claim. Allowed only as a *seed for a
-  search* or as a row in 「待验证事实」. **Never** as a gated reference answer,
-  never as a MISSION.md claim, never in a quiz.
+  search* or as a row in "facts to verify（待验证）". **Never** as a gated
+  reference answer, never as a MISSION.md claim, never in a quiz.
 - **Degraded mode**: no search tool → build the brief from repo evidence and
-  mark peer rows `[unv]` / 「需验证」. **Never fabricate a source.**
+  mark peer rows `[unv]` / "待验证". **Never fabricate a source.**

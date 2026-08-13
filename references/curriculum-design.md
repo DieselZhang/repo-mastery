@@ -85,7 +85,7 @@ changes**. Three points, ordered so each builds on the last:
 | `kp00-02` | Key tradeoffs vs peers | Pick the matrix row the learner cares about most and walk the tradeoff: why this repo does X, what the peer does instead, the failure mode of each choice. |
 | `kp00-03` | When to pick it (transferable criterion) | State the decision rule that transfers across projects ("pick this when …; pick the peer when …"), not a memorized feature list. |
 
-The 「when to pick it」 column of `positioning.md` is the evidence anchor for
+The "when to pick it" column of `positioning.md` is the evidence anchor for
 `kp00-03`; the whole matrix stays in `positioning.md`, never re-written into a
 quiz or a reference answer.
 
